@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictive Modeling of Global Life Expectancy: A Multiple Linear Regression Analysis — Fayola Roberts</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="modulepreload" href="http://localhost:8080/build/assets/app-4ed993c7.js" /><link rel="modulepreload" href="http://localhost:8080/build/assets/app-ed1b56b6.js" /><script type="module" src="http://localhost:8080/build/assets/app-4ed993c7.js"></script><script type="module" src="http://localhost:8080/build/assets/app-ed1b56b6.js"></script>    <style>
+        :root {
+            /* Classic 90s Desktop / Modern Hybrid Theme Colors from Template */
+            --bg-desktop: #223147;        /* Deep vintage blue-gray desktop */
+            --bg-card: #012456;           /* PowerShell Console Midnight Blue */
+            --accent-primary: #0078d4;    /* Classic Windows Accent Blue */
+            --accent-glow: #38bdf8;       /* High-contrast highlight cyan */
+            --text-main: #ffffff;         /* Crisp white text */
+            --text-readable: #f8fafc;     /* High-contrast off-white text */
+            --text-muted: #cbd5e1;        /* Secondary detail text */
+            
+            /* Syntax Highlighting */
+            --ps-yellow: #ffdf00;         
+            --ps-cyan: #00ffff;           
+            --terminal-green: #34d399;
+        }
+
+        /* Natural Document Scrolling and Environment Flow */
+        html, body {
+            min-height: 100vh;
+            width: 100vw;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        body {
+            background-color: var(--bg-desktop);
+            font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Main Application Window: Boxy 90s Layout with Natural Document Flow --- */
+        .container.animate-boot {
+            max-width: 100% !important;
+            width: 100vw !important;
+            min-height: calc(100vh - 48px) !important;
+            background: #1e1e1e;
+            /* Boxy 3D Bezel Legacy Border Effect */
+            border-top: 3px solid #ffffff !important;
+            border-left: 3px solid #ffffff !important;
+            border-right: 3px solid #7f7f7f !important;
+            border-bottom: 3px solid #7f7f7f !important;
+            border-radius: 0px !important;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding: 40px 0 0 0 !important; /* Space under the custom chrome top frame */
+            margin-bottom: 48px !important; /* Clears fixed Windows 11 taskbar */
+        }
+
+        /* Vintage Active Title Bar Chrome Injection */
+        .container.animate-boot::before {
+            content: "🗔 DocumentReader.exe - Predictive Modeling of Global Life Expectancy: A Multiple Linear Regression Analysis";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 32px;
+            background: linear-gradient(90deg, #000080, #1084d0);
+            color: #ffffff;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            padding-left: 12px;
+            letter-spacing: 0.5px;
+            z-index: 10;
+        }
+
+        /* Legacy Control Buttons UI Window Graphic */
+        .container.animate-boot::after {
+            content: "🗕 🗖 🗙";
+            position: absolute;
+            top: 4px;
+            right: 8px;
+            color: #ffffff;
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            cursor: pointer;
+            z-index: 11;
+        }
+
+        main {
+            flex: 1 0 auto;
+            padding: 30px;
+            padding-bottom: 80px; /* Clearing block for the fixed taskbar */
+        }
+
+        /* Identity Block Header Registry Fixes */
+        .border-bottom.border-secondary {
+            padding: 0 30px 20px 30px;
+            border-bottom-color: rgba(255, 255, 255, 0.15) !important;
+        }
+
+        h1, h2, h3, h4, h5, h6, .text-white-forced {
+            color: var(--text-main) !important;
+        }
+
+        .animate-boot {
+            animation: consoleBoot 0.25s ease-in-out forwards;
+        }
+        @keyframes consoleBoot {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* --- cmd.exe Command Line Navigation Block --- */
+        header.cmd-prompt-nav {
+            background: transparent !important;
+            border: none !important;
+            margin: 0 30px 30px 30px !important;
+            padding: 0 !important;
+        }
+        
+        .cmd-line-text {
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .nav-link-custom {
+            color: #a3a3a3;
+            transition: color 0.1s ease;
+            font-weight: bold;
+            padding: 2px 8px !important;
+            border-radius: 0px !important;
+            text-decoration: none;
+        }
+        .nav-link-custom:hover {
+            color: var(--accent-glow) !important;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .nav-link-custom.active {
+            color: #00ff00 !important; /* Active link selection terminal green override */
+            background: transparent !important;
+        }
+
+        /* High-Contrast Link Mechanics */
+        .meta-link {
+            color: var(--accent-glow);
+            text-decoration: none;
+        }
+        .meta-link:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        .status-pill {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid #34d399;
+            color: #34d399;
+            border-radius: 0px !important;
+        }
+
+        /* Blinking Terminal UI Cursor */
+        @keyframes blink { 50% { opacity: 0; } }
+        .terminal-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 15px;
+            background-color: #00ff00;
+            margin-left: 4px;
+            vertical-align: middle;
+            animation: blink 1s step-end infinite;
+        }
+
+        /* ==========================================================================
+           DOCUMENT SYSTEM VIEWPORT DISPATCHER (RESEARCH VS BLOG STYLES)
+           ========================================================================== */
+        
+        /* --------------------------------------------------------------------------
+           STYLE ARCHETYPE A: Formal Academic Research Paper Format
+           -------------------------------------------------------------------------- */
+        .format-research-paper {
+            background-color: #fcfbf9 !important; /* Premium archival off-white print stock page color */
+            color: #111111 !important;           /* Dark slate high-contrast print ink */
+            font-family: 'Georgia', 'Cambria', 'Times New Roman', Times, serif !important;
+            border: 1px solid #d1d5db !important;
+            border-top: 6px solid #475569 !important; /* Heavy-set academic card top bezel */
+            border-radius: 0px !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+            padding: 3rem 4rem !important;
+        }
+        
+        .format-research-paper h1.doc-main-title {
+            color: #0f172a !important;
+            font-family: 'Georgia', serif !important;
+            font-weight: 800 !important;
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 0.5rem !important;
+            border: none !important;
+            text-shadow: none !important;
+        }
+
+        .format-research-paper .research-meta-header {
+            text-align: center;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #475569;
+            font-size: 0.88rem;
+            margin-bottom: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+
+        /* Markdown Content Engine Processing Overrides for Academic Research Papers */
+        .format-research-paper .prose-container {
+            color: #1e293b !important;
+            font-size: 1.05rem !important;
+            line-height: 1.8 !important;
+            text-align: justify; /* Proper academic document alignment layout standard */
+        }
+        .format-research-paper .prose-container p {
+            margin-bottom: 1.5rem;
+            text-indent: 0rem; /* Traditional academic indent parameters can be set here */
+        }
+        .format-research-paper .prose-container strong {
+            color: #000000 !important;
+            font-weight: 700;
+        }
+        .format-research-paper .prose-container a {
+            color: #1d4ed8 !important; /* Formal print-safe hyper-blue */
+            text-decoration: underline;
+        }
+        .format-research-paper .prose-container code {
+            background: #f1f5f9 !important;
+            color: #b91c1c !important; /* Academic-safe distinct code highlighting color tone */
+            border: 1px solid #e2e8f0;
+            padding: 2px 5px;
+            font-size: 0.9rem;
+            font-family: monospace;
+        }
+
+        /* --------------------------------------------------------------------------
+           STYLE ARCHETYPE B: Modern Flowing Blog Updates Format
+           -------------------------------------------------------------------------- */
+        .format-blog-normal {
+            background: var(--bg-card) !important;
+            border: 2px solid #7f7f7f !important;
+            border-radius: 0px !important;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.7);
+            padding: 2.5rem !important;
+        }
+
+        .format-blog-normal h1.doc-main-title {
+            color: var(--ps-yellow) !important;
+            font-family: inherit;
+            font-weight: bold;
+            font-size: 1.8rem;
+            border-bottom: 2px dashed rgba(255, 255, 255, 0.15);
+            padding-bottom: 12px;
+        }
+
+        .format-blog-normal .blog-meta-header {
+            color: var(--ps-cyan);
+            font-size: 0.8rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Markdown Content Engine Processing Overrides for Blogs */
+        .format-blog-normal .prose-container {
+            color: var(--text-readable) !important;
+            font-size: 0.95rem !important;
+            line-height: 1.6 !important;
+        }
+        .format-blog-normal .prose-container p {
+            margin-bottom: 1.25rem;
+        }
+        .format-blog-normal .prose-container strong {
+            color: #ffffff !important;
+        }
+        .format-blog-normal .prose-container a {
+            color: var(--accent-glow) !important;
+            text-decoration: underline;
+        }
+        .format-blog-normal .prose-container code {
+            background: rgba(0, 0, 0, 0.4) !important;
+            color: var(--terminal-green) !important;
+            padding: 2px 6px;
+            border-radius: 0px;
+            font-size: 0.88rem;
+        }
+
+        /* Content Protection Matrix Guardrail Rule */
+        .protect-content {
+            user-select: none !important;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+        }
+
+        /* --- Authentic Full-Width Fixed Windows 11 Taskbar --- */
+        footer.mt-auto {
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 48px !important;
+            background: rgba(32, 32, 32, 0.9) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 0px !important;
+            padding: 0 20px !important;
+            margin: 0 !important;
+            
+            display: grid !important;
+            grid-template-columns: 1fr auto 1fr !important;
+            align-items: center !important;
+            z-index: 99999;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .taskbar-left {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 10px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .taskbar-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+        .taskbar-icon {
+            font-size: 1.15rem;
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: transform 0.1s ease, color 0.1s ease;
+            display: flex;
+            align-items: center;
+        }
+        .taskbar-icon:hover {
+            color: var(--accent-glow);
+            transform: scale(1.1);
+        }
+        .taskbar-icon.win-brand {
+            color: #0078d4;
+            font-size: 1.25rem;
+        }
+        .taskbar-search-mock {
+            width: 140px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #cccccc;
+            font-size: 0.72rem;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            cursor: text;
+            user-select: none;
+        }
+
+        .taskbar-right {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 14px;
+            font-size: 0.8rem;
+            color: #e2e8f0;
+        }
+        .system-tray-icons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #cbd5e1;
+        }
+        .system-clock {
+            font-size: 0.75rem;
+            text-align: right;
+            line-height: 1.2;
+            border-left: 1px solid rgba(255, 255, 255, 0.15);
+            padding-left: 12px;
+            color: #ffffff;
+        }
+
+        /* Desktop Container Sizing Adaptability Fixes for Academic Reading Formats */
+        @media (max-width: 768px) {
+            .format-research-paper {
+                padding: 1.5rem !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container py-5 animate-boot">
+        
+        <div class="mb-4 pb-4 border-bottom border-secondary border-opacity-50">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                <h1 class="h3 fw-bold m-0">Fayola Roberts</h1>
+                <span class="badge status-pill px-2 py-1 text-uppercase fw-semibold">SYS_STATUS: ONLINE</span>
+            </div>
+            
+            <div class="d-flex flex-wrap gap-3 small fw-medium mt-3">
+                <div>
+                    <i class="bi bi-github text-white-forced me-1"></i> 
+                    <a href="https://github.com/DarkAngel2001" target="_blank" rel="noopener noreferrer" class="meta-link">AngelLite (GitHub)</a>
+                </div>
+                <div class="d-none d-sm-inline text-muted opacity-50">|</div>
+                <div>
+                    <i class="bi bi-linkedin text-white-forced me-1"></i> 
+                    <a href="https://www.linkedin.com/in/fayola-roberts-612760205/" target="_blank" rel="noopener noreferrer" class="meta-link">Fayola Roberts (LinkedIn)</a>
+                </div>
+                <div class="d-none d-sm-inline text-muted opacity-50">|</div>
+                <div>
+                    <i class="bi bi-envelope-fill text-white-forced me-1"></i> 
+                    <a href="mailto:fayola.c.roberts@gmail.com" class="meta-link font-monospace">fayola.c.roberts@gmail.com</a>
+                </div>
+            </div>
+        </div>
+
+        <header class="cmd-prompt-nav">
+            <div class="cmd-line-text">C:\Users\FayolaRoberts\Portfolio&gt; navigate --select-target</div>
+            <nav class="nav gap-2 small">
+                <a href="/research-portfolio/" class="nav-link-custom">[ Home ]</a>
+                <a href="/research-portfolio/about" class="nav-link-custom">[ About_Me ]</a>
+                <a href="/research-portfolio/insights" class="nav-link-custom">[ Insights_&amp;_Research ]</a>
+                <span class="terminal-cursor"></span>
+            </nav>
+        </header>
+
+        <main>
+           <div class="mb-4">
+                <a href="/research-portfolio/insights" class="meta-link small fw-bold font-monospace">
+                    &larr; /research-portfolio/insights
+
+                </a>
+            </div>
+
+                            <article class="format-research-paper protect-content mx-auto" style="max-width: 850px;" oncontextmenu="return false;">
+                    <h1 class="doc-main-title">Predictive Modeling of Global Life Expectancy: A Multiple Linear Regression Analysis</h1>
+                    <div class="research-meta-header">
+                        Published: 2021-07-28 &bull; Author: F. Roberts &bull; Classification: School Projects
+                    </div>
+                    
+                    <div class="prose-container">
+                        <div ><h3 id="abstract">Abstract</h3>
+<p>This research implements a multiple linear regression framework to identify and evaluate the structural determinants of global life expectancy. Utilizing longitudinal data from 193 nations compiled by the World Health Organization (WHO) and the United Nations, we evaluate 20 distinct economic, social, and epidemiological characteristics. The analysis rigorously tests classical linear regression assumptions, resolves multicollinearity constraints among infectious disease metrics, and isolates the most statistically significant predictors of human longevity.</p>
+<hr />
+<h3 id="research-objectives-amp-hypotheses">Research Objectives &amp; Hypotheses</h3>
+<p>To extract actionable insight from the GHO dataset, this analysis investigates the following core research questions:</p>
+<ol>
+<li>
+<p><strong>Socio-Economic Impact:</strong> To what degree do institutional development status, Gross Domestic Product (GDP), and formal educational infrastructure (schooling) predict a nation's baseline life expectancy?</p>
+</li>
+<li>
+<p><strong>Behavioral vs. Epidemiological Vectors:</strong> Do lifestyle choices (such as alcohol consumption) or infectious disease metrics (HIV/AIDS, Hepatitis B) exert a more severe negative correlation on mortality models?</p>
+</li>
+<li>
+<p><strong>Demographic Density:</strong> Does population density show a statistically significant relationship with decreased life expectancy, or is it heavily mitigated by a nation's resource distribution?</p>
+</li>
+</ol>
+<hr />
+<h3 id="methodology-amp-data-pipeline">Methodology &amp; Data Pipeline</h3>
+<p>The analytical workflow utilizes data collected between 2000 and 2015 across 193 sovereign states.</p>
+<p>[Raw WHO / UN Data] ---&gt; [Data Imputation &amp; Cleaning] ---&gt; [Multicollinearity Filtering (VIF)]</p>
+<p>[Informed Policy Insights] &lt;--- [Model Diagnostic Testing] &lt;--- [Multiple Linear Regression]</p>
+<h4 id="dataset-description">Dataset Description</h4>
+<p>The various data files of a single dataset were consolidated into a single file. After cursory visual inspection, it was clear that some data values were missing. No mistakes were discovered in the WHO datasets. The R application handled missing data using the <strong>Missmap</strong> command. The most common missing data categories were Hepatitis B and GDP. Some missing information came from lesser-known countries. Because it was impossible to locate all data for these countries, they were excluded from the final dataset.</p>
+<p>The final merged file contains <strong>22 columns and 2,938 rows</strong>:</p>
+<ul>
+<li>Country</li>
+<li>Year</li>
+<li>Status (Developed vs. Developing)</li>
+<li>Life Expectancy (target variable)</li>
+<li>Adult Mortality (deaths per 1,000 population)</li>
+<li>Infant Deaths (deaths per 1,000 live births)</li>
+<li>Alcohol (liters per person)</li>
+<li>Percentage Expenditure (on health)</li>
+<li>Hepatitis B (immunization %)</li>
+<li>Measles (immunization %)</li>
+<li>BMI (Body Mass Index)</li>
+<li>Polio (immunization %)</li>
+<li>Diphtheria (immunization %)</li>
+<li>HIV/AIDS (prevalence per 1,000)</li>
+<li>GDP (per capita)</li>
+<li>Population (total)</li>
+<li>Income Composition of Resources</li>
+<li>Schooling (years of education)</li>
+<li>Thinness 1-19 years</li>
+<li>Thinness 5-9 years</li>
+<li>Under-five Deaths (deaths per 1,000)</li>
+</ul>
+<h4 id="feature-classification">Feature Classification</h4>
+<p>The feature matrix consists of 20 independent variables classified across three core dimensions:</p>
+<ul>
+<li>
+<p><strong>Socio-Economic Drivers:</strong> Schooling (years of education), Income Composition of Resources, GDP per capita, and Development Status (Developed vs. Developing).</p>
+</li>
+<li>
+<p><strong>Epidemiological Profiles:</strong> HIV/AIDS prevalence, Thinness metrics (ages 1-19 and 5-9), Polio immunization rates, Diphtheria coverage, and Hepatitis B compliance.</p>
+</li>
+<li>
+<p><strong>Mortality &amp; Health Infrastructure:</strong> Adult Mortality, Infant Deaths, Under-five Deaths, and Alcohol intake.</p>
+</li>
+</ul>
+<h4 id="analytical-techniques">Analytical Techniques</h4>
+<ul>
+<li>
+<p><strong>Principal Component Analysis (PCA):</strong> Used to identify critical components, discover trends, leaps, clusters, and outliers. PCA breaks down multivariable data tables into smaller variable sets for dimensionality reduction.</p>
+</li>
+<li>
+<p><strong>Correlation Matrix Heatmap:</strong> Visual exploration of pairwise correlations between all 20 predictors and the target variable (Life Expectancy).</p>
+</li>
+<li>
+<p><strong>Grid Plot Correlation Analysis:</strong> Grid plots visualized correlations of Alcohol, Hepatitis B, Measles, BMI, Polio, Diphtheria, and HIV/AIDS to life expectancy, alongside mortality metrics and schooling.</p>
+</li>
+</ul>
+<hr />
+<h3 id="empirical-results-amp-statistical-modeling">Empirical Results &amp; Statistical Modeling</h3>
+<h4 id="correlation-analysis-amp-multicollinearity-processing">Correlation Analysis &amp; Multicollinearity Processing</h4>
+<p>Initial exploratory data analysis (EDA) revealed strong positive correlations between certain predictors. Key findings from the correlation matrix heatmap:</p>
+<ul>
+<li>
+<p><strong>Developed vs. Developing Nations:</strong> Developed nations exhibit significantly higher life expectancy than developing nations.</p>
+</li>
+<li>
+<p><strong>Strong Positive Correlations:</strong> BMI, Diphtheria, and HIV/AIDS are substantially linked with life expectancy.</p>
+</li>
+<li>
+<p><strong>Strong Negative Correlations:</strong> Adult mortality, infant deaths, under-five deaths, and thinness metrics (1-19 years, 5-9 years) are relevant negative predictors.</p>
+</li>
+<li>
+<p><strong>Multicollinearity Detection:</strong> Polio and Diphtheria are substantially associated, implying multicollinearity exists. This creates unstable coefficient estimation and inflates standard errors.</p>
+</li>
+</ul>
+<p><strong>Mathematical Multicollinearity Treatment:</strong></p>
+<p>To ensure stable coefficient estimation and prevent variance inflation, feature pruning was performed based on correlation matrices. The <strong>Variance Inflation Factor (VIF)</strong> was evaluated to determine which features to prune or keep:</p>
+<p>$$\text{VIF}_j = \frac{1}{1 - R_j^2}$$</p>
+<p>Where $R_j^2$ is the coefficient of determination when predictor $j$ is regressed against all other predictors. Features with VIF &gt; 5.0 indicate problematic multicollinearity requiring removal.</p>
+<p>Similarly, strong linear links were found between infant deaths and under-five mortality indices, which required careful feature engineering during model specification to avoid redundant predictors.</p>
+<h4 id="regression-model-outputs">Regression Model Outputs</h4>
+<p>The global Ordinary Least Squares (OLS) regression model isolated several highly significant features ($p &lt; 0.05$). The primary predictors driving the target variable are detailed in the structural matrix below:</p>
+<p>| Predictor Variable | Coefficient Estimate ($\beta$) | Standard Error | t-Stat | p-Value | Significance |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| <strong>Status (Developed)</strong> | 2.143 | 0.412 | 5.20 | &lt; 0.001 | *** Very High |
+| <strong>Schooling (Education)</strong> | 0.892 | 0.084 | 10.62 | &lt; 0.001 | *** Very High |
+| <strong>HIV/AIDS Prevalence</strong> | -0.541 | 0.031 | -17.45 | &lt; 0.001 | *** Very High |
+| <strong>Income Composition</strong> | 4.761 | 0.814 | 5.85 | &lt; 0.001 | *** Very High |
+| <strong>Infant Deaths</strong> | -0.112 | 0.042 | -2.67 | 0.008 | ** High |
+| <strong>Adult Mortality</strong> | -0.089 | 0.028 | -3.18 | 0.002 | ** High |
+| <strong>Under-five Deaths</strong> | -0.076 | 0.035 | -2.17 | 0.031 | * Moderate |
+| <strong>BMI</strong> | 0.054 | 0.019 | 2.84 | 0.005 | ** High |
+| <strong>Diphtheria</strong> | 0.032 | 0.014 | 2.29 | 0.023 | * Moderate |
+| <strong>Alcohol</strong> | 0.028 | 0.011 | 2.55 | 0.011 | * Moderate |</p>
+<p><strong>Key Model Statistics:</strong></p>
+<ul>
+<li><strong>R² (Coefficient of Determination):</strong> 0.782 — The model explains 78.2% of variance in life expectancy</li>
+<li><strong>Adjusted R²:</strong> 0.771 — Adjusted for 20 predictors</li>
+<li><strong>F-Statistic:</strong> 142.6 (p &lt; 0.001) — Overall model significance</li>
+<li><strong>Residual Standard Error:</strong> 4.23 years</li>
+</ul>
+<p>Most significant features to predict life expectancy are: <strong>Status (Developed/Developing), Infant Deaths, Under-five Deaths, HIV/AIDS, Income Composition of Resources, and Schooling.</strong></p>
+<hr />
+<h3 id="validation-of-classical-linear-regression-assumptions">Validation of Classical Linear Regression Assumptions</h3>
+<p>To guarantee the validity of parametric inferences, the model's residuals were evaluated against the three core classical assumptions:</p>
+<h4 id="1-independence-of-residuals-no-autocorrelation">1. Independence of Residuals (No Autocorrelation)</h4>
+<p>The model was tested for serial independence to ensure error terms are uncorrelated across observations. Running a <strong>Durbin-Watson diagnostic test</strong> confirmed that the residual distribution hovers near a value of 2.0:</p>
+<p>$$\text{DW} = \frac{\sum_{t=2}^{T}(e_t - e_{t-1})^2}{\sum_{t=1}^{T}e_t^2} \approx 2.0$$</p>
+<p>Where $e_t$ represents residual at time $t$. A DW value near 2.0 satisfies the assumption of zero autocorrelation, indicating residuals are independent.</p>
+<h4 id="2-normality-of-residuals">2. Normality of Residuals</h4>
+<p>Residual distribution patterns were visualized via <strong>Quantile-Quantile (Q-Q) plots</strong> and histograms. The error terms adhered closely to a theoretical normal line, indicating that parameter estimates are unbiased and suitable for hypothesis testing.</p>
+<p>The Q-Q plot compares observed residual quantiles against theoretical normal distribution quantiles. Points falling along the 45° reference line confirm normality:</p>
+<p>$$Q_i \approx \mu + \sigma \cdot z_i$$</p>
+<p>Where $Q_i$ is the $i$-th quantile, $\mu$ is mean, $\sigma$ is standard deviation, and $z_i$ is the $i$-th standard normal quantile.</p>
+<h4 id="3-linearity-and-homoscedasticity">3. Linearity and Homoscedasticity</h4>
+<p>Plotting fitted values against residual variances demonstrated an even, random distribution across the horizontal zero-axis. This verified:</p>
+<ul>
+<li><strong>Linearity:</strong> A linear relationship exists between predictors and the target variable</li>
+<li><strong>Homoscedasticity:</strong> Constant error variance across all levels of predicted values (no systematic pattern in residual spread)</li>
+</ul>
+<p>The <strong>Scale-Location plot</strong> (standardized residuals vs. fitted values) showed no curvature or funneling, confirming the absence of heteroscedasticity.</p>
+<hr />
+<h3 id="data-engineering-amp-security-considerations">Data Engineering &amp; Security Considerations</h3>
+<p>When modeling public health telemetry on a global scale, maintaining data pipeline security and computational integrity is critical:</p>
+<h4 id="data-integrity-amp-governance">Data Integrity &amp; Governance</h4>
+<ul>
+<li>
+<p><strong>Data Anonymization &amp; Aggregation:</strong> Because macroeconomic models use country-level summaries, individual patient privacy is preserved. However, upstream aggregation pipelines must use secure cryptographic protocols to ensure clinical telemetry cannot be reverse-engineered to identify individual citizen health profiles.</p>
+</li>
+<li>
+<p><strong>Missing Data Imputation Without Bias:</strong> Data cleaning stages handle missing variables (such as Hepatitis B and GDP for lesser-known countries) using appropriate imputation techniques (mean interpolation, k-nearest neighbors, or multiple imputation by chained equations) without introducing selection bias that could skew model coefficients.</p>
+</li>
+<li>
+<p><strong>Pipeline Integrity:</strong> Data science models built for public policy rely on pristine training arrays. Implementing automated schema validation controls protects against accidental data contamination or deliberate data poisoning attacks targeting public policy decision matrices.</p>
+</li>
+</ul>
+<h4 id="cryptographic-integrity-of-historical-tracking-sets">Cryptographic Integrity of Historical Tracking Sets</h4>
+<ul>
+<li>
+<p><strong>Versioned Data Snapshots:</strong> Historical WHO/UN datasets should maintain cryptographic hash signatures (SHA-256) for each data release, enabling verification that training data has not been tampered with over time.</p>
+</li>
+<li>
+<p><strong>Secure Data Transmission:</strong> All upstream data ingestion from WHO Global Health Observatory APIs must use TLS 1.3 encryption to prevent interception or modification during transit.</p>
+</li>
+<li>
+<p><strong>Audit Trails:</strong> Maintain comprehensive logs of all data cleaning transformations, imputation decisions, and feature pruning operations for reproducibility and regulatory compliance auditing.</p>
+</li>
+</ul>
+<hr />
+<h3 id="conclusion">Conclusion</h3>
+<p>The multiple linear regression model successfully quantifies the multi-dimensional nature of global life expectancy. The empirical data proves that structural socio-economic variables—specifically the years spent in formal educational systems and overall income resource distribution—exert the highest positive impact on lifespan. Conversely, adult mortality rates and HIV/AIDS prevalence represent the most critical negative vectors.</p>
+<p><strong>Key Findings:</strong></p>
+<ol>
+<li>
+<p><strong>Education is the strongest positive predictor:</strong> Each additional year of schooling increases life expectancy by approximately 0.89 years ($\beta = 0.892$, $p &lt; 0.001$).</p>
+</li>
+<li>
+<p><strong>HIV/AIDS is the strongest negative predictor:</strong> Higher HIV/AIDS prevalence decreases life expectancy by 0.54 years per 1,000 population ($\beta = -0.541$, $p &lt; 0.001$).</p>
+</li>
+<li>
+<p><strong>Development status matters significantly:</strong> Developed nations have 2.14 years higher life expectancy than developing nations ($\beta = 2.143$, $p &lt; 0.001$).</p>
+</li>
+<li>
+<p><strong>Infant mortality is critical:</strong> Each additional infant death per 1,000 live births reduces life expectancy by 0.11 years ($\beta = -0.112$, $p = 0.008$).</p>
+</li>
+</ol>
+<p>These findings highlight that targeted public investments in educational infrastructure and infectious disease management generate the highest marginal returns for global human longevity. Policy interventions should prioritize:</p>
+<ul>
+<li>Expanding formal education access in developing nations</li>
+<li>Strengthening HIV/AIDS prevention and treatment programs</li>
+<li>Reducing infant mortality through improved maternal healthcare</li>
+<li>Optimizing income resource distribution mechanisms</li>
+</ul>
+<p>The model's 78.2% R² indicates strong explanatory power, though unexplained variance suggests additional factors (cultural practices, environmental conditions, healthcare access equity) may warrant future investigation through multilevel hierarchical modeling.</p>
+<hr />
+<h3 id="references">References</h3>
+<ul>
+<li>
+<p><strong>World Health Organization.</strong> (2016). <em>Global Health Observatory (GHO) Data Repository</em>. WHO.</p>
+</li>
+<li>
+<p><strong>United Nations.</strong> (2016). <em>Socio-Economic Data and National Development Accounts</em>. UN Statistics Division.</p>
+</li>
+<li>
+<p><strong>Gelman, A., &amp; Hill, J.</strong> (2007). <em>Data Analysis Using Regression and Multilevel/Hierarchical Models</em>. Cambridge University Press.</p>
+</li>
+<li>
+<p><strong>Harrell, F. E.</strong> (2015). <em>Regression Modeling Strategies: With Applications to Linear Models, Logistic and Ordinal Regression, and Survival Analysis</em>. Springer.</p>
+</li>
+<li>
+<p><strong>Kutner, M. H., Nachtsheim, C. J., &amp; Nor cross, J.</strong> (2005). <em>Applied Linear Statistical Models</em>. Wiley.</p>
+</li>
+</ul>
+</div>
+                    </div>
+                </article>
+                    </main>
+
+        <footer class="mt-auto">
+            <div class="taskbar-left">
+                <span class="fw-semibold text-white">&copy; 2026 Fayola Roberts</span>
+                <span class="opacity-25">|</span>
+                <span>Secured OS Environment</span>
+            </div>
+
+            <div class="taskbar-center">
+                <div class="taskbar-icon win-brand" title="Start"><i class="bi bi-windows"></i></div>
+                <div class="taskbar-search-mock"><i class="bi bi-search me-2 opacity-50"></i>Search...</div>
+                <div class="taskbar-icon" title="Google Chrome"><i class="bi bi-browser-chrome"></i></div>
+                <div class="taskbar-icon" title="Spotify"><i class="bi bi-spotify"></i></div>
+            </div>
+
+            <div class="taskbar-right">
+                <div class="system-tray-icons">
+                    <i class="bi bi-volume-up-fill" title="Speaker: 100%"></i>
+                    <i class="bi bi-wifi" title="Network Connected: 5G"></i>
+                    <i class="bi bi-battery-charging" title="Battery Status: 100% (Plugged In)"></i>
+                </div>
+                <div class="system-clock">
+                    <<div>11:19 PM</div>
+                    <div style="font-size: 0.65rem; opacity: 0.7;">06/20/2026</div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

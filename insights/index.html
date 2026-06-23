@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insights & Research — Fayola Roberts</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="modulepreload" href="http://localhost:8080/build/assets/app-4ed993c7.js" /><link rel="modulepreload" href="http://localhost:8080/build/assets/app-ed1b56b6.js" /><script type="module" src="http://localhost:8080/build/assets/app-4ed993c7.js"></script><script type="module" src="http://localhost:8080/build/assets/app-ed1b56b6.js"></script>    <style>
+        :root {
+            /* Classic 90s Desktop / Modern Hybrid Theme Colors from Template */
+            --bg-desktop: #223147;       
+            --bg-card: #012456;         
+            --accent-primary: #0078d4;   
+            --accent-glow: #38bdf8;       
+            --text-main: #ffffff;       
+            --text-readable: #f8fafc;    
+            --text-muted: #cbd5e1;       
+            
+            /* Syntax Highlighting */
+            --ps-yellow: #ffdf00;         
+            --ps-cyan: #00ffff;           
+        }
+
+        /* Allow browser-level natural document scrolling */
+        html, body {
+            min-height: 100vh;
+            width: 100vw;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            overflow-y: auto; /* Uses normal native browser scrolling */
+        }
+
+        body {
+            background-color: var(--bg-desktop);
+            font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Main Application Window --- */
+        .container.animate-boot {
+            max-width: 100% !important;
+            width: 100vw !important;
+            min-height: calc(100vh - 48px) !important;
+            background: #1e1e1e;
+            /* Boxy Effect */
+            border-top: 3px solid #ffffff !important;
+            border-left: 3px solid #ffffff !important;
+            border-right: 3px solid #7f7f7f !important;
+            border-bottom: 3px solid #7f7f7f !important;
+            border-radius: 0px !important; /* Zero curves */
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding: 40px 0 0 0 !important; 
+            margin-bottom: 48px !important; 
+        }
+
+        /* Vintage Boxy Title Bar Chrome Injection */
+        .container.animate-boot::before {
+            content: "🗔 MainWorkspace - Insights_And_Research.exe";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 32px;
+            background: linear-gradient(90deg, #000080, #1084d0); /* Classic legacy active window gradient */
+            color: #ffffff;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            padding-left: 12px;
+            letter-spacing: 0.5px;
+            z-index: 10;
+        }
+
+        /* Retro Window Min/Max/Close Control Buttons Graphic */
+        .container.animate-boot::after {
+            content: "🗕 🗖 🗙";
+            position: absolute;
+            top: 4px;
+            right: 8px;
+            color: #ffffff;
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            cursor: pointer;
+            z-index: 11;
+        }
+
+        /* Main application container flows with page content height */
+        main {
+            flex: 1 0 auto;
+            padding: 30px;
+            padding-bottom: 80px; /* Safe clearing block above taskbar */
+        }
+
+        /* Identity Registry Layout Adjustments */
+        .border-bottom.border-secondary {
+            padding: 0 30px 20px 30px;
+            border-bottom-color: rgba(255, 255, 255, 0.15) !important;
+        }
+
+        h1, h2, h3, h4, h5, h6, .text-white-forced {
+            color: var(--text-main) !important;
+        }
+
+        .animate-boot {
+            animation: consoleBoot 0.25s ease-in-out forwards;
+        }
+        @keyframes consoleBoot {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* --- cmd.exe Prompt Command Line Navigation Block --- */
+        header.cmd-prompt-nav {
+            background: transparent !important;
+            border: none !important;
+            margin: 0 30px 30px 30px !important;
+            padding: 0 !important;
+        }
+        
+        .cmd-line-text {
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .nav-link-custom {
+            color: #a3a3a3; /* Distinct gray to represent available options */
+            transition: color 0.1s ease;
+            font-weight: bold;
+            padding: 2px 8px !important;
+            border-radius: 0px !important;
+            text-decoration: none;
+        }
+        .nav-link-custom:hover {
+            color: var(--accent-glow) !important;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .nav-link-custom.active {
+            color: #00ff00 !important; /* Bright terminal green for active option readability */
+            background: transparent !important;
+        }
+
+        .border-start.border-secondary {
+            border-left-color: var(--accent-primary) !important;
+            border-left-width: 4px !important;
+        }
+
+        /* --- PowerShell Console Windows (Subsections) --- */
+        .tech-card {
+            background: var(--bg-card) !important;
+            border: 2px solid #7f7f7f !important;
+            border-radius: 0px !important; 
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.7);
+            position: relative;
+            padding: 42px 20px 20px 20px !important;
+            overflow: hidden;
+        }
+        .tech-card:hover {
+            border-color: var(--accent-glow) !important;
+        }
+        
+        /* Specialized card titles mapping specific tracking streams */
+        .tech-card.card-research::before { 
+            /* Unicode equivalent for bootstrap icon folder: \F3C2 */
+            content: "\F3C2  Local_Repository\\RESEARCH_PAPERS.DIR"; 
+            font-family: 'Bootstrap-Icons', 'SF Mono', Consolas, monospace !important;
+            background: #002b66 !important; /* Brightened block background to pop from deep midnight blue card shadow */
+            color: var(--ps-cyan) !important; /* High-contrast cyan terminal color for maximum link label visibility */
+            font-weight: bold;
+            font-size: 0.78rem;
+            letter-spacing: 0.5px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            padding-left: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .tech-card.card-blogs::before { 
+            /* Unicode equivalent for bootstrap icon file-text: \F37F */
+            content: "\F37F  System_Config\\BLOG_UPDATES.LOG"; 
+            font-family: 'Bootstrap-Icons', 'SF Mono', Consolas, monospace !important;
+            background: #1e293b !important; /* Elevated slate tone to enhance line item reading edge */
+            color: var(--ps-yellow) !important; /* High-contrast yellow console code visibility tracking */
+            font-weight: bold;
+            font-size: 0.78rem;
+            letter-spacing: 0.5px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            padding-left: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* --- Filter Controls Panel Retro Modification --- */
+        .filter-select-retro {
+            background-color: #111827 !important;
+            color: #00ff00 !important;
+            border: 1px solid #4b5563 !important;
+            border-radius: 0px !important;
+            font-family: inherit;
+            font-size: 0.75rem !important;
+            padding: 4px 8px !important;
+        }
+        .filter-select-retro:focus {
+            border-color: var(--accent-glow) !important;
+            box-shadow: none !important;
+        }
+        .filter-label-retro {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        /* Child Entry Node Wrappers inside PowerShell Windows */
+        .entry-node {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 3px solid var(--accent-primary);
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.2s ease;
+        }
+        .entry-node:last-child {
+            margin-bottom: 0;
+        }
+        .entry-node:hover {
+            border-left-color: var(--accent-glow);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Text Element Readability Controls */
+        .tech-card h3 {
+            font-size: 0.98rem;
+            color: var(--ps-yellow) !important;
+            margin-bottom: 12px !important;
+        }
+        .tech-card p {
+            color: var(--text-readable) !important;
+            line-height: 1.5;
+        }
+        
+        .entry-title-link {
+            color: var(--ps-cyan) !important;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .entry-title-link:hover {
+            color: #ffffff !important;
+            text-decoration: underline;
+        }
+
+        /* Interface Badges */
+        .status-pill {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid #34d399;
+            color: #34d399;
+            border-radius: 0px !important;
+        }
+        .meta-badge {
+            font-size: 0.65rem !important;
+            border-radius: 0px !important;
+            background: rgba(56, 189, 248, 0.1) !important;
+            border: 1px solid rgba(56, 189, 248, 0.4) !important;
+            color: var(--accent-glow) !important;
+        }
+        .meta-link {
+            color: var(--accent-glow);
+            text-decoration: none;
+        }
+        .meta-link:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        /* Blinking Terminal Cursor */
+        @keyframes blink { 50% { opacity: 0; } }
+        .terminal-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 15px;
+            background-color: #00ff00;
+            margin-left: 4px;
+            vertical-align: middle;
+            animation: blink 1s step-end infinite;
+        }
+
+        /* --- Authentic Full-Width Fixed Windows 11 Taskbar --- */
+        footer.mt-auto {
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 48px !important;
+            background: rgba(32, 32, 32, 0.9) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 0px !important; 
+            padding: 0 20px !important;
+            margin: 0 !important;
+            
+            display: grid !important;
+            grid-template-columns: 1fr auto 1fr !important;
+            align-items: center !important;
+            z-index: 99999;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .taskbar-left {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 10px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .taskbar-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+        .taskbar-icon {
+            font-size: 1.15rem;
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: transform 0.1s ease, color 0.1s ease;
+            display: flex;
+            align-items: center;
+        }
+        .taskbar-icon:hover {
+            color: var(--accent-glow);
+            transform: scale(1.1);
+        }
+        .taskbar-icon.win-brand {
+            color: #0078d4;
+            font-size: 1.25rem;
+        }
+        .taskbar-search-mock {
+            width: 140px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #cccccc;
+            font-size: 0.72rem;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            cursor: text;
+            user-select: none;
+        }
+
+        .taskbar-right {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 14px;
+            font-size: 0.8rem;
+            color: #e2e8f0;
+        }
+        .system-tray-icons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #cbd5e1;
+        }
+        .system-clock {
+            font-size: 0.75rem;
+            text-align: right;
+            line-height: 1.2;
+            border-left: 1px solid rgba(255, 255, 255, 0.15);
+            padding-left: 12px;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container py-5 animate-boot">
+        
+        <div class="mb-4 pb-4 border-bottom border-secondary border-opacity-50">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                <h1 class="h3 fw-bold m-0">Fayola Roberts</h1>
+                <span class="badge status-pill px-2 py-1 text-uppercase fw-semibold">SYS_STATUS: ONLINE</span>
+            </div>
+            
+            <div class="d-flex flex-wrap gap-3 small fw-medium mt-3">
+                <div>
+                    <i class="bi bi-github text-white-forced me-1"></i> 
+                    <a href="https://github.com/DarkAngel2001" target="_blank" rel="noopener noreferrer" class="meta-link">AngelLite (GitHub)</a>
+                </div>
+                <div class="d-none d-sm-inline text-muted opacity-50">|</div>
+                <div>
+                    <i class="bi bi-linkedin text-white-forced me-1"></i> 
+                    <a href="https://www.linkedin.com/in/fayola-roberts-612760205/" target="_blank" rel="noopener noreferrer" class="meta-link">Fayola Roberts (LinkedIn)</a>
+                </div>
+                <div class="d-none d-sm-inline text-muted opacity-50">|</div>
+                <div>
+                    <i class="bi bi-envelope-fill text-white-forced me-1"></i> 
+                    <a href="mailto:fayola.c.roberts@gmail.com" class="meta-link font-monospace">fayola.c.roberts@gmail.com</a>
+                </div>
+            </div>
+        </div>
+
+        <header class="cmd-prompt-nav">
+            <div class="cmd-line-text">C:\Users\FayolaRoberts\Portfolio&gt; navigate --select-target</div>
+            <nav class="nav gap-2 small">
+                <a href="/research-portfolio/" class="nav-link-custom">[ Home ]</a>
+                <a href="/research-portfolio/about" class="nav-link-custom">[ About_Me ]</a>
+                <a href="/research-portfolio/insights" class="nav-link-custom">[ Insights_&amp;_Research ]</a>
+                <span class="terminal-cursor"></span>
+            </nav>
+        </header>
+        <main>
+            <div class="row g-4">
+                
+                <!-- Research Panel Container -->
+                <div class="col-lg-6" id="research-container">
+                    <div class="tech-card card-research h-100">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3 mt-1">
+                            <h2 class="h6 fw-bold m-0" style="color: var(--ps-yellow) !important; font-size: 0.85rem; letter-spacing: 0.5px;">
+                                // QUERY: LOCAL_RESEARCH_MANIFEST
+                            </h2>
+                            <!-- Filtering Controls -->
+                            <div class="d-flex align-items-center gap-2">
+                                <label class="filter-label-retro">Cat:</label>
+                                <select class="form-select filter-select-retro filter-category">
+                                    <option value="ALL">ALL</option>
+                                    <option value="Professional">Professional</option>
+                                    <option value="School Projects">School Projects</option>
+                                    <option value="For fun">For fun</option>
+                                </select>
+                                <label class="filter-label-retro">Sort:</label>
+                                <select class="form-select filter-select-retro filter-order">
+                                    <option value="DESC">Latest</option>
+                                    <option value="ASC">Oldest</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex flex-column gap-1 entries-wrapper">
+                                                            <div class="entry-node" data-category="Professional" data-date="2026-05-27">
+                                    <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+                                        <h3 class="h6 fw-bold mb-0">
+                                            <a href="/research-portfolio/research/mext-submission-llm-secure-framework" class="text-decoration-none">
+                                                ./Research Prospectus: A Secure Framework for Integrating Large Language Models in Public Sector Information Systems
+                                            </a>
+                                        </h3>
+                                        <span class="badge meta-badge text-uppercase">Professional</span>
+                                    </div>
+                                    <div class="text-white-50 font-monospace mb-2" style="font-size: 0.72rem;">
+                                        [TIMESTAMP: 2026-05-27]
+                                    </div>
+                                    <p class="small m-0 text-muted" style="font-size: 0.82rem; line-height: 1.4;">
+                                        An interdisciplinary technical and managerial framework balancing data privacy, cyber governance, and operational efficiency for RAG pipelines within the public sectors of Trinidad &amp; Tobago and Japan.
+                                    </p>
+                                </div>
+                                                            <div class="entry-node" data-category="Professional" data-date="2024-06-02">
+                                    <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+                                        <h3 class="h6 fw-bold mb-0">
+                                            <a href="/research-portfolio/research/t-and-t-transportation-cybersecurity-thesis-prospectus" class="text-decoration-none">
+                                                ./Critical Infrastructure Protection: A Vulnerability Assessment Framework for the Transportation Sector of Trinidad &amp; Tobago
+                                            </a>
+                                        </h3>
+                                        <span class="badge meta-badge text-uppercase">Professional</span>
+                                    </div>
+                                    <div class="text-white-50 font-monospace mb-2" style="font-size: 0.72rem;">
+                                        [TIMESTAMP: 2024-06-02]
+                                    </div>
+                                    <p class="small m-0 text-muted" style="font-size: 0.82rem; line-height: 1.4;">
+                                        A comprehensive cybersecurity research prospectus establishing a methodologies-driven framework to assess, model, and mitigate systemic cyber risk across air, land, and maritime transit systems.
+                                    </p>
+                                </div>
+                                                            <div class="entry-node" data-category="School Projects" data-date="2022-07-26">
+                                    <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+                                        <h3 class="h6 fw-bold mb-0">
+                                            <a href="/research-portfolio/research/trincity-mall-navigator-ips" class="text-decoration-none">
+                                                ./Trincity Mall Navigator: Engineering Indoor Positioning Systems via Native SDKs and No-Code Sensor Fusion
+                                            </a>
+                                        </h3>
+                                        <span class="badge meta-badge text-uppercase">School Projects</span>
+                                    </div>
+                                    <div class="text-white-50 font-monospace mb-2" style="font-size: 0.72rem;">
+                                        [TIMESTAMP: 2022-07-26]
+                                    </div>
+                                    <p class="small m-0 text-muted" style="font-size: 0.82rem; line-height: 1.4;">
+                                        An engineering case study detailing the development of an Indoor Positioning System (IPS) utilizing the IndoorAtlas SDK, and a comparative pivot to low-code prototyping.
+                                    </p>
+                                </div>
+                                                            <div class="entry-node" data-category="School Projects" data-date="2022-04-13">
+                                    <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+                                        <h3 class="h6 fw-bold mb-0">
+                                            <a href="/research-portfolio/research/immersive-frontier-vr-metaverse" class="text-decoration-none">
+                                                ./The Immersive Frontier: Socio-Technical Realities of Virtual Environments and Geopolitical Adoption
+                                            </a>
+                                        </h3>
+                                        <span class="badge meta-badge text-uppercase">School Projects</span>
+                                    </div>
+                                    <div class="text-white-50 font-monospace mb-2" style="font-size: 0.72rem;">
+                                        [TIMESTAMP: 2022-04-13]
+                                    </div>
+                                    <p class="small m-0 text-muted" style="font-size: 0.82rem; line-height: 1.4;">
+                                        An analysis of Virtual Reality (VR) development trajectories, clinical and defense simulations, and economic constraints affecting ICT infrastructure integration.
+                                    </p>
+                                </div>
+                                                            <div class="entry-node" data-category="School Projects" data-date="2021-11-27">
+                                    <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+                                        <h3 class="h6 fw-bold mb-0">
+                                            <a href="/research-portfolio/research/architectural-analysis-feaf-ea3" class="text-decoration-none">
+                                                ./Architectural Analysis: Evaluating FEAF and EA3 Frameworks in Public Sector Infrastructures
+                                            </a>
+                                        </h3>
+                                        <span class="badge meta-badge text-uppercase">School Projects</span>
+                                    </div>
+                                    <div class="text-white-50 font-monospace mb-2" style="font-size: 0.72rem;">
+                                        [TIMESTAMP: 2021-11-27]
+                                    </div>
+                                    <p class="small m-0 text-muted" style="font-size: 0.82rem; line-height: 1.4;">
+                                        A comparative study of the Federal Enterprise Architecture Framework (FEAF) and the EA3 Cube, featuring a public health case study on data standard synchronization.
+                                    </p>
+                                </div>
+                                                            <div class="entry-node" data-category="School Projects" data-date="2021-11-25">
+                                    <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+                                        <h3 class="h6 fw-bold mb-0">
+                                            <a href="/research-portfolio/research/omori-software-project-management-postmortem" class="text-decoration-none">
+                                                ./Software Project Management Post-Mortem: Analyzing Scope Creep and Engine Migration in OMORI&#039;s Development Lifecycle
+                                            </a>
+                                        </h3>
+                                        <span class="badge meta-badge text-uppercase">School Projects</span>
+                                    </div>
+                                    <div class="text-white-50 font-monospace mb-2" style="font-size: 0.72rem;">
+                                        [TIMESTAMP: 2021-11-25]
+                                    </div>
+                                    <p class="small m-0 text-muted" style="font-size: 0.82rem; line-height: 1.4;">
+                                        An industry case study analyzing the software development bottlenecks, engine migrations, and stakeholder management failures during the six-year production of the indie game OMORI.
+                                    </p>
+                                </div>
+                                                            <div class="entry-node" data-category="School Projects" data-date="2021-07-28">
+                                    <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+                                        <h3 class="h6 fw-bold mb-0">
+                                            <a href="/research-portfolio/research/global-life-expectancy-regression-analysis" class="text-decoration-none">
+                                                ./Predictive Modeling of Global Life Expectancy: A Multiple Linear Regression Analysis
+                                            </a>
+                                        </h3>
+                                        <span class="badge meta-badge text-uppercase">School Projects</span>
+                                    </div>
+                                    <div class="text-white-50 font-monospace mb-2" style="font-size: 0.72rem;">
+                                        [TIMESTAMP: 2021-07-28]
+                                    </div>
+                                    <p class="small m-0 text-muted" style="font-size: 0.82rem; line-height: 1.4;">
+                                        An empirical data science study leveraging WHO Global Health Observatory datasets to model demographic, economic, and epidemiological predictors of life expectancy.
+                                    </p>
+                                </div>
+                                                            <div class="entry-node" data-category="For fun" data-date="2021-06-27">
+                                    <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+                                        <h3 class="h6 fw-bold mb-0">
+                                            <a href="/research-portfolio/research/bts-entertainment-analytics-streaming-telemetry" class="text-decoration-none">
+                                                ./Entertainment Analytics: Modeling Global Streaming Telemetry and Consumption Growth Trajectories
+                                            </a>
+                                        </h3>
+                                        <span class="badge meta-badge text-uppercase">For fun</span>
+                                    </div>
+                                    <div class="text-white-50 font-monospace mb-2" style="font-size: 0.72rem;">
+                                        [TIMESTAMP: 2021-06-27]
+                                    </div>
+                                    <p class="small m-0 text-muted" style="font-size: 0.82rem; line-height: 1.4;">
+                                        An exploratory data science project leveraging Python analytics to parse cross-platform streaming datasets, tracking distribution growth in the global music industry.
+                                    </p>
+                                </div>
+                                                            <div class="entry-node" data-category="School Projects" data-date="2021-05-29">
+                                    <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+                                        <h3 class="h6 fw-bold mb-0">
+                                            <a href="/research-portfolio/research/starbucks-enterprise-data-architecture-spatial-analytics-case-study" class="text-decoration-none">
+                                                ./Enterprise Data Architecture: Spatial Analytics and Business Intelligence Pipelines at Starbucks
+                                            </a>
+                                        </h3>
+                                        <span class="badge meta-badge text-uppercase">School Projects</span>
+                                    </div>
+                                    <div class="text-white-50 font-monospace mb-2" style="font-size: 0.72rem;">
+                                        [TIMESTAMP: 2021-05-29]
+                                    </div>
+                                    <p class="small m-0 text-muted" style="font-size: 0.82rem; line-height: 1.4;">
+                                        A comprehensive data science case study analyzing how global enterprises combine geographic information systems (GIS), OLAP data cubes, and loyalty telemetry to optimize market placement.
+                                    </p>
+                                </div>
+                                                            <div class="entry-node" data-category="School Projects" data-date="2021-04-04">
+                                    <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+                                        <h3 class="h6 fw-bold mb-0">
+                                            <a href="/research-portfolio/research/algorithmic-paradigms-greedy-divide-conquer-whitepaper" class="text-decoration-none">
+                                                ./Algorithmic Paradigms: Comparative Analysis of Greedy and Divide-and-Conquer Frameworks
+                                            </a>
+                                        </h3>
+                                        <span class="badge meta-badge text-uppercase">School Projects</span>
+                                    </div>
+                                    <div class="text-white-50 font-monospace mb-2" style="font-size: 0.72rem;">
+                                        [TIMESTAMP: 2021-04-04]
+                                    </div>
+                                    <p class="small m-0 text-muted" style="font-size: 0.82rem; line-height: 1.4;">
+                                        An analytical study evaluating the efficiency, structural constraints, and optimization trade-offs between Greedy pathfinding models and Divide-and-Conquer sorting frameworks.
+                                    </p>
+                                </div>
+                                                            <div class="entry-node" data-category="School Projects" data-date="2020-11-23">
+                                    <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+                                        <h3 class="h6 fw-bold mb-0">
+                                            <a href="/research-portfolio/research/egovernment-paradigms-trinidad" class="text-decoration-none">
+                                                ./E-Government Paradigms: Digital Transformation and Regional Frameworks
+                                            </a>
+                                        </h3>
+                                        <span class="badge meta-badge text-uppercase">School Projects</span>
+                                    </div>
+                                    <div class="text-white-50 font-monospace mb-2" style="font-size: 0.72rem;">
+                                        [TIMESTAMP: 2020-11-23]
+                                    </div>
+                                    <p class="small m-0 text-muted" style="font-size: 0.82rem; line-height: 1.4;">
+                                        An overview of electronic government models (G2G, G2B, G2C), operational efficiencies, and a case study of ICT implementation constraints within Trinidad and Tobago.
+                                    </p>
+                                </div>
+                                                            <div class="entry-node" data-category="School Projects" data-date="2020-11-23">
+                                    <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+                                        <h3 class="h6 fw-bold mb-0">
+                                            <a href="/research-portfolio/research/enterprise-information-architecture-tps-mis-dss-ess-case-study" class="text-decoration-none">
+                                                ./Enterprise Information Architecture: Data Ingestion Cascades and Threat Surfaces Across Management Tiers
+                                            </a>
+                                        </h3>
+                                        <span class="badge meta-badge text-uppercase">School Projects</span>
+                                    </div>
+                                    <div class="text-white-50 font-monospace mb-2" style="font-size: 0.72rem;">
+                                        [TIMESTAMP: 2020-11-23]
+                                    </div>
+                                    <p class="small m-0 text-muted" style="font-size: 0.82rem; line-height: 1.4;">
+                                        An architectural analysis of enterprise information systems (TPS, MIS, DSS, ESS), detailing the ETL data pipelines that connect them and the security surfaces inherent to vertical data propagation.
+                                    </p>
+                                </div>
+                                                            <div class="entry-node" data-category="School Projects" data-date="2020-11-13">
+                                    <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+                                        <h3 class="h6 fw-bold mb-0">
+                                            <a href="/research-portfolio/research/ebbrt-system-architecture-review-zookeeper-integration" class="text-decoration-none">
+                                                ./System Review: Evaluating EbbRT Architecture and Distributed Coordination Mechanisms
+                                            </a>
+                                        </h3>
+                                        <span class="badge meta-badge text-uppercase">School Projects</span>
+                                    </div>
+                                    <div class="text-white-50 font-monospace mb-2" style="font-size: 0.72rem;">
+                                        [TIMESTAMP: 2020-11-13]
+                                    </div>
+                                    <p class="small m-0 text-muted" style="font-size: 0.82rem; line-height: 1.4;">
+                                        An architectural review of the Elastic Building Block Runtime (EbbRT) framework, analyzing library operating systems, distributed node scaling, and coordination optimizations via Apache ZooKeeper.
+                                    </p>
+                                </div>
+                                                        
+                            <!-- JavaScript Dynamic Catch for 0 filtering matches -->
+                            <div class="p-3 text-center border border-secondary border-opacity-20 bg-dark bg-opacity-30 d-none filter-empty-placeholder">
+                                <p class="text-white-50 small italic m-0">STATUS_ERR: No resources match criteria filters.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Blogs Panel Container -->
+                <div class="col-lg-6" id="blogs-container">
+                    <div class="tech-card card-blogs h-100">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3 mt-1">
+                            <h2 class="h6 fw-bold m-0" style="color: var(--ps-yellow) !important; font-size: 0.85rem; letter-spacing: 0.5px;">
+                                // QUERY: LIVE_BLOG_UPDATES
+                            </h2>
+                            <!-- Filtering Controls -->
+                            <div class="d-flex align-items-center gap-2">
+                                <label class="filter-label-retro">Cat:</label>
+                                <select class="form-select filter-select-retro filter-category">
+                                    <option value="ALL">ALL</option>
+                                    <option value="General">General</option>
+                                    <option value="Event">Event</option>
+                                </select>
+                                <label class="filter-label-retro">Sort:</label>
+                                <select class="form-select filter-select-retro filter-order">
+                                    <option value="DESC">Latest</option>
+                                    <option value="ASC">Oldest</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex flex-column gap-1 entries-wrapper">
+                                                            <div class="entry-node" data-category="General" data-date="2026-06-26">
+                                    <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+                                        <h3 class="h6 fw-bold mb-0">
+                                            <a href="/research-portfolio/blogs/first-update" class="text-decoration-none">
+                                                ./My goal for this project
+                                            </a>
+                                        </h3>
+                                        <span class="badge meta-badge text-uppercase">General</span>
+                                    </div>
+                                    <div class="text-white-50 font-monospace mb-2" style="font-size: 0.72rem;">
+                                        [TIMESTAMP: 2026-06-26]
+                                    </div>
+                                    <p class="small m-0 text-muted" style="font-size: 0.82rem; line-height: 1.4;">
+                                        Personal Goal Outline and Hopes
+                                    </p>
+                                </div>
+                                                        
+                            <!-- JavaScript Dynamic Catch for 0 filtering matches -->
+                            <div class="p-3 text-center border border-secondary border-opacity-20 bg-dark bg-opacity-30 d-none filter-empty-placeholder">
+                                <p class="text-white-50 small italic m-0">STATUS_ERR: No resources match criteria filters.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <footer class="mt-auto">
+            <div class="taskbar-left">
+                <span class="fw-semibold text-white">&copy; 2026 Fayola Roberts</span>
+                <span class="opacity-25">|</span>
+                <span>Secured OS Environment</span>
+            </div>
+
+            <div class="taskbar-center">
+                <div class="taskbar-icon win-brand" title="Start"><i class="bi bi-windows"></i></div>
+                <div class="taskbar-search-mock"><i class="bi bi-search me-2 opacity-50"></i>Search...</div>
+                <div class="taskbar-icon" title="Google Chrome"><i class="bi bi-browser-chrome"></i></div>
+                <div class="taskbar-icon" title="Spotify"><i class="bi bi-spotify"></i></div>
+            </div>
+
+            <div class="taskbar-right">
+                <div class="system-tray-icons">
+                    <i class="bi bi-volume-up-fill" title="Speaker: 100%"></i>
+                    <i class="bi bi-wifi" title="Network Connected: 5G"></i>
+                    <i class="bi bi-battery-charging" title="Battery Status: 100% (Plugged In)"></i>
+                </div>
+                <div class="system-clock">
+                    <div>11:19 PM</div>
+                    <div style="font-size: 0.65rem; opacity: 0.7;">06/20/2026</div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
+    <!-- Client-Side Filter Control Logic Execution Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const setups = ['research-container', 'blogs-container'];
+            
+            setups.forEach(containerId => {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                
+                const catSelect = container.querySelector('.filter-category');
+                const orderSelect = container.querySelector('.filter-order');
+                const wrapper = container.querySelector('.entries-wrapper');
+                const fallbackPlaceholder = container.querySelector('.filter-empty-placeholder');
+                
+                // Track nodes present at runtime initialization
+                const originalNodes = Array.from(wrapper.querySelectorAll('.entry-node'));
+                
+                function runPipeline() {
+                    const selectedCat = catSelect.value;
+                    const selectedOrder = orderSelect.value;
+                    
+                    // Filter matching entries
+                    let filtered = originalNodes.filter(node => {
+                        const matchesCat = (selectedCat === 'ALL' || node.getAttribute('data-category') === selectedCat);
+                        if (matchesCat) {
+                            node.classList.remove('d-none');
+                            return true;
+                        } else {
+                            node.classList.add('d-none');
+                            return false;
+                        }
+                    });
+                    
+                    // Sort nodes based on timestamps
+                    filtered.sort((nodeA, nodeB) => {
+                        const valA = nodeA.getAttribute('data-date') || '';
+                        const valB = nodeB.getAttribute('data-date') || '';
+                        return selectedOrder === 'DESC' 
+                            ? valB.localeCompare(valA) 
+                            : valA.localeCompare(valB);
+                    });
+                    
+                    // Clear the current visual wrapper stack
+                    originalNodes.forEach(n => n.remove());
+                    
+                    // Append sorted & active matching nodes
+                    filtered.forEach(node => wrapper.appendChild(node));
+                    
+                    // Re-append hidden elements so they remain tracked inside DOM hierarchy
+                    originalNodes.forEach(node => {
+                        if (node.classList.contains('d-none')) wrapper.appendChild(node);
+                    });
+                    
+                    // Manage Empty Matches State Indicator
+                    if (filtered.length === 0 && originalNodes.length > 0) {
+                        fallbackPlaceholder.classList.remove('d-none');
+                    } else {
+                        fallbackPlaceholder.classList.add('d-none');
+                    }
+                }
+                
+                catSelect.addEventListener('change', runPipeline);
+                orderSelect.addEventListener('change', runPipeline);
+            });
+        });
+    </script>
+</body>
+</html>

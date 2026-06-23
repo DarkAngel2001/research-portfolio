@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Prospectus: A Secure Framework for Integrating Large Language Models in Public Sector Information Systems — Fayola Roberts</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="modulepreload" href="http://localhost:8080/build/assets/app-4ed993c7.js" /><link rel="modulepreload" href="http://localhost:8080/build/assets/app-ed1b56b6.js" /><script type="module" src="http://localhost:8080/build/assets/app-4ed993c7.js"></script><script type="module" src="http://localhost:8080/build/assets/app-ed1b56b6.js"></script>    <style>
+        :root {
+            /* Classic 90s Desktop / Modern Hybrid Theme Colors from Template */
+            --bg-desktop: #223147;        /* Deep vintage blue-gray desktop */
+            --bg-card: #012456;           /* PowerShell Console Midnight Blue */
+            --accent-primary: #0078d4;    /* Classic Windows Accent Blue */
+            --accent-glow: #38bdf8;       /* High-contrast highlight cyan */
+            --text-main: #ffffff;         /* Crisp white text */
+            --text-readable: #f8fafc;     /* High-contrast off-white text */
+            --text-muted: #cbd5e1;        /* Secondary detail text */
+            
+            /* Syntax Highlighting */
+            --ps-yellow: #ffdf00;         
+            --ps-cyan: #00ffff;           
+            --terminal-green: #34d399;
+        }
+
+        /* Natural Document Scrolling and Environment Flow */
+        html, body {
+            min-height: 100vh;
+            width: 100vw;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        body {
+            background-color: var(--bg-desktop);
+            font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Main Application Window: Boxy 90s Layout with Natural Document Flow --- */
+        .container.animate-boot {
+            max-width: 100% !important;
+            width: 100vw !important;
+            min-height: calc(100vh - 48px) !important;
+            background: #1e1e1e;
+            /* Boxy 3D Bezel Legacy Border Effect */
+            border-top: 3px solid #ffffff !important;
+            border-left: 3px solid #ffffff !important;
+            border-right: 3px solid #7f7f7f !important;
+            border-bottom: 3px solid #7f7f7f !important;
+            border-radius: 0px !important;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding: 40px 0 0 0 !important; /* Space under the custom chrome top frame */
+            margin-bottom: 48px !important; /* Clears fixed Windows 11 taskbar */
+        }
+
+        /* Vintage Active Title Bar Chrome Injection */
+        .container.animate-boot::before {
+            content: "🗔 DocumentReader.exe - Research Prospectus: A Secure Framework for Integrating Large Language Models in Public Sector Information Systems";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 32px;
+            background: linear-gradient(90deg, #000080, #1084d0);
+            color: #ffffff;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            padding-left: 12px;
+            letter-spacing: 0.5px;
+            z-index: 10;
+        }
+
+        /* Legacy Control Buttons UI Window Graphic */
+        .container.animate-boot::after {
+            content: "🗕 🗖 🗙";
+            position: absolute;
+            top: 4px;
+            right: 8px;
+            color: #ffffff;
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            cursor: pointer;
+            z-index: 11;
+        }
+
+        main {
+            flex: 1 0 auto;
+            padding: 30px;
+            padding-bottom: 80px; /* Clearing block for the fixed taskbar */
+        }
+
+        /* Identity Block Header Registry Fixes */
+        .border-bottom.border-secondary {
+            padding: 0 30px 20px 30px;
+            border-bottom-color: rgba(255, 255, 255, 0.15) !important;
+        }
+
+        h1, h2, h3, h4, h5, h6, .text-white-forced {
+            color: var(--text-main) !important;
+        }
+
+        .animate-boot {
+            animation: consoleBoot 0.25s ease-in-out forwards;
+        }
+        @keyframes consoleBoot {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* --- cmd.exe Command Line Navigation Block --- */
+        header.cmd-prompt-nav {
+            background: transparent !important;
+            border: none !important;
+            margin: 0 30px 30px 30px !important;
+            padding: 0 !important;
+        }
+        
+        .cmd-line-text {
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .nav-link-custom {
+            color: #a3a3a3;
+            transition: color 0.1s ease;
+            font-weight: bold;
+            padding: 2px 8px !important;
+            border-radius: 0px !important;
+            text-decoration: none;
+        }
+        .nav-link-custom:hover {
+            color: var(--accent-glow) !important;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .nav-link-custom.active {
+            color: #00ff00 !important; /* Active link selection terminal green override */
+            background: transparent !important;
+        }
+
+        /* High-Contrast Link Mechanics */
+        .meta-link {
+            color: var(--accent-glow);
+            text-decoration: none;
+        }
+        .meta-link:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        .status-pill {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid #34d399;
+            color: #34d399;
+            border-radius: 0px !important;
+        }
+
+        /* Blinking Terminal UI Cursor */
+        @keyframes blink { 50% { opacity: 0; } }
+        .terminal-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 15px;
+            background-color: #00ff00;
+            margin-left: 4px;
+            vertical-align: middle;
+            animation: blink 1s step-end infinite;
+        }
+
+        /* ==========================================================================
+           DOCUMENT SYSTEM VIEWPORT DISPATCHER (RESEARCH VS BLOG STYLES)
+           ========================================================================== */
+        
+        /* --------------------------------------------------------------------------
+           STYLE ARCHETYPE A: Formal Academic Research Paper Format
+           -------------------------------------------------------------------------- */
+        .format-research-paper {
+            background-color: #fcfbf9 !important; /* Premium archival off-white print stock page color */
+            color: #111111 !important;           /* Dark slate high-contrast print ink */
+            font-family: 'Georgia', 'Cambria', 'Times New Roman', Times, serif !important;
+            border: 1px solid #d1d5db !important;
+            border-top: 6px solid #475569 !important; /* Heavy-set academic card top bezel */
+            border-radius: 0px !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+            padding: 3rem 4rem !important;
+        }
+        
+        .format-research-paper h1.doc-main-title {
+            color: #0f172a !important;
+            font-family: 'Georgia', serif !important;
+            font-weight: 800 !important;
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 0.5rem !important;
+            border: none !important;
+            text-shadow: none !important;
+        }
+
+        .format-research-paper .research-meta-header {
+            text-align: center;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #475569;
+            font-size: 0.88rem;
+            margin-bottom: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+
+        /* Markdown Content Engine Processing Overrides for Academic Research Papers */
+        .format-research-paper .prose-container {
+            color: #1e293b !important;
+            font-size: 1.05rem !important;
+            line-height: 1.8 !important;
+            text-align: justify; /* Proper academic document alignment layout standard */
+        }
+        .format-research-paper .prose-container p {
+            margin-bottom: 1.5rem;
+            text-indent: 0rem; /* Traditional academic indent parameters can be set here */
+        }
+        .format-research-paper .prose-container strong {
+            color: #000000 !important;
+            font-weight: 700;
+        }
+        .format-research-paper .prose-container a {
+            color: #1d4ed8 !important; /* Formal print-safe hyper-blue */
+            text-decoration: underline;
+        }
+        .format-research-paper .prose-container code {
+            background: #f1f5f9 !important;
+            color: #b91c1c !important; /* Academic-safe distinct code highlighting color tone */
+            border: 1px solid #e2e8f0;
+            padding: 2px 5px;
+            font-size: 0.9rem;
+            font-family: monospace;
+        }
+
+        /* --------------------------------------------------------------------------
+           STYLE ARCHETYPE B: Modern Flowing Blog Updates Format
+           -------------------------------------------------------------------------- */
+        .format-blog-normal {
+            background: var(--bg-card) !important;
+            border: 2px solid #7f7f7f !important;
+            border-radius: 0px !important;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.7);
+            padding: 2.5rem !important;
+        }
+
+        .format-blog-normal h1.doc-main-title {
+            color: var(--ps-yellow) !important;
+            font-family: inherit;
+            font-weight: bold;
+            font-size: 1.8rem;
+            border-bottom: 2px dashed rgba(255, 255, 255, 0.15);
+            padding-bottom: 12px;
+        }
+
+        .format-blog-normal .blog-meta-header {
+            color: var(--ps-cyan);
+            font-size: 0.8rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Markdown Content Engine Processing Overrides for Blogs */
+        .format-blog-normal .prose-container {
+            color: var(--text-readable) !important;
+            font-size: 0.95rem !important;
+            line-height: 1.6 !important;
+        }
+        .format-blog-normal .prose-container p {
+            margin-bottom: 1.25rem;
+        }
+        .format-blog-normal .prose-container strong {
+            color: #ffffff !important;
+        }
+        .format-blog-normal .prose-container a {
+            color: var(--accent-glow) !important;
+            text-decoration: underline;
+        }
+        .format-blog-normal .prose-container code {
+            background: rgba(0, 0, 0, 0.4) !important;
+            color: var(--terminal-green) !important;
+            padding: 2px 6px;
+            border-radius: 0px;
+            font-size: 0.88rem;
+        }
+
+        /* Content Protection Matrix Guardrail Rule */
+        .protect-content {
+            user-select: none !important;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+        }
+
+        /* --- Authentic Full-Width Fixed Windows 11 Taskbar --- */
+        footer.mt-auto {
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 48px !important;
+            background: rgba(32, 32, 32, 0.9) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 0px !important;
+            padding: 0 20px !important;
+            margin: 0 !important;
+            
+            display: grid !important;
+            grid-template-columns: 1fr auto 1fr !important;
+            align-items: center !important;
+            z-index: 99999;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .taskbar-left {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 10px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .taskbar-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+        .taskbar-icon {
+            font-size: 1.15rem;
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: transform 0.1s ease, color 0.1s ease;
+            display: flex;
+            align-items: center;
+        }
+        .taskbar-icon:hover {
+            color: var(--accent-glow);
+            transform: scale(1.1);
+        }
+        .taskbar-icon.win-brand {
+            color: #0078d4;
+            font-size: 1.25rem;
+        }
+        .taskbar-search-mock {
+            width: 140px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #cccccc;
+            font-size: 0.72rem;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            cursor: text;
+            user-select: none;
+        }
+
+        .taskbar-right {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 14px;
+            font-size: 0.8rem;
+            color: #e2e8f0;
+        }
+        .system-tray-icons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #cbd5e1;
+        }
+        .system-clock {
+            font-size: 0.75rem;
+            text-align: right;
+            line-height: 1.2;
+            border-left: 1px solid rgba(255, 255, 255, 0.15);
+            padding-left: 12px;
+            color: #ffffff;
+        }
+
+        /* Desktop Container Sizing Adaptability Fixes for Academic Reading Formats */
+        @media (max-width: 768px) {
+            .format-research-paper {
+                padding: 1.5rem !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container py-5 animate-boot">
+        
+        <div class="mb-4 pb-4 border-bottom border-secondary border-opacity-50">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                <h1 class="h3 fw-bold m-0">Fayola Roberts</h1>
+                <span class="badge status-pill px-2 py-1 text-uppercase fw-semibold">SYS_STATUS: ONLINE</span>
+            </div>
+            
+            <div class="d-flex flex-wrap gap-3 small fw-medium mt-3">
+                <div>
+                    <i class="bi bi-github text-white-forced me-1"></i> 
+                    <a href="https://github.com/DarkAngel2001" target="_blank" rel="noopener noreferrer" class="meta-link">AngelLite (GitHub)</a>
+                </div>
+                <div class="d-none d-sm-inline text-muted opacity-50">|</div>
+                <div>
+                    <i class="bi bi-linkedin text-white-forced me-1"></i> 
+                    <a href="https://www.linkedin.com/in/fayola-roberts-612760205/" target="_blank" rel="noopener noreferrer" class="meta-link">Fayola Roberts (LinkedIn)</a>
+                </div>
+                <div class="d-none d-sm-inline text-muted opacity-50">|</div>
+                <div>
+                    <i class="bi bi-envelope-fill text-white-forced me-1"></i> 
+                    <a href="mailto:fayola.c.roberts@gmail.com" class="meta-link font-monospace">fayola.c.roberts@gmail.com</a>
+                </div>
+            </div>
+        </div>
+
+        <header class="cmd-prompt-nav">
+            <div class="cmd-line-text">C:\Users\FayolaRoberts\Portfolio&gt; navigate --select-target</div>
+            <nav class="nav gap-2 small">
+                <a href="/research-portfolio/" class="nav-link-custom">[ Home ]</a>
+                <a href="/research-portfolio/about" class="nav-link-custom">[ About_Me ]</a>
+                <a href="/research-portfolio/insights" class="nav-link-custom">[ Insights_&amp;_Research ]</a>
+                <span class="terminal-cursor"></span>
+            </nav>
+        </header>
+
+        <main>
+           <div class="mb-4">
+                <a href="/research-portfolio/insights" class="meta-link small fw-bold font-monospace">
+                    &larr; /research-portfolio/insights
+
+                </a>
+            </div>
+
+                            <article class="format-research-paper protect-content mx-auto" style="max-width: 850px;" oncontextmenu="return false;">
+                    <h1 class="doc-main-title">Research Prospectus: A Secure Framework for Integrating Large Language Models in Public Sector Information Systems</h1>
+                    <div class="research-meta-header">
+                        Published: 2026-05-27 &bull; Author: F. Roberts &bull; Classification: Professional
+                    </div>
+                    
+                    <div class="prose-container">
+                        <div ><h3 id="abstract">Abstract</h3>
+<p>This research framework outlines an end-to-end technical and managerial governance model enabling public sector institutions to leverage generative AI safely. By developing a containerized, privacy-preserving data pipeline layer for Retrieval-Augmented Generation (RAG), this study empirically quantifies the utility-privacy trade-offs associated with Named Entity Recognition (NER) masking, tokenization, and differential privacy constraints on embedding vectors. The final framework cross-maps technical mitigation strategies against international readiness indicators, establishing a secure blueprint for public sector technical deployments.</p>
+<hr />
+<h3 id="1-background-amp-motivation">1. Background &amp; Motivation</h3>
+<h4 id="11-trinidad-and-tobagos-ai-policy-environment">1.1 Trinidad and Tobago's AI Policy Environment</h4>
+<p>Trinidad and Tobago is actively building a structured, evidence-based national AI strategy. Led by the Ministry of Public Administration and Artificial Intelligence (MPAAI) in partnership with UNESCO and the UNDP, the country launched its national AI readiness baseline using the UNESCO Readiness Assessment Methodology (RAM) in early 2026. The UNESCO RAM national validation workshop was held on Friday 27 February 2026 at The University of the West Indies, St. Augustine.</p>
+<p>This approach covers five critical socio-technical areas:</p>
+<ul>
+<li>Legal &amp; Regulatory.</li>
+<li>Technological &amp; Infrastructural.</li>
+<li>Societal &amp; Cultural.</li>
+<li>Scientific &amp; Educational.</li>
+<li>Economic.</li>
+</ul>
+<p>This exploration is further supported by policy demands from the ground up, including the 2024 National Youth Parliament motion calling for age-appropriate AI regulations and robust data privacy guardrails within digital educational frameworks.</p>
+<h4 id="12-japans-national-ai-strategy">1.2 Japan's National AI Strategy</h4>
+<p>Concurrently, Japan’s Basic Plan on AI Development and Use was adopted by the Cabinet on December 23, 2025. The plan seeks to accelerate the adoption of generative AI systems across local and central government offices while strengthening safeguards, and it is tied to Japan’s broader AI policy direction and Society 5.0 vision.</p>
+<p>The policy direction is organized around four basic pillars:</p>
+<ul>
+<li>Accelerating AI adoption.</li>
+<li>Strategically strengthening AI development capabilities.</li>
+<li>Leading AI governance.</li>
+<li>Continuous transformation toward an AI-enabled society.</li>
+</ul>
+<p>Backed by the AI Promotion Law of May 2025 and audited via the Japan AI Safety Institute, Japan’s strategy prioritizes structural trust, technical reliability, and secure deployment models within its Society 5.0 vision.</p>
+<h4 id="13-critical-security-surfaces-amp-structural-vulnerabilities">1.3 Critical Security Surfaces &amp; Structural Vulnerabilities</h4>
+<p>Direct integration of unflagged commercial cloud LLMs introduces major security vulnerabilities to public workflows. These include:</p>
+<ul>
+<li>Data Leakage: inadvertent ingestion of sensitive citizen data or policy drafts into external model training arrays.</li>
+<li>Prompt Injection (OWASP LLM01): malicious manipulation of user instructions to bypass system guardrails and access restricted administrative files.</li>
+<li>Vector Database Vulnerabilities (OWASP LLM08): unauthorized retrieval of high-value metadata records or unredacted information chunks through poorly isolated semantic search spaces.</li>
+</ul>
+<p>The 2025 OWASP LLM updates explicitly identify LLM01 Prompt Injection and LLM08 Vector and Embedding Weaknesses as major risks in retrieval-augmented generation and vector database deployments.</p>
+<hr />
+<h3 id="2-research-objectives-amp-specific-aims">2. Research Objectives &amp; Specific Aims</h3>
+<p>The core goal of this master’s research is to develop a modular, verifiable technical pipeline that allows government agencies to securely implement RAG frameworks without risking data confidentiality or violating statutory policy bounds.</p>
+<h4 id="21-ultimate-goal">2.1 Ultimate Goal</h4>
+<p>Develop an end-to-end, interdisciplinary technical and managerial framework (governance model) enabling public sector institutions in both Trinidad and Tobago and Japan to fully leverage LLM capabilities while ensuring:</p>
+<ul>
+<li>Absolute data confidentiality (no PII/financial/student data leakage).</li>
+<li>Full auditability (immutable logs for external regulatory review).</li>
+<li>Statutory regulatory compliance (alignment with UNESCO RAM dimensions, NIST Privacy Framework, Japan AI Guidelines, emerging T&amp;T AI policy).</li>
+</ul>
+<h4 id="22-specific-research-aims">2.2 Specific Research Aims</h4>
+<p><strong>Aim 1: Design Privacy-Preserving Anonymization Algorithms</strong><br />
+Develop an automated data pre-processing pipeline featuring:</p>
+<ul>
+<li>Named Entity Recognition (NER) using domain-adapted transformer models.</li>
+<li>Differential privacy constraints with tunable epsilon parameters balancing utility-privacy trade-off.</li>
+<li>Tokenization/hashing mechanisms for sensitive attributes before data reaches the LLM environment.</li>
+<li>Data discovery and classification hooks identifying sensitive data before ingestion.</li>
+</ul>
+<p><strong>Aim 2: Formulate System Architecture Defenses Against LLM-Specific Vulnerabilities</strong><br />
+Engineer defenses targeting OWASP Top 10 for LLM (2025):</p>
+<ul>
+<li>Prompt Injection Mitigation: input/output filtering, semantic analysis, RAG Triad assessment.</li>
+<li>Vector Database Security: permission-aware vector stores with fine-grained access controls.</li>
+<li>Containerized Network Isolation: Docker/Kubernetes environments preventing external model-training loop data retention.</li>
+<li>API Security: ephemeral scoped credentials, privilege control with least-privilege access.</li>
+</ul>
+<p><strong>Aim 3: Establish Automated Governance Evaluation Protocol</strong><br />
+Create a compliance verification system featuring:</p>
+<ul>
+<li>LLM-as-a-Judge architecture: secondary restricted security model monitoring primary model outputs for data compliance.</li>
+<li>SR 11-7 Model Risk Management governance: treating the LLM judge as a model requiring validation, ongoing monitoring, human-in-the-loop design, and bias testing.</li>
+<li>Immutable audit logging: detailed logs of retrieval activities for compliance reporting.</li>
+<li>Continuous monitoring: ML-based behavioral baseline and anomaly detection with automated alerts.</li>
+</ul>
+<hr />
+<h3 id="3-technical-pipeline-and-privacy-layer">3. Technical Pipeline and Privacy Layer</h3>
+<h4 id="31-technical-pipeline-overview">3.1 Technical Pipeline Overview</h4>
+<p>The technical process can be represented as a layered pipeline:</p>
+<code class="language-text">Raw Input Data
+│
+▼
+Data Classification Hooks
+│   └─ Evaluates asset sensitivity scores
+▼
+Transformer-Based NER
+│   └─ Detects names, IDs, addresses, financial data, and other sensitive entities
+▼
+Masking &amp; Tokenization of PII
+│   └─ Replaces sensitive fields with protected placeholders or hashes
+▼
+Noise Perturbation Layer
+│   └─ Calibrates DP noise (ε ≤ 1.0) on selected representations
+▼
+Permission-Aware VDB
+│   └─ Applies cleartext Boolean access control arrays for retrieval filtering
+▼
+Local Containerized LLM
+│   └─ Performs local context inference loop without exposing raw sensitive data
+</code>
+<h4 id="32-the-privacy-preserving-data-pipeline-layer">3.2 The Privacy-Preserving Data Pipeline Layer</h4>
+<p>This is the core privacy layer the research proposes. Its purpose is to mediate public-sector data before it reaches the RAG environment, ensuring that raw sensitive content is not directly exposed to the model or the vector store.</p>
+<p>The privacy-preserving layer performs the following functions:</p>
+<ul>
+<li><strong>Data discovery and classification:</strong> identifies whether incoming records contain sensitive assets.</li>
+<li><strong>NER-based masking/replacement:</strong> detects personally identifiable information and replaces it with protected forms.</li>
+<li><strong>Tokenization/hashing:</strong> transforms sensitive attributes so they can be referenced without revealing cleartext identity.</li>
+<li><strong>Differential privacy perturbation:</strong> applies controlled noise to embeddings and related representations to reduce re-identification risk.</li>
+<li><strong>Permission-aware metadata handling:</strong> stores access-control information in cleartext for ACL filtering, not hashed, so retrieval permissions can be enforced properly.</li>
+<li><strong>Local containment:</strong> keeps the raw sensitive data and the LLM inference workflow inside a trusted environment.</li>
+</ul>
+<p>This privacy layer is important because the proposal is not simply about classification or masking in isolation. It is about constructing a full data protection stage between raw public-sector records and the downstream RAG system so that utility can be preserved while leakage risk is reduced.</p>
+<h4 id="33-why-the-privacy-layer-matters">3.3 Why the Privacy Layer Matters</h4>
+<p>The proposal explicitly evaluates the utility-privacy trade-off when applying:</p>
+<ul>
+<li>PII detection.</li>
+<li>NER-based masking/replacement.</li>
+<li>Tokenization/hashing.</li>
+<li>Differential privacy on embeddings.</li>
+</ul>
+<p>The privacy layer is designed to support both countries’ public-sector use cases, including student records, procurement data, health records, citizen PII, financial instruments, and national security documents, while preserving enough signal for retrieval and generation tasks.</p>
+<h4 id="34-specific-aims-in-pipeline-form">3.4 Specific Aims in Pipeline Form</h4>
+<ol>
+<li>Implement a reproducible pipeline for data discovery/classification, NER-based PII protection, tokenization/hashing, and configurable differential privacy on embeddings.</li>
+<li>Quantitatively evaluate DP effects on RAG utility across epsilon values by measuring retrieval accuracy, relevance, and generation fidelity.</li>
+<li>Demonstrate end-to-end feasibility with a local, containerized LLM plus permission-aware vector DB using synthetic or redacted public-sector datasets.</li>
+</ol>
+<hr />
+<h3 id="4-methodology-amp-execution-timeline">4. Methodology &amp; Execution Timeline</h3>
+<p>This research project follows a 24-month technical proof-of-concept design built around controlled quantitative optimization experiments.</p>
+<h4 id="phase-1-requirement-modeling-compliance-mapping-and-ingestion-pipeline-assembly">Phase 1: Requirement Modeling, Compliance Mapping, and Ingestion Pipeline Assembly</h4>
+<p>Months 1–12</p>
+<h5 id="phase-11-literature-review-amp-regulatory-framework-analysis">Phase 1.1: Literature Review &amp; Regulatory Framework Analysis</h5>
+<p>Months 1–3</p>
+<p>Activities:</p>
+<ul>
+<li>Comprehensive OWASP Review: detailed analysis of OWASP Top 10 for LLM (2025), focusing on LLM01 prompt injection and LLM08 vector and embedding weaknesses.</li>
+<li>Trinidad &amp; Tobago Regulatory Analysis:
+<ul>
+<li>UNESCO RAM across five dimensions.</li>
+<li>UNDP’s Artificial Intelligence Landscape Assessment (AILA).</li>
+<li>MPAAI National AI Policy Framework emerging from the Validation Workshop on February 27, 2026.</li>
+<li>21st National Youth Parliament Motion (2024).</li>
+</ul>
+</li>
+<li>Japan Regulatory Analysis:
+<ul>
+<li>AI Guidelines for Business Ver 1.0 (METI/MIC, April 2024).</li>
+<li>Basic Plan on AI Development (Cabinet, December 2025).</li>
+<li>Society 5.0 vision.</li>
+<li>AI Promotion Law (enacted May 2025).</li>
+</ul>
+</li>
+<li>International Framework Mapping:
+<ul>
+<li>NIST Privacy Framework.</li>
+<li>NIST AI RMF GenAI Profile (July 2024).</li>
+<li>GDPR Generative AI Guidance.</li>
+<li>EU AI Act risk-based categorization.</li>
+</ul>
+</li>
+</ul>
+<p>Deliverables:</p>
+<ul>
+<li>Annotated bibliography (50+ peer-reviewed sources).</li>
+<li>Comparative regulatory compliance matrix.</li>
+<li>Initial risk taxonomy for public sector LLM deployment in both countries.</li>
+</ul>
+<h5 id="phase-12-public-dataset-characterization-amp-risk-assessment-matrix-development">Phase 1.2: Public Dataset Characterization &amp; Risk Assessment Matrix Development</h5>
+<p>Months 4–6</p>
+<p>Activities:</p>
+<ul>
+<li>Dataset categorization for Trinidad &amp; Tobago:
+<ul>
+<li>Education sector: student records, academic performance data, classroom AI interactions.</li>
+<li>Procurement records: contract values, vendor information, bidding details.</li>
+<li>Municipal minutes: council discussions, policy decisions, citizen complaints.</li>
+<li>Health sector: patient records, health statistics.</li>
+</ul>
+</li>
+<li>Dataset categorization for Japan:
+<ul>
+<li>Citizen PII datasets: national ID, health records, tax information.</li>
+<li>Government procurement: contract values, vendor information.</li>
+<li>Policy documentation: regulations, guidelines, procedural manuals.</li>
+<li>National security documents: classified information, law enforcement records.</li>
+</ul>
+</li>
+<li>Sensitivity Classification:
+<ul>
+<li>Tier 1 (Low): publicly available information, no PII.</li>
+<li>Tier 2 (Medium): internal operational data, limited PII.</li>
+<li>Tier 3 (High): sensitive PII, financial instruments, legally restricted data.</li>
+</ul>
+</li>
+<li>Risk Assessment Matrix Development:
+<ul>
+<li>Data leakage to external model training.</li>
+<li>Prompt injection compromising system integrity.</li>
+<li>Compliance violation triggering regulatory penalties.</li>
+<li>Quantitative risk scoring where Probability ∈ {1–5}, Impact ∈ {1–5}.</li>
+</ul>
+</li>
+<li>Stakeholder Interviews:
+<ul>
+<li>3–4 Trinidad &amp; Tobago public sector IT managers.</li>
+<li>3–4 Japanese public sector IT managers.</li>
+</ul>
+</li>
+</ul>
+<p>Deliverables:</p>
+<ul>
+<li>Dataset classification framework with sensitivity tiers.</li>
+<li>Risk assessment matrix with quantitative scoring model.</li>
+<li>Comparative stakeholder needs analysis report.</li>
+</ul>
+<h5 id="phase-13-privacy-preserving-data-preprocessing-pipeline-design">Phase 1.3: Privacy-Preserving Data Preprocessing Pipeline Design</h5>
+<p>Months 7–9</p>
+<p>Activities:</p>
+<ul>
+<li>NER Model Development:
+<ul>
+<li>Python-based workflow using spaCy and Hugging Face transformers.</li>
+<li>Target entities for Trinidad &amp; Tobago: student PII, procurement financial data, health records.</li>
+<li>Target entities for Japan: citizen PII, financial instruments, national security data.</li>
+<li>Training data: annotated corpus of public sector documents from both countries.</li>
+</ul>
+</li>
+<li>Differential Privacy Implementation:
+<ul>
+<li>Library: Google’s Differential Privacy library or OpenMined’s PySyft.</li>
+<li>Mechanism: add calibrated noise ensuring differential privacy.</li>
+<li>Utility-privacy trade-off: tune parameter, with target for high-sensitivity data like student records.</li>
+</ul>
+</li>
+<li>Tokenization/Hashing Mechanisms:
+<ul>
+<li>Sensitive attribute masking: replace PII with deterministic hashes or synthetic tokens.</li>
+<li>Reversibility control: key management system ensuring only authorized processes can reverse tokens.</li>
+<li>Consistency with Thales CipherTrust approach: classification, tokenization, encryption, masking through prebuilt hooks.</li>
+</ul>
+</li>
+</ul>
+<p>Deliverables:</p>
+<ul>
+<li>Data preprocessing pipeline prototype (Python codebase, ~2,000 lines).</li>
+<li>NER model trained on public sector documents from both countries.</li>
+<li>Technical documentation for privacy-preserving preprocessing module.</li>
+</ul>
+<h5 id="phase-14-year-1-synthesis-amp-midterm-review">Phase 1.4: Year 1 Synthesis &amp; Midterm Review</h5>
+<p>Months 10–12</p>
+<p>Activities:</p>
+<ul>
+<li>Component integration.</li>
+<li>Quantitative evaluation:
+<ul>
+<li>NER performance: precision, recall, F1 score.</li>
+<li>Differential privacy measurement: calculate actual values, measure utility vs. privacy trade-off.</li>
+<li>Processing latency: time overhead introduced by preprocessing pipeline.</li>
+</ul>
+</li>
+<li>Midterm presentation.</li>
+<li>Conference paper submission.</li>
+</ul>
+<p>Deliverables:</p>
+<ul>
+<li>Year 1 progress report.</li>
+<li>Midterm presentation slides.</li>
+<li>Conference paper submission.</li>
+<li>Refined research direction based on advisor feedback.</li>
+</ul>
+<h4 id="phase-2-secure-system-architecture-design-vulnerability-testing-and-framework-synthesis">Phase 2: Secure System Architecture Design, Vulnerability Testing, and Framework Synthesis</h4>
+<p>Months 13–24</p>
+<h5 id="phase-21-secure-containerized-environment-architecture-design">Phase 2.1: Secure Containerized Environment Architecture Design</h5>
+<p>Months 13–15</p>
+<p>Activities:</p>
+<ul>
+<li>Containerized Environment Engineering:
+<ul>
+<li>Platform: Docker containers orchestrated via Kubernetes.</li>
+<li>Local open-source LLMs: Llama 2/3, Mistral 7B, or Falcon 40B.</li>
+<li>Isolation: network isolation preventing external data exfiltration.</li>
+<li>Infrastructure-as-Code: Terraform/Ansible scripts for reproducible deployment.</li>
+</ul>
+</li>
+<li>Secure API Gateway Configuration:
+<ul>
+<li>Framework: FastAPI with programmatically enforced security constraints.</li>
+<li>Prompt retention prevention: ensure user prompts are not retained for external model-training loops.</li>
+<li>Model Context Protocol (MCP): implement MCP for safely connecting models with tools.</li>
+<li>Credential management: ephemeral scoped credentials replacing static API keys.</li>
+</ul>
+</li>
+<li>Permission-Aware Vector Database Architecture:
+<ul>
+<li>Database: Qdrant or Milvus with fine-grained access controls.</li>
+<li>Access partitioning: strict logical partitioning prevents unauthorized access between user groups.</li>
+<li>Encryption: CipherTrust Transparent Encryption (CTE) for vector database storage at rest.</li>
+</ul>
+</li>
+</ul>
+<p>Deliverables:</p>
+<ul>
+<li>System architecture diagrams.</li>
+<li>Infrastructure-as-Code scripts.</li>
+<li>API gateway security specification document.</li>
+</ul>
+<h5 id="phase-22-llm-specific-vulnerability-implementation-amp-mitigation-development">Phase 2.2: LLM-Specific Vulnerability Implementation &amp; Mitigation Development</h5>
+<p>Months 16–18</p>
+<p>Activities:</p>
+<ul>
+<li>Prompt Injection Defenses:
+<ul>
+<li>Input filtering: semantic filters and string-checking to scan for non-allowed content.</li>
+<li>Output filtering: evaluate responses using RAG Triad.</li>
+<li>System prompt hardening: enforce strict context adherence.</li>
+</ul>
+</li>
+<li>Adversarial Attack Detection Filters:
+<ul>
+<li>Prompt injection detection: pattern matching for injection attempts.</li>
+<li>Training data poisoning detection: validate knowledge base integrity.</li>
+<li>API parameter tampering detection: monitor for unauthorized API calls.</li>
+</ul>
+</li>
+</ul>
+<p>Deliverables:</p>
+<ul>
+<li>Vulnerability mitigation module.</li>
+<li>Security testing framework with 50+ adversarial attack test cases.</li>
+<li>Technical whitepaper on LLM-specific defense mechanisms.</li>
+</ul>
+<h5 id="phase-23-automated-governance-evaluation-protocol-amp-llm-as-a-judge-integration">Phase 2.3: Automated Governance Evaluation Protocol &amp; LLM-as-a-Judge Integration</h5>
+<p>Months 19–21</p>
+<p>Activities:</p>
+<ul>
+<li>LLM-as-a-Judge Architecture Design:
+<ul>
+<li>Primary model: open-source LLM for public sector tasks.</li>
+<li>Judge model: secondary restricted security model monitoring outputs for data compliance.</li>
+<li>Evaluation criteria: structured rubrics for data compliance, UNESCO RAM alignment, Japan AI Guidelines compliance.</li>
+<li>Output: score plus reasoning explanation with high agreement relative to human evaluators.</li>
+</ul>
+</li>
+<li>SR 11-7 Model Risk Management Governance:
+<ul>
+<li>Validation: formal validation of LLM judge before deployment.</li>
+<li>Ongoing monitoring: continuous performance tracking with drift detection.</li>
+<li>Human-in-the-loop design: human review for edge cases.</li>
+</ul>
+</li>
+<li>Immutable Audit Logging System:
+<ul>
+<li>Retrieval activity logging: immutable logs of all vector database queries.</li>
+<li>Compliance verification logs: record of all compliance checks.</li>
+<li>Decision audit trail: complete lineage from raw data to preprocessing to LLM to judge evaluation.</li>
+</ul>
+</li>
+</ul>
+<p>Deliverables:</p>
+<ul>
+<li>LLM-as-a-Judge prototype with evaluation rubrics.</li>
+<li>Automated compliance auditing system.</li>
+<li>Audit trail documentation framework.</li>
+</ul>
+<h5 id="phase-24-framework-synthesis-thesis-writing-and-deployment-package-creation">Phase 2.4: Framework Synthesis, Thesis Writing, and Deployment Package Creation</h5>
+<p>Months 22–24</p>
+<p>Activities:</p>
+<ul>
+<li>Comprehensive Security Testing:
+<ul>
+<li>Penetration testing.</li>
+<li>Vulnerability assessment for OWASP Top 10 for LLM risks.</li>
+</ul>
+</li>
+<li>Quantitative Evaluation Framework:
+<ul>
+<li>Data leakage prevention rate.</li>
+<li>Prompt injection detection accuracy.</li>
+<li>Compliance verification speed.</li>
+</ul>
+</li>
+<li>Deployable Governance Package Creation:
+<ul>
+<li>Documentation for public sector IT managers.</li>
+<li>Modular Python codebase.</li>
+<li>Docker Compose files and Kubernetes manifests.</li>
+<li>Policy templates aligned with UNESCO RAM dimensions.</li>
+</ul>
+</li>
+</ul>
+<p>Deliverables:</p>
+<ul>
+<li>Master’s thesis.</li>
+<li>Deployable governance package.</li>
+<li>Final presentation and defense.</li>
+<li>Peer-reviewed journal submissions.</li>
+</ul>
+<hr />
+<h3 id="5-expected-results-amp-contributions">5. Expected Results &amp; Contributions</h3>
+<h4 id="51-academic-contributions">5.1 Academic Contributions</h4>
+<ul>
+<li>Comparative framework for secure LLM integration in emerging vs. advanced AI policy environments.</li>
+<li>Privacy-preserving preprocessing pipeline validated on datasets from both Trinidad &amp; Tobago and Japan.</li>
+<li>LLM-as-a-Judge governance protocol aligned with UNESCO RAM dimensions and Japan AI Guidelines.</li>
+<li>Peer-reviewed publications in security and AI journals.</li>
+</ul>
+<h4 id="52-practical-contributions-to-trinidad-amp-tobago">5.2 Practical Contributions to Trinidad &amp; Tobago</h4>
+<ul>
+<li>Deployable governance package for MPAAI and public sector IT managers implementing AI in priority sectors.</li>
+<li>Risk assessment matrix aligned with UNESCO RAM’s five dimensions.</li>
+<li>Education sector safeguards addressing Youth Parliament Motion concerns about student data protection, critical thinking preservation, and age-appropriate AI regulation.</li>
+<li>Policy recommendations for Trinidad &amp; Tobago’s emerging national AI policy.</li>
+<li>Open-source codebase enabling reproducibility.</li>
+</ul>
+<h4 id="53-practical-contributions-to-japan">5.3 Practical Contributions to Japan</h4>
+<ul>
+<li>Deployable governance package for Japanese government agencies implementing AI under the 2025 Basic Plan.</li>
+<li>Security framework supporting Society 5.0 vision of human-centered AI with trustworthiness.</li>
+<li>Technical expertise contribution to Japan’s domestic AI development capabilities.</li>
+<li>Best practices document applicable across Japanese municipalities and ministries.</li>
+</ul>
+<h4 id="54-policy-contributions">5.4 Policy Contributions</h4>
+<p>| Country | Policy Contribution |
+| :--- | :--- |
+| <strong>Trinidad &amp; Tobago</strong> | Recommendations for integrating UNESCO RAM principles into technical AI security standards; safeguards for education sector AI alignment with Youth Parliament Motion |
+| <strong>Japan</strong> | Recommendations for accelerating safe AI adoption in government agencies while maintaining Society 5.0 human-centered principles |
+| <strong>International</strong> | Comparative analysis showing how developing nations can leverage advanced country expertise for safe AI adoption |</p>
+<hr />
+<h3 id="6-alignment-with-trinidad-amp-tobagos-national-ai-strategy">6. Alignment with Trinidad &amp; Tobago’s National AI Strategy</h3>
+<p>This research directly supports Trinidad &amp; Tobago’s AI readiness initiative:</p>
+<p>| UNESCO RAM Dimension | Research Alignment |
+| :--- | :--- |
+| <strong>Legal and Regulatory</strong> | Framework operationalizes emerging T&amp;T AI policy principles into technical implementation |
+| <strong>Technological and Infrastructural</strong> | Secure containerized architecture, differential privacy pipeline, NER preprocessing provide technological foundation for safe AI |
+| <strong>Societal and Cultural</strong> | Protects citizen rights and privacy while enabling AI benefits; addresses Youth Parliament concerns about education |
+| <strong>Scientific and Educational</strong> | Builds local technical capacity; framework can be used to develop AI security curricula in Trinidadian universities |
+| <strong>Economic</strong> | Enables safe AI adoption in priority sectors, supporting national development |</p>
+<p>Additional alignment:</p>
+<ul>
+<li>UNDP’s AILA: research addresses gaps and challenges identified in holistic assessment.</li>
+<li>MPAAI leadership: research conducted under the Ministry’s strategic direction.</li>
+<li>Multi-stakeholder approach: research incorporates public/private sector, academia, and civil society perspectives through stakeholder interviews.</li>
+</ul>
+<hr />
+<h3 id="7-references">7. References</h3>
+<ul>
+<li>Cabinet Office, Government of Japan. (2025). <em>Basic Plan on AI Development and Use</em>.</li>
+<li>Ministry of Public Administration and Digital Transformation / MPAAI. (2026). <em>UNESCO Readiness Assessment Methodology (RAM) National Validation Outcomes</em>.</li>
+<li>OWASP Foundation. (2025). <em>Top 10 for Large Language Model Applications Security</em>, Version 2025.</li>
+<li>National Institute of Standards and Technology (NIST). (2024). <em>Artificial Intelligence Risk Management Framework: Generative AI Profile</em>.</li>
+</ul>
+</div>
+                    </div>
+                </article>
+                    </main>
+
+        <footer class="mt-auto">
+            <div class="taskbar-left">
+                <span class="fw-semibold text-white">&copy; 2026 Fayola Roberts</span>
+                <span class="opacity-25">|</span>
+                <span>Secured OS Environment</span>
+            </div>
+
+            <div class="taskbar-center">
+                <div class="taskbar-icon win-brand" title="Start"><i class="bi bi-windows"></i></div>
+                <div class="taskbar-search-mock"><i class="bi bi-search me-2 opacity-50"></i>Search...</div>
+                <div class="taskbar-icon" title="Google Chrome"><i class="bi bi-browser-chrome"></i></div>
+                <div class="taskbar-icon" title="Spotify"><i class="bi bi-spotify"></i></div>
+            </div>
+
+            <div class="taskbar-right">
+                <div class="system-tray-icons">
+                    <i class="bi bi-volume-up-fill" title="Speaker: 100%"></i>
+                    <i class="bi bi-wifi" title="Network Connected: 5G"></i>
+                    <i class="bi bi-battery-charging" title="Battery Status: 100% (Plugged In)"></i>
+                </div>
+                <div class="system-clock">
+                    <<div>11:19 PM</div>
+                    <div style="font-size: 0.65rem; opacity: 0.7;">06/20/2026</div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

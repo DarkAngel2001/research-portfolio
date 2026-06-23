@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software Project Management Post-Mortem: Analyzing Scope Creep and Engine Migration in OMORI&#039;s Development Lifecycle — Fayola Roberts</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="modulepreload" href="http://localhost:8080/build/assets/app-4ed993c7.js" /><link rel="modulepreload" href="http://localhost:8080/build/assets/app-ed1b56b6.js" /><script type="module" src="http://localhost:8080/build/assets/app-4ed993c7.js"></script><script type="module" src="http://localhost:8080/build/assets/app-ed1b56b6.js"></script>    <style>
+        :root {
+            /* Classic 90s Desktop / Modern Hybrid Theme Colors from Template */
+            --bg-desktop: #223147;        /* Deep vintage blue-gray desktop */
+            --bg-card: #012456;           /* PowerShell Console Midnight Blue */
+            --accent-primary: #0078d4;    /* Classic Windows Accent Blue */
+            --accent-glow: #38bdf8;       /* High-contrast highlight cyan */
+            --text-main: #ffffff;         /* Crisp white text */
+            --text-readable: #f8fafc;     /* High-contrast off-white text */
+            --text-muted: #cbd5e1;        /* Secondary detail text */
+            
+            /* Syntax Highlighting */
+            --ps-yellow: #ffdf00;         
+            --ps-cyan: #00ffff;           
+            --terminal-green: #34d399;
+        }
+
+        /* Natural Document Scrolling and Environment Flow */
+        html, body {
+            min-height: 100vh;
+            width: 100vw;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        body {
+            background-color: var(--bg-desktop);
+            font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Main Application Window: Boxy 90s Layout with Natural Document Flow --- */
+        .container.animate-boot {
+            max-width: 100% !important;
+            width: 100vw !important;
+            min-height: calc(100vh - 48px) !important;
+            background: #1e1e1e;
+            /* Boxy 3D Bezel Legacy Border Effect */
+            border-top: 3px solid #ffffff !important;
+            border-left: 3px solid #ffffff !important;
+            border-right: 3px solid #7f7f7f !important;
+            border-bottom: 3px solid #7f7f7f !important;
+            border-radius: 0px !important;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding: 40px 0 0 0 !important; /* Space under the custom chrome top frame */
+            margin-bottom: 48px !important; /* Clears fixed Windows 11 taskbar */
+        }
+
+        /* Vintage Active Title Bar Chrome Injection */
+        .container.animate-boot::before {
+            content: "🗔 DocumentReader.exe - Software Project Management Post-Mortem: Analyzing Scope Creep and Engine Migration in OMORI&#039;s Development Lifecycle";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 32px;
+            background: linear-gradient(90deg, #000080, #1084d0);
+            color: #ffffff;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            padding-left: 12px;
+            letter-spacing: 0.5px;
+            z-index: 10;
+        }
+
+        /* Legacy Control Buttons UI Window Graphic */
+        .container.animate-boot::after {
+            content: "🗕 🗖 🗙";
+            position: absolute;
+            top: 4px;
+            right: 8px;
+            color: #ffffff;
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            cursor: pointer;
+            z-index: 11;
+        }
+
+        main {
+            flex: 1 0 auto;
+            padding: 30px;
+            padding-bottom: 80px; /* Clearing block for the fixed taskbar */
+        }
+
+        /* Identity Block Header Registry Fixes */
+        .border-bottom.border-secondary {
+            padding: 0 30px 20px 30px;
+            border-bottom-color: rgba(255, 255, 255, 0.15) !important;
+        }
+
+        h1, h2, h3, h4, h5, h6, .text-white-forced {
+            color: var(--text-main) !important;
+        }
+
+        .animate-boot {
+            animation: consoleBoot 0.25s ease-in-out forwards;
+        }
+        @keyframes consoleBoot {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* --- cmd.exe Command Line Navigation Block --- */
+        header.cmd-prompt-nav {
+            background: transparent !important;
+            border: none !important;
+            margin: 0 30px 30px 30px !important;
+            padding: 0 !important;
+        }
+        
+        .cmd-line-text {
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .nav-link-custom {
+            color: #a3a3a3;
+            transition: color 0.1s ease;
+            font-weight: bold;
+            padding: 2px 8px !important;
+            border-radius: 0px !important;
+            text-decoration: none;
+        }
+        .nav-link-custom:hover {
+            color: var(--accent-glow) !important;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .nav-link-custom.active {
+            color: #00ff00 !important; /* Active link selection terminal green override */
+            background: transparent !important;
+        }
+
+        /* High-Contrast Link Mechanics */
+        .meta-link {
+            color: var(--accent-glow);
+            text-decoration: none;
+        }
+        .meta-link:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        .status-pill {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid #34d399;
+            color: #34d399;
+            border-radius: 0px !important;
+        }
+
+        /* Blinking Terminal UI Cursor */
+        @keyframes blink { 50% { opacity: 0; } }
+        .terminal-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 15px;
+            background-color: #00ff00;
+            margin-left: 4px;
+            vertical-align: middle;
+            animation: blink 1s step-end infinite;
+        }
+
+        /* ==========================================================================
+           DOCUMENT SYSTEM VIEWPORT DISPATCHER (RESEARCH VS BLOG STYLES)
+           ========================================================================== */
+        
+        /* --------------------------------------------------------------------------
+           STYLE ARCHETYPE A: Formal Academic Research Paper Format
+           -------------------------------------------------------------------------- */
+        .format-research-paper {
+            background-color: #fcfbf9 !important; /* Premium archival off-white print stock page color */
+            color: #111111 !important;           /* Dark slate high-contrast print ink */
+            font-family: 'Georgia', 'Cambria', 'Times New Roman', Times, serif !important;
+            border: 1px solid #d1d5db !important;
+            border-top: 6px solid #475569 !important; /* Heavy-set academic card top bezel */
+            border-radius: 0px !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+            padding: 3rem 4rem !important;
+        }
+        
+        .format-research-paper h1.doc-main-title {
+            color: #0f172a !important;
+            font-family: 'Georgia', serif !important;
+            font-weight: 800 !important;
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 0.5rem !important;
+            border: none !important;
+            text-shadow: none !important;
+        }
+
+        .format-research-paper .research-meta-header {
+            text-align: center;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #475569;
+            font-size: 0.88rem;
+            margin-bottom: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+
+        /* Markdown Content Engine Processing Overrides for Academic Research Papers */
+        .format-research-paper .prose-container {
+            color: #1e293b !important;
+            font-size: 1.05rem !important;
+            line-height: 1.8 !important;
+            text-align: justify; /* Proper academic document alignment layout standard */
+        }
+        .format-research-paper .prose-container p {
+            margin-bottom: 1.5rem;
+            text-indent: 0rem; /* Traditional academic indent parameters can be set here */
+        }
+        .format-research-paper .prose-container strong {
+            color: #000000 !important;
+            font-weight: 700;
+        }
+        .format-research-paper .prose-container a {
+            color: #1d4ed8 !important; /* Formal print-safe hyper-blue */
+            text-decoration: underline;
+        }
+        .format-research-paper .prose-container code {
+            background: #f1f5f9 !important;
+            color: #b91c1c !important; /* Academic-safe distinct code highlighting color tone */
+            border: 1px solid #e2e8f0;
+            padding: 2px 5px;
+            font-size: 0.9rem;
+            font-family: monospace;
+        }
+
+        /* --------------------------------------------------------------------------
+           STYLE ARCHETYPE B: Modern Flowing Blog Updates Format
+           -------------------------------------------------------------------------- */
+        .format-blog-normal {
+            background: var(--bg-card) !important;
+            border: 2px solid #7f7f7f !important;
+            border-radius: 0px !important;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.7);
+            padding: 2.5rem !important;
+        }
+
+        .format-blog-normal h1.doc-main-title {
+            color: var(--ps-yellow) !important;
+            font-family: inherit;
+            font-weight: bold;
+            font-size: 1.8rem;
+            border-bottom: 2px dashed rgba(255, 255, 255, 0.15);
+            padding-bottom: 12px;
+        }
+
+        .format-blog-normal .blog-meta-header {
+            color: var(--ps-cyan);
+            font-size: 0.8rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Markdown Content Engine Processing Overrides for Blogs */
+        .format-blog-normal .prose-container {
+            color: var(--text-readable) !important;
+            font-size: 0.95rem !important;
+            line-height: 1.6 !important;
+        }
+        .format-blog-normal .prose-container p {
+            margin-bottom: 1.25rem;
+        }
+        .format-blog-normal .prose-container strong {
+            color: #ffffff !important;
+        }
+        .format-blog-normal .prose-container a {
+            color: var(--accent-glow) !important;
+            text-decoration: underline;
+        }
+        .format-blog-normal .prose-container code {
+            background: rgba(0, 0, 0, 0.4) !important;
+            color: var(--terminal-green) !important;
+            padding: 2px 6px;
+            border-radius: 0px;
+            font-size: 0.88rem;
+        }
+
+        /* Content Protection Matrix Guardrail Rule */
+        .protect-content {
+            user-select: none !important;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+        }
+
+        /* --- Authentic Full-Width Fixed Windows 11 Taskbar --- */
+        footer.mt-auto {
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 48px !important;
+            background: rgba(32, 32, 32, 0.9) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 0px !important;
+            padding: 0 20px !important;
+            margin: 0 !important;
+            
+            display: grid !important;
+            grid-template-columns: 1fr auto 1fr !important;
+            align-items: center !important;
+            z-index: 99999;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .taskbar-left {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 10px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .taskbar-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+        .taskbar-icon {
+            font-size: 1.15rem;
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: transform 0.1s ease, color 0.1s ease;
+            display: flex;
+            align-items: center;
+        }
+        .taskbar-icon:hover {
+            color: var(--accent-glow);
+            transform: scale(1.1);
+        }
+        .taskbar-icon.win-brand {
+            color: #0078d4;
+            font-size: 1.25rem;
+        }
+        .taskbar-search-mock {
+            width: 140px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #cccccc;
+            font-size: 0.72rem;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            cursor: text;
+            user-select: none;
+        }
+
+        .taskbar-right {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 14px;
+            font-size: 0.8rem;
+            color: #e2e8f0;
+        }
+        .system-tray-icons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #cbd5e1;
+        }
+        .system-clock {
+            font-size: 0.75rem;
+            text-align: right;
+            line-height: 1.2;
+            border-left: 1px solid rgba(255, 255, 255, 0.15);
+            padding-left: 12px;
+            color: #ffffff;
+        }
+
+        /* Desktop Container Sizing Adaptability Fixes for Academic Reading Formats */
+        @media (max-width: 768px) {
+            .format-research-paper {
+                padding: 1.5rem !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container py-5 animate-boot">
+        
+        <div class="mb-4 pb-4 border-bottom border-secondary border-opacity-50">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                <h1 class="h3 fw-bold m-0">Fayola Roberts</h1>
+                <span class="badge status-pill px-2 py-1 text-uppercase fw-semibold">SYS_STATUS: ONLINE</span>
+            </div>
+            
+            <div class="d-flex flex-wrap gap-3 small fw-medium mt-3">
+                <div>
+                    <i class="bi bi-github text-white-forced me-1"></i> 
+                    <a href="https://github.com/DarkAngel2001" target="_blank" rel="noopener noreferrer" class="meta-link">AngelLite (GitHub)</a>
+                </div>
+                <div class="d-none d-sm-inline text-muted opacity-50">|</div>
+                <div>
+                    <i class="bi bi-linkedin text-white-forced me-1"></i> 
+                    <a href="https://www.linkedin.com/in/fayola-roberts-612760205/" target="_blank" rel="noopener noreferrer" class="meta-link">Fayola Roberts (LinkedIn)</a>
+                </div>
+                <div class="d-none d-sm-inline text-muted opacity-50">|</div>
+                <div>
+                    <i class="bi bi-envelope-fill text-white-forced me-1"></i> 
+                    <a href="mailto:fayola.c.roberts@gmail.com" class="meta-link font-monospace">fayola.c.roberts@gmail.com</a>
+                </div>
+            </div>
+        </div>
+
+        <header class="cmd-prompt-nav">
+            <div class="cmd-line-text">C:\Users\FayolaRoberts\Portfolio&gt; navigate --select-target</div>
+            <nav class="nav gap-2 small">
+                <a href="/research-portfolio/" class="nav-link-custom">[ Home ]</a>
+                <a href="/research-portfolio/about" class="nav-link-custom">[ About_Me ]</a>
+                <a href="/research-portfolio/insights" class="nav-link-custom">[ Insights_&amp;_Research ]</a>
+                <span class="terminal-cursor"></span>
+            </nav>
+        </header>
+
+        <main>
+           <div class="mb-4">
+                <a href="/research-portfolio/insights" class="meta-link small fw-bold font-monospace">
+                    &larr; /research-portfolio/insights
+
+                </a>
+            </div>
+
+                            <article class="format-research-paper protect-content mx-auto" style="max-width: 850px;" oncontextmenu="return false;">
+                    <h1 class="doc-main-title">Software Project Management Post-Mortem: Analyzing Scope Creep and Engine Migration in OMORI&#039;s Development Lifecycle</h1>
+                    <div class="research-meta-header">
+                        Published: 2021-11-25 &bull; Author: F. Roberts &bull; Classification: School Projects
+                    </div>
+                    
+                    <div class="prose-container">
+                        <div ><h3 id="abstract">Abstract</h3>
+<p>This case study evaluates the software development lifecycle (SDLC) of the independent video game <em><strong>OMORI</strong></em>, tracking its progression from a 2014 Kickstarter campaign to its eventual release in 2020. We analyze the root causes of its six-year delay, focusing on the <strong>technical risks of mid-project engine migration</strong>, <strong>software scope creep</strong>, and <strong>stakeholder communication mismanagement</strong>. Finally, we provide strategic risk mitigation frameworks designed to stabilize volatile software development lifecycles.</p>
+<hr />
+<h2 id="1-executive-summary-the-anatomy-of-development-limbo">1. Executive Summary: The Anatomy of Development Limbo</h2>
+<p>Video game production combines creative narrative design with the technical uncertainties of software engineering. Independent (&quot;indie&quot;) projects are highly vulnerable to operational volatility because they lack the rigid oversight and structured funding milestones provided by traditional software publishers.</p>
+<p>[2014: Kickstarter Launch] ---&gt; [Scope Creep: Over-Ambitious Goals]</p>
+<p>[2020: Delayed Release] &lt;--- [Engine Migration: VX Ace to MV] &lt;-------+</p>
+<p><em><strong>OMORI</strong></em> encountered severe production bottlenecks shortly after securing initial funding. Budgeted initially for a modest scope, the influx of crowdfunding capital triggered significant <strong>scope creep</strong>, extending the asset pipeline and mechanical requirements far beyond the team's operational capacity. Without consistent updates from the team, supporters assumed the worst, leading to internal friction and external reputational damage.</p>
+<p><strong>Key Questions Addressed:</strong></p>
+<ul>
+<li>Could these issues have been avoided with proper planning?</li>
+<li>What assumptions by the game director led to the six-year outcome?</li>
+<li>How did technology migration and stakeholder mishandling contribute to &quot;development hell&quot;?</li>
+</ul>
+<hr />
+<h2 id="2-company-details-amp-business-strategy">2. Company Details &amp; Business Strategy</h2>
+<h3 id="21-development-organization-omocat">2.1 Development Organization: OMOCAT</h3>
+<p>Indie games typically lack formal corporate structure, relying on distributed teams of independent developers. <em><strong>OMORI</strong></em> was developed by <strong>OMOCAT</strong>, an online alias representing both the game director/writer/illustrator and the collective team.</p>
+<p><strong>OMOCAT Background:</strong></p>
+<ul>
+<li>Professional illustrator (comics, fan art for games/anime)</li>
+<li>Runs clothing brand featuring original art and collaborations</li>
+<li><em><strong>First game development project</strong></em> (no prior game development experience)</li>
+</ul>
+<p><strong>Core Development Team:</strong></p>
+<p>| Role | Name | Alias |
+| :--- | :--- | :--- |
+| <strong>Illustrator, Animator</strong> | Charlene Lu | MINCED |
+| <strong>Pixel Artist, Map Designer</strong> | Emily Shaw | EMS |
+| <strong>Composer</strong> | Jami Lynne | CLOVER &amp; SEALIFE |
+| <strong>Programmer</strong> | Luca Mastroianni | BLUEMOON |
+| <strong>Programmer</strong> | Cesar Rendon | OCEAN'S DREAM |
+| <strong>Battle Programmer</strong> | Andrew Vance | SLEEPYKUYA |
+| <strong>Programmer</strong> | Whitney E. White | YIN |
+| <strong>Programmer</strong> | Cachi Cordova | CZO |
+| <strong>Writing Editor</strong> | Andrew Batino | — |
+| <strong>Web Developer</strong> | — | WAN |</p>
+<h3 id="22-publisher-playism">2.2 Publisher: Playism</h3>
+<p><strong>Playism</strong> is a PC game digital distribution platform introduced by Active Gaming Media in 2011, targeting independent developers with services including:</p>
+<ul>
+<li>Localization</li>
+<li>Debugging support</li>
+<li>Marketing assistance</li>
+<li>Multi-platform distribution (Steam, GOG, Gamefly, PlayStation Store, Google Play, iOS)</li>
+</ul>
+<p><strong>Distribution Model:</strong> Users download games directly from Playism's website (no separate client like Steam required).</p>
+<hr />
+<h2 id="3-indie-game-business-strategy-analysis">3. Indie Game Business Strategy Analysis</h2>
+<h3 id="31-vision-amp-business-objectives">3.1 Vision &amp; Business Objectives</h3>
+<p>The game is based on &quot;'Omori,'&quot; a shortened form of <em><strong>hikikomori</strong></em> (a webcomic Tumblr blog created by OMOCAT to cope with challenges during a difficult life period). Originally intended as a visual novel, the medium shifted to a video game to enable player decision-making within the narrative.</p>
+<p><strong>Core Goals:</strong></p>
+<ul>
+<li>Deliver unique RPG world experience</li>
+<li>Provide compelling story addressing mental health and trauma awareness</li>
+<li>Enable player agency through narrative decisions</li>
+</ul>
+<h3 id="32-swot-analysis">3.2 SWOT Analysis</h3>
+<p>| Dimension | Factors |
+| :--- | :--- |
+| <strong>Strengths</strong> | • Small close-knit team<br>• Deadlines depend purely on development team (no publisher oversight)<br>• Lower costs (staff payments, software licenses)<br>• Personal communication with fanbase (if executed correctly) |
+| <strong>Weaknesses</strong> | • Little to no initial funding<br>• No safety net if project fails<br>• Minimal brand awareness (director known as illustrator, not game developer)<br>• Smaller team = longer development than AAA counterparts<br>• Essentially starting from scratch (excluding prior team experience) |
+| <strong>Opportunities</strong> | • Low-cost games vs. AAA titles for customers<br>• Large customer support from RPG genre fans + OMOCAT clothing line fanbase<br>• Low production costs (if no major issues)<br>• Crowdfunding simplifies money gathering<br>• Game ideas less limited than AAA titles<br>• Nintendo 3DS and console release options available |
+| <strong>Threats</strong> | • No funding compared to AAA companies<br>• Unlimited competitors (game creation becoming easier)<br>• Game plagiarism (spin-offs sold cheaper with minimal changes)<br>• AAA companies creating indie divisions |</p>
+<h3 id="33-marketing-tactics-amp-product-differentiation">3.3 Marketing Tactics &amp; Product Differentiation</h3>
+<p>Most indie developers are start-ups with little marketing education/finances, often foregoing marketing strategies entirely. Online strategy guides exist but frequently omit critical topics or contain outdated information.</p>
+<p><strong>Product Differentiation Strategy:</strong></p>
+<ul>
+<li>What distinguishes your product from competition in customer eyes</li>
+<li>Boosts customer loyalty, revenue, and development momentum</li>
+<li>Focus on customers as starting point for effective diversification</li>
+</ul>
+<p><strong>OMORI's Market Positioning:</strong></p>
+<ul>
+<li><strong>Main story completion:</strong> 21 hours</li>
+<li><strong>Full completion (all endings, achievements):</strong> 61 hours</li>
+<li><strong>Original release schedule:</strong> Early 2015</li>
+<li><strong>Competitive context:</strong> Undertale (late 2015), Lisa (late 2014)</li>
+<li><strong>Promised scale:</strong> 8+ dungeons, 60 unique characters</li>
+<li><strong>Result:</strong> Extremely successful Kickstarter due to trailer quality placing it above competitors</li>
+</ul>
+<p>Even after 6 years of development (supporters losing hope), OMORI's promised scale and complex story provided the edge needed to succeed in the indie market.</p>
+<hr />
+<h2 id="4-background-on-the-project">4. Background on the Project</h2>
+<p><em><strong>OMORI</strong></em> is a surreal psychological horror RPG Maker game developed by OMOCAT and co-published by Playism, fully released <strong>December 25, 2020</strong>.</p>
+<p><strong>Development Timeline:</strong></p>
+<ul>
+<li><strong>2013 (July):</strong> First Tumblr post regarding game (one year after comic ended)</li>
+<li><strong>2014 (April):</strong> Kickstarter launched, funded in one day</li>
+<li><strong>2015 (May):</strong> Original release date</li>
+<li><strong>2019–2020:</strong> Multiple delays (pushed four more times)</li>
+<li><strong>2020 (December 25):</strong> Final release</li>
+</ul>
+<p><strong>Stretch Goals &amp; Compromises:</strong></p>
+<ul>
+<li><strong>Nintendo 3DS port:</strong> Promised as stretch goal, never materialized (console demise)</li>
+<li><strong>Nintendo Switch port:</strong> Alternative promise to backers</li>
+<li><strong>Team expansion:</strong> OMOCAT acquired RPG Maker specialist + musician friends (Space Boyfriend, Slime Girls) inspired by bo en's &quot;My Time&quot;</li>
+</ul>
+<p><strong>Funding Transition:</strong></p>
+<ul>
+<li>After crowdfunding funds depleted, relied on merchandise sales to continue development</li>
+</ul>
+<hr />
+<h2 id="5-literature-review-game-production-management-frameworks">5. Literature Review: Game Production Management Frameworks</h2>
+<h3 id="51-development-strategy-amp-work-breakdown-structure-wbs">5.1 Development Strategy &amp; Work Breakdown Structure (WBS)</h3>
+<p><strong>Cohen &amp; Bustamante (2010)</strong> establish that before project initiation, producers must develop a development strategy to establish budget and manpower requirements:</p>
+<ol>
+<li><strong>Task Decomposition:</strong> Break down work into general aims (character drawing, level design, environment design)</li>
+<li><strong>Subdivision:</strong> Subdivide goals into smaller tasks assignable to individuals</li>
+<li><strong>Timeline Estimation:</strong> Estimate time required for objective completion (may not account for all stumbling blocks)</li>
+<li><strong>Prioritization Sequence:</strong> Assign tasks to personnel with varying responsibilities (seniors = highest obligations, juniors = less responsibility)</li>
+<li><strong>WBS Plan:</strong> Work Breakdown Structure formalizes this hierarchy</li>
+</ol>
+<p><strong>Critical Budget Considerations:</strong></p>
+<ul>
+<li>Prepare for budget larger than required (unforeseen expenditures, cutbacks)</li>
+<li>Employ more professionals in creativity/content development areas</li>
+<li>Prioritize budget savings areas (failure = possible studio crisis)</li>
+<li>If game strongly relies on mechanics, do not fire developers</li>
+</ul>
+<h3 id="52-scheduling-amp-project-management-tools">5.2 Scheduling &amp; Project Management Tools</h3>
+<p>Schedules guarantee on-time completion. Job arrangement aids schedule determination (persons necessary for each condition) [Cohen &amp; Bustamante, 2010]. Typically produced using project management software like <strong>Gantt charts</strong>.</p>
+<hr />
+<h2 id="6-development-analysis-omoris-six-year-delay">6. Development Analysis: OMORI's Six-Year Delay</h2>
+<h3 id="61-industry-context-long-development-cycles-are-not-uncommon">6.1 Industry Context: Long Development Cycles Are Not Uncommon</h3>
+<p>| Game | Development Time |
+| :--- | :--- |
+| <strong>The Witness</strong> | 7 years |
+| <strong>Owl Boy</strong> | 8 years 11 months |
+| <strong>Cyberpunk 2077</strong> | 7 years |
+| <strong>OMORI</strong> | 6.5 years (5.5 years late) |</p>
+<p>While experienced teams can polish ideas into unique products over extended periods, OMORI received overwhelming positive reviews upon release despite being <strong>showered in rumors of development limbo/hell for the latter 2 years</strong> of delays.</p>
+<h3 id="62-competitive-timing-analysis">6.2 Competitive Timing Analysis</h3>
+<p><strong>2014 Context (Development Start):</strong></p>
+<ul>
+<li>Similar games (Undertale, Lisa) not yet announced</li>
+<li>Large interest in psychological RPG genre</li>
+<li>OMORI positioned above competitors via trailer quality</li>
+</ul>
+<p><strong>Original Schedule (2015):</strong></p>
+<ul>
+<li>If released by original date, OMORI would have released within one year of Undertale/Lisa</li>
+<li>Massive undertaking compared to contemporaries</li>
+</ul>
+<p><strong>Actual Release (2020):</strong></p>
+<ul>
+<li>Released December 2020 (5 years late)</li>
+<li>Question: What caused the 5-year delay?</li>
+</ul>
+<hr />
+<h2 id="7-root-cause-analysis-three-primary-factors">7. Root Cause Analysis: Three Primary Factors</h2>
+<p>Per post-release statements and Kickstarter updates, three reasons outlined:</p>
+<h3 id="factor-1-ignorant-ambition">Factor 1: Ignorant Ambition</h3>
+<p><strong>OMOCAT's Background:</strong></p>
+<ul>
+<li>Known for illustration + Japanese-themed apparel</li>
+<li><strong>Not known as game developer</strong></li>
+<li><em><strong>OMORI is first game led development-wise</strong></em></li>
+</ul>
+<p><strong>Scope Mis estimation:</strong></p>
+<p>| Metric | OMORI | Undertale (Comparison) |
+| :--- | :--- | :--- |
+| <strong>Main Story</strong> | ~21 hours | ~6.5 hours |
+| <strong>Full Completion</strong> | ~61 hours | ~20 hours |
+| <strong>Complexity</strong> | 8+ dungeons, 60 characters | Significantly smaller |</p>
+<p>This was a massive project for a first-time game director.</p>
+<h3 id="factor-2-poor-planning-amp-time-management">Factor 2: Poor Planning &amp; Time Management</h3>
+<p><strong>Timeline Compression:</strong>
+2013 (July): First Tumblr post
+↓ (1 year)
+2014 (April): Kickstarter launched
+↓ (&lt;1 year)
+2015 (May): Original release date</p>
+<p><strong>Less than one year</strong> to implement all features + complete main story = <strong>poor planning on OMOCAT's part</strong>.</p>
+<p><strong>Likely Missing Planning Documents:</strong></p>
+<ul>
+<li>No Scope definition</li>
+<li>No Work Breakdown Structure (WBS)</li>
+<li>No project schedule</li>
+</ul>
+<p><strong>Probable High-Level WBS for OMORI:</strong></p>
+<p>| Phase | Tasks | Duration Estimate |
+| :--- | :--- | :--- |
+| <strong>Pre-Production</strong> | Concept art, story outline, mechanics design | 3 months |
+| <strong>Core Development</strong> | Level design, character implementation, battle systems | 12 months |
+| <strong>Asset Production</strong> | Sprite matrices, tilemaps, music, voice work | 8 months |
+| <strong>Testing &amp; QA</strong> | Bug fixing, playtesting, optimization | 4 months |
+| <strong>Polish &amp; Release</strong> | Final adjustments, marketing, distribution setup | 2 months |
+| <strong>TOTAL</strong> | — | <strong>~29 months (2.4 years)</strong> |</p>
+<h3 id="factor-3-underestimating-development-complexity">Factor 3: Underestimating Development Complexity</h3>
+<p><strong>Delayed Issues Not Accounted For:</strong></p>
+<ol>
+<li>RPG Maker engine change (VX Ace → MV)</li>
+<li>Plugins breaking during migration</li>
+<li>Nintendo 3DS port no longer possible (console demise)</li>
+</ol>
+<p><strong>Risk Assessment Failure:</strong> First two points should have been accounted for in initial risk assessment.</p>
+<p><strong>Risk Breakdown Structure for Game Development:</strong></p>
+<p>| Risk Category | Specific Risks | Probability | Impact | Mitigation |
+| :--- | :--- | :--- | :--- | :--- |
+| <strong>Technical</strong> | Engine migration, plugin incompatibility | High | Critical | Evaluate engine limitations pre-production |
+| <strong>Scope</strong> | Feature creep, over-ambitious goals | High | High | Define MVP early, enforce feature freezes |
+| <strong>Schedule</strong> | Time estimation errors, task dependencies | High | High | Track hours continuously, use Gantt charts |
+| <strong>Platform</strong> | Console demise (3DS), compatibility issues | Medium | High | Target stable platforms, avoid stretch goals |
+| <strong>Stakeholder</strong> | Backer impatience, communication gaps | Medium | High | Bi-weekly updates, transparent progress metrics |</p>
+<hr />
+<h2 id="8-technical-deep-dive-the-engine-migration-risk">8. Technical Deep-Dive: The Engine Migration Risk</h2>
+<h3 id="81-technology-migration-vector">8.1 Technology Migration Vector</h3>
+<p>A core technical failure was <strong>mid-development migration between game engines</strong>:</p>
+<p>| Parameter | Initial Infrastructure (RPG Maker VX Ace) | Target Infrastructure (RPG Maker MV) |
+| :--- | :--- | :--- |
+| <strong>Release Era</strong> | 2011 | 2015 |
+| <strong>Core Scripting Language</strong> | <strong>Ruby (RGSS3)</strong> | <strong>JavaScript / HTML5</strong> |
+| <strong>Platform Deployment</strong> | Exclusively Windows Desktop | <strong>Cross-Platform</strong> (Windows, Mac, Mobile) |</p>
+<h3 id="82-impact-on-the-codebase">8.2 Impact on the Codebase</h3>
+<p>Migrating an active software project across distinct engine versions introduces <strong>extreme architectural friction</strong>:</p>
+<h4 id="1-language-incompatibility">1. Language Incompatibility</h4>
+<p>Switching from <strong>Ruby to JavaScript</strong> meant:</p>
+<ul>
+<li>All custom script repositories completely rewritten from scratch</li>
+<li>Event handling logic requiring full reimplementation</li>
+<li>Plugin architectures needing complete rewrite</li>
+</ul>
+<h4 id="2-asset-pipeline-refactoring">2. Asset Pipeline Refactoring</h4>
+<p>Base asset scaling changed between versions:</p>
+<ul>
+<li>Manual reconfiguration of sprite matrices required</li>
+<li>Tilemaps needing重新scaling</li>
+<li>Rendering parameters requiring adjustment</li>
+</ul>
+<h4 id="3-dependency-fragility">3. Dependency Fragility</h4>
+<p>Transition broke backwards compatibility:</p>
+<ul>
+<li>Development team troubleshooting <strong>unoptimized plugins</strong></li>
+<li>Engine-level bugs consuming development time</li>
+<li><strong>New game feature development stalled</strong> while fixing migration issues</li>
+</ul>
+<p><strong>Software Engineering Perspective:</strong>
+Changing engine versions mid-development introduces:</p>
+<ul>
+<li>Major code refactoring requirements</li>
+<li>Broken backwards compatibility for existing asset pipelines</li>
+<li>Unoptimized dependency trees inflating development cycles</li>
+<li><strong>4–8 months additional development time</strong> (industry estimate for similar migrations)</li>
+</ul>
+<hr />
+<h2 id="9-stakeholder-management-amp-third-party-risk">9. Stakeholder Management &amp; Third-Party Risk</h2>
+<h3 id="91-the-crowdfunding-communication-void">9.1 The Crowdfunding Communication Void</h3>
+<p><strong>Kickstarter Metrics:</strong></p>
+<ul>
+<li><strong>Total raised:</strong> $203,300</li>
+<li><strong>Number of donors:</strong> 5,910</li>
+<li><strong>Original goal:</strong> $20,000 (10x overfunded)</li>
+</ul>
+<p>This was unprecedented in indie game business, overwhelming the team.</p>
+<p><strong>Communication Breakdown:</strong></p>
+<p>| Metric | OMORI | Industry Standard |
+| :--- | :--- | :--- |
+| <strong>Update Frequency</strong> | Sporadic (longest drought: 9 months) | Bi-weekly to monthly |
+| <strong>Backer Response Handling</strong> | None addressed directly | Transparent responses |
+| <strong>Progress Transparency</strong> | Unimpressive updates | Quantitative metrics (Git tags, burn-down charts) |</p>
+<p><strong>Backer Sentiment (2015 onward):</strong></p>
+<ul>
+<li>Public complaints on Kickstarter page</li>
+<li>Requests for explanations/refunds</li>
+<li>Comments demanding progress updates with more detail</li>
+<li><strong>Specific sponsor interested in legal action</strong></li>
+</ul>
+<h3 id="92-crowdfunding-as-attack-surface-cybersecurity-perspective">9.2 Crowdfunding as Attack Surface: Cybersecurity Perspective</h3>
+<p>From a <strong>cybersecurity and risk posture</strong> perspective, Kickstarter represents a <strong>third-party risk surface</strong>:</p>
+<p>| Risk Dimension | Technical Description | Security Consequence |
+| :--- | :--- | :--- |
+| <strong>Platform Secrecy</strong> | Kickstarter provides limited transparency on funding flow | Backers cannot verify money allocation |
+| <strong>No Secure Milestones</strong> | Lack of centralized, cryptographically verified progress tracking | No data-driven accountability with investors |
+| <strong>Fraud Claims Exposure</strong> | Ambiguous progress reporting enables reputational damage | Legal action threats, public trust erosion |
+| <strong>Supply Chain Vulnerability</strong> | External community-contributed plugins (RPG Maker MV JavaScript ecosystem) | Potential malicious scripts compromising player environments |</p>
+<p><strong>Modern Best Practices for Indie Software Ecosystems:</strong></p>
+<ul>
+<li><strong>Public Git Commit Milestones:</strong> Transparent version control tracking for investor accountability</li>
+<li><strong>Secure Transparency Dashboards:</strong> Real-time progress metrics (burn-down charts, feature completion rates)</li>
+<li><strong>Dependency Scanning:</strong> Continuous vulnerability scanning for external plugins</li>
+<li><strong>Version Locking:</strong> Strict dependency version control to prevent supply-chain attacks</li>
+</ul>
+<h3 id="93-agile-communication-mitigation-model">9.3 Agile Communication Mitigation Model</h3>
+<p>+-------------------------------------------------------------------------+
+| Agile Communication Mitigation Model for Delays                        |
+| ---------------------------------------------------------------------- |
+| [Technical Delay] --&gt; [Quantify Metric via Jira/Git] --&gt; [Publish Tag] |
+|                                                                        |
+| v                        v                           v                 |
+| Document Root Cause       Generate Burn-down Chart      Public GitHub  |
+| (Engine migration,        showing progress vs.          Update with    |
+| scope creep)             planned timeline              commit hashes   |
++-------------------------------------------------------------------------+</p>
+<p><strong>Implementation:</strong></p>
+<ul>
+<li>Bi-weekly sprints with clear dependency logging</li>
+<li>Automated testing loops detecting regression bugs early</li>
+<li>Public Git tags demonstrating tangible progress</li>
+<li>Quantitative metrics (not just qualitative descriptions)</li>
+</ul>
+<hr />
+<h2 id="10-data-engineering-amp-financial-justification">10. Data Engineering &amp; Financial Justification</h2>
+<h3 id="101-development-cost-analysis">10.1 Development Cost Analysis</h3>
+<p><strong>Monthly Development Costs (Based on Team Structure):</strong></p>
+<p>| Role | Cost Per Hour | Cost Per Month |
+| :--- | :--- | :--- |
+| 2D Artist | $20/hour | $3,200/month |
+| 2D Animator | $20/hour | $3,200/month |
+| UI/UX Professional | $20/hour | $3,200/month |
+| DevOps | $25/hour | $4,000/month |
+| Game Producer | $15/hour | $2,400/month |
+| Quality Assurance | $15/hour | $2,400/month |
+| Sound Engineer | $15/hour | $2,400/month |
+| <strong>TOTAL MONTHLY</strong> | — | <strong>$20,800/month</strong> |
+| <strong>Approx. Total (6 months)</strong> | — | <strong>$219,648</strong> |</p>
+<p><strong>Video Game Production Cost Components:</strong></p>
+<ol>
+<li>Acquisition of game developer tools, software, hardware</li>
+<li>IP rights, branding, character rights licensing expenses</li>
+<li>Project team pay (developers, artists, sound engineers, composers, QA testers)</li>
+</ol>
+<h3 id="102-return-on-investment-roi-analysis">10.2 Return on Investment (ROI) Analysis</h3>
+<p><strong>ROI Formula:</strong>
+$$\text{ROI} = \frac{\text{Gain from Investment} - \text{Cost of Investment}}{\text{Cost of Investment}}$$</p>
+<p><strong>Revenue Calculation:</strong></p>
+<p>| Metric | Value |
+| :--- | :--- |
+| <strong>Steam Price</strong> | $19.99 USD |
+| <strong>Peak Players (Monthly Sum)</strong> | 21,731 |
+| <strong>Steam Review Purchasers</strong> | 24,979 |
+| <strong>Lowest Earning Estimate</strong> | $434,402.69 |
+| <strong>Highest Earning Estimate</strong> | $499,330.21 |
+| <strong>Cost of Investment (Kickstarter)</strong> | $203,300 |</p>
+<p><strong>ROI Calculation:</strong></p>
+<p>$$\text{Lowest ROI} = \frac{434,402.69 - 203,300}{203,300} = 1.14$$</p>
+<p>$$\text{Highest ROI} = \frac{499,330.21 - 203,300}{203,300} = 1.46$$</p>
+<p><strong>ROI Interpretation:</strong></p>
+<ul>
+<li><strong>Range:</strong> 1.14 – 1.46 (114% – 146% return)</li>
+<li><strong>Position:</strong> Very good position—project was financially successful</li>
+<li><strong>Opportunity Cost:</strong> Six-year timeline drastically reduced Net Present Value (NPV) of initial development capital</li>
+</ul>
+<p><strong>Timeline Impact on NPV:</strong>
+If Released 2015 (Original Schedule):
+Revenue Stream: 2015–2020 (5 years early)
+NPV: Significantly higher (compounding returns)</p>
+<p>Actual Release 2020:
+Revenue Stream: 2020–present
+NPV: Reduced by 5 years of delayed cash flow
+Opportunity Cost: Estimated $200,000–$400,000 lost NPV</p>
+<h3 id="103-data-integrity-amp-pipeline-security">10.3 Data Integrity &amp; Pipeline Security</h3>
+<p><strong>Modern Software Deployment Pipeline Requirements:</strong></p>
+<ul>
+<li><strong>Continuous Dependency Scanning:</strong> Detect supply-chain vulnerabilities in external plugins</li>
+<li><strong>Strict Version Locking:</strong> Prevent malicious scripts from compromising player environments</li>
+<li><strong>Secure Internal Code Asset Protection:</strong> Prevent unauthorized access to proprietary code</li>
+</ul>
+<p><strong>RPG Maker MV JavaScript Ecosystem Risks:</strong></p>
+<ul>
+<li>Community-contributed plugins = potential attack surfaces</li>
+<li>Unverified code = potential malicious script injection</li>
+<li><strong>Mitigation:</strong> Implement automated security scanning, code review processes, plugin validation</li>
+</ul>
+<hr />
+<h2 id="11-strategic-recommendations-for-volatile-sdlcs">11. Strategic Recommendations for Volatile SDLCs</h2>
+<p>To mitigate systematic risks highlighted by the OMORI post-mortem, software development teams should enforce operational guardrails:</p>
+<h3 id="recommendation-1-enforce-strict-feature-freezes">Recommendation 1: Enforce Strict Feature Freezes</h3>
+<ul>
+<li><strong>Define MVP Early:</strong> Minimum Viable Product scope before development begins</li>
+<li><strong>Reject Late-Stage Scope Modifications:</strong> Any changes jeopardizing primary deployment timeline vetoed</li>
+<li><strong>Scope Documentation:</strong> Formal Scope definition + WBS before Kickstarter launch</li>
+</ul>
+<h3 id="recommendation-2-isolate-prototyping-from-migration">Recommendation 2: Isolate Prototyping from Migration</h3>
+<ul>
+<li><strong>Evaluate Engine Limitations Pre-Production:</strong> Test engine capabilities during planning phase</li>
+<li><strong>Avoid Mid-Project Framework Switches:</strong> Only change core frameworks if absolutely necessary for basic compatibility</li>
+<li><strong>Migration Cost Accounting:</strong> If migration required, account for 4–8 months additional development time in risk assessment</li>
+</ul>
+<h3 id="recommendation-3-adopt-transparent-agile-frameworks">Recommendation 3: Adopt Transparent Agile Frameworks</h3>
+<ul>
+<li><strong>Bi-Weekly Sprints:</strong> Regular development cycles with clear deliverables</li>
+<li><strong>Jira/Git Dependency Logging:</strong> Document all dependencies in project management system</li>
+<li><strong>Automated Testing Loops:</strong> Detect regression bugs early (prevent migration-induced bugs)</li>
+<li><strong>Public Progress Metrics:</strong> Git tags, burn-down charts, feature completion rates</li>
+</ul>
+<h3 id="recommendation-4-implement-stakeholder-communication-protocols">Recommendation 4: Implement Stakeholder Communication Protocols</h3>
+<ul>
+<li><strong>Update Frequency:</strong> Bi-weekly to monthly public updates</li>
+<li><strong>Transparent Progress Reporting:</strong> Quantitative metrics (not qualitative descriptions)</li>
+<li><strong>Backer Response Handling:</strong> Directly address all sponsor concerns</li>
+<li><strong>Legal Risk Mitigation:</strong> Document all progress to prevent fraud claims</li>
+</ul>
+<h3 id="recommendation-5-secure-development-pipeline">Recommendation 5: Secure Development Pipeline</h3>
+<ul>
+<li><strong>Dependency Scanning:</strong> Automated vulnerability detection for external plugins</li>
+<li><strong>Version Locking:</strong> Strict dependency version control</li>
+<li><strong>Code Review Processes:</strong> Validate all community-contributed plugins</li>
+<li><strong>Secure Milestone Tracking:</strong> Public Git commit history for investor accountability</li>
+</ul>
+<hr />
+<h2 id="12-conclusion">12. Conclusion</h2>
+<p>From a project management perspective, OMORI demonstrates both <strong>success</strong> and <strong>failure</strong>:</p>
+<p><strong>Success Indicators:</strong></p>
+<ul>
+<li>Game successfully released (avoided permanent development limbo)</li>
+<li>One of biggest indie games of 2020</li>
+<li>Set new standard for RPG quality</li>
+<li>Financially successful (ROI: 1.14–1.46)</li>
+</ul>
+<p><strong>Failure Indicators:</strong></p>
+<ul>
+<li>5.5 years late from original release date</li>
+<li>Development hell rumors for latter 2 years</li>
+<li>Poor planning + management (could have been downfall)</li>
+<li>Stakeholder communication breakdown (legal action threats)</li>
+<li>Engine migration issues unplanned (4–8 months additional time)</li>
+<li>Opportunity cost: $200,000–$400,000 lost NPV</li>
+</ul>
+<p><strong>Key Takeaways:</strong></p>
+<ol>
+<li><strong>Poor planning and management</strong> could have been project downfall if not passion project</li>
+<li><strong>Limited information</strong> on corporate management methods—research + literature review filled gaps</li>
+<li><strong>Case study importance:</strong> Demonstrates how differently corporations apply planning vs. varied outcomes</li>
+<li><strong>Research limitation:</strong> Gathering management/planning information difficult (none existed in first several years)</li>
+<li><strong>OMOCAT secrecy:</strong> Regarding OMORI's shortcomings + ambition shortcomings</li>
+</ol>
+<p><strong>Final Assessment:</strong>
+Project aims fulfilled despite mishaps. Research valuable for understanding gaming business operations, SDLC volatility, and the critical importance of <strong>operational discipline</strong> alongside technical excellence.</p>
+<hr />
+<h2 id="13-references">13. References</h2>
+<ul>
+<li>
+<p><strong>Berle, K.</strong> (2021). <em>Managing Game Production Management</em>. Aalborg University Research Archive. https://projekter.aau.dk/projekter/files/239488075/Report_Complete.pdf</p>
+</li>
+<li>
+<p><strong>Chandler, H. M.</strong> (2013). <em>The Game Production Handbook</em> (3rd ed.). Jones &amp; Bartlett Learning.</p>
+</li>
+<li>
+<p><strong>Cohen, D. S., &amp; Bustamante, S. A.</strong> (2010). <em>Producing Games</em>. Game Development Publishing.</p>
+</li>
+<li>
+<p><strong>Heller, N., &amp; Roberts, D.</strong> (2021). &quot;Games Developed Entirely By One Person&quot;. <em>GamesRadar</em>. https://www.gamesradar.com/10-games-developed-entirely-one-person/</p>
+</li>
+<li>
+<p><strong>OMOCAT.</strong> (2014). <em>OMORI Kickstarter Campaign Updates and Production Logs</em>. https://www.kickstarter.com/projects/omocat/omori/posts</p>
+</li>
+<li>
+<p><strong>OMOCAT.</strong> (2021). <em>OMORI Kickstarter Update</em>. https://www.omocat-blog.com/post/85490697570/from-illustration-to-video-game-omori-kickstarter</p>
+</li>
+<li>
+<p><strong>Oldbring, J.</strong> (2021). &quot;Project Management in Game Development&quot;. <em>Massive</em>. https://www.massive.se/blog/games-technology/project-management-in-game-development/</p>
+</li>
+<li>
+<p><strong>Schreier, J.</strong> (2017). <em>Blood, Sweat, and Pixels: The Triumphant, Turbulent Stories Behind How Video Games Are Made</em>. Harper.</p>
+</li>
+<li>
+<p><strong>Steam.</strong> (2020). <em>OMORI Player Statistics &amp; Review Data</em>. https://steamgames.com/omori</p>
+</li>
+</ul>
+<hr />
+<p><strong>Reviewer:</strong> Fayola Roberts<br />
+<strong>Affiliation:</strong> Roytec Institute of Technology<br />
+<strong>Course:</strong> Project Management Assignment<br />
+<strong>Date:</strong> June 21, 2026<br />
+<strong>Category:</strong> School Projects (Software Project Management &amp; Agile Case Study)</p>
+</div>
+                    </div>
+                </article>
+                    </main>
+
+        <footer class="mt-auto">
+            <div class="taskbar-left">
+                <span class="fw-semibold text-white">&copy; 2026 Fayola Roberts</span>
+                <span class="opacity-25">|</span>
+                <span>Secured OS Environment</span>
+            </div>
+
+            <div class="taskbar-center">
+                <div class="taskbar-icon win-brand" title="Start"><i class="bi bi-windows"></i></div>
+                <div class="taskbar-search-mock"><i class="bi bi-search me-2 opacity-50"></i>Search...</div>
+                <div class="taskbar-icon" title="Google Chrome"><i class="bi bi-browser-chrome"></i></div>
+                <div class="taskbar-icon" title="Spotify"><i class="bi bi-spotify"></i></div>
+            </div>
+
+            <div class="taskbar-right">
+                <div class="system-tray-icons">
+                    <i class="bi bi-volume-up-fill" title="Speaker: 100%"></i>
+                    <i class="bi bi-wifi" title="Network Connected: 5G"></i>
+                    <i class="bi bi-battery-charging" title="Battery Status: 100% (Plugged In)"></i>
+                </div>
+                <div class="system-clock">
+                    <<div>11:19 PM</div>
+                    <div style="font-size: 0.65rem; opacity: 0.7;">06/20/2026</div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

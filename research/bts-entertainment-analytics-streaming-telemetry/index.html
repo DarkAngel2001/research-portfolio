@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entertainment Analytics: Modeling Global Streaming Telemetry and Consumption Growth Trajectories — Fayola Roberts</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="modulepreload" href="http://localhost:8080/build/assets/app-4ed993c7.js" /><link rel="modulepreload" href="http://localhost:8080/build/assets/app-ed1b56b6.js" /><script type="module" src="http://localhost:8080/build/assets/app-4ed993c7.js"></script><script type="module" src="http://localhost:8080/build/assets/app-ed1b56b6.js"></script>    <style>
+        :root {
+            /* Classic 90s Desktop / Modern Hybrid Theme Colors from Template */
+            --bg-desktop: #223147;        /* Deep vintage blue-gray desktop */
+            --bg-card: #012456;           /* PowerShell Console Midnight Blue */
+            --accent-primary: #0078d4;    /* Classic Windows Accent Blue */
+            --accent-glow: #38bdf8;       /* High-contrast highlight cyan */
+            --text-main: #ffffff;         /* Crisp white text */
+            --text-readable: #f8fafc;     /* High-contrast off-white text */
+            --text-muted: #cbd5e1;        /* Secondary detail text */
+            
+            /* Syntax Highlighting */
+            --ps-yellow: #ffdf00;         
+            --ps-cyan: #00ffff;           
+            --terminal-green: #34d399;
+        }
+
+        /* Natural Document Scrolling and Environment Flow */
+        html, body {
+            min-height: 100vh;
+            width: 100vw;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        body {
+            background-color: var(--bg-desktop);
+            font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Main Application Window: Boxy 90s Layout with Natural Document Flow --- */
+        .container.animate-boot {
+            max-width: 100% !important;
+            width: 100vw !important;
+            min-height: calc(100vh - 48px) !important;
+            background: #1e1e1e;
+            /* Boxy 3D Bezel Legacy Border Effect */
+            border-top: 3px solid #ffffff !important;
+            border-left: 3px solid #ffffff !important;
+            border-right: 3px solid #7f7f7f !important;
+            border-bottom: 3px solid #7f7f7f !important;
+            border-radius: 0px !important;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding: 40px 0 0 0 !important; /* Space under the custom chrome top frame */
+            margin-bottom: 48px !important; /* Clears fixed Windows 11 taskbar */
+        }
+
+        /* Vintage Active Title Bar Chrome Injection */
+        .container.animate-boot::before {
+            content: "🗔 DocumentReader.exe - Entertainment Analytics: Modeling Global Streaming Telemetry and Consumption Growth Trajectories";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 32px;
+            background: linear-gradient(90deg, #000080, #1084d0);
+            color: #ffffff;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            padding-left: 12px;
+            letter-spacing: 0.5px;
+            z-index: 10;
+        }
+
+        /* Legacy Control Buttons UI Window Graphic */
+        .container.animate-boot::after {
+            content: "🗕 🗖 🗙";
+            position: absolute;
+            top: 4px;
+            right: 8px;
+            color: #ffffff;
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            cursor: pointer;
+            z-index: 11;
+        }
+
+        main {
+            flex: 1 0 auto;
+            padding: 30px;
+            padding-bottom: 80px; /* Clearing block for the fixed taskbar */
+        }
+
+        /* Identity Block Header Registry Fixes */
+        .border-bottom.border-secondary {
+            padding: 0 30px 20px 30px;
+            border-bottom-color: rgba(255, 255, 255, 0.15) !important;
+        }
+
+        h1, h2, h3, h4, h5, h6, .text-white-forced {
+            color: var(--text-main) !important;
+        }
+
+        .animate-boot {
+            animation: consoleBoot 0.25s ease-in-out forwards;
+        }
+        @keyframes consoleBoot {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* --- cmd.exe Command Line Navigation Block --- */
+        header.cmd-prompt-nav {
+            background: transparent !important;
+            border: none !important;
+            margin: 0 30px 30px 30px !important;
+            padding: 0 !important;
+        }
+        
+        .cmd-line-text {
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .nav-link-custom {
+            color: #a3a3a3;
+            transition: color 0.1s ease;
+            font-weight: bold;
+            padding: 2px 8px !important;
+            border-radius: 0px !important;
+            text-decoration: none;
+        }
+        .nav-link-custom:hover {
+            color: var(--accent-glow) !important;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .nav-link-custom.active {
+            color: #00ff00 !important; /* Active link selection terminal green override */
+            background: transparent !important;
+        }
+
+        /* High-Contrast Link Mechanics */
+        .meta-link {
+            color: var(--accent-glow);
+            text-decoration: none;
+        }
+        .meta-link:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        .status-pill {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid #34d399;
+            color: #34d399;
+            border-radius: 0px !important;
+        }
+
+        /* Blinking Terminal UI Cursor */
+        @keyframes blink { 50% { opacity: 0; } }
+        .terminal-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 15px;
+            background-color: #00ff00;
+            margin-left: 4px;
+            vertical-align: middle;
+            animation: blink 1s step-end infinite;
+        }
+
+        /* ==========================================================================
+           DOCUMENT SYSTEM VIEWPORT DISPATCHER (RESEARCH VS BLOG STYLES)
+           ========================================================================== */
+        
+        /* --------------------------------------------------------------------------
+           STYLE ARCHETYPE A: Formal Academic Research Paper Format
+           -------------------------------------------------------------------------- */
+        .format-research-paper {
+            background-color: #fcfbf9 !important; /* Premium archival off-white print stock page color */
+            color: #111111 !important;           /* Dark slate high-contrast print ink */
+            font-family: 'Georgia', 'Cambria', 'Times New Roman', Times, serif !important;
+            border: 1px solid #d1d5db !important;
+            border-top: 6px solid #475569 !important; /* Heavy-set academic card top bezel */
+            border-radius: 0px !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+            padding: 3rem 4rem !important;
+        }
+        
+        .format-research-paper h1.doc-main-title {
+            color: #0f172a !important;
+            font-family: 'Georgia', serif !important;
+            font-weight: 800 !important;
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 0.5rem !important;
+            border: none !important;
+            text-shadow: none !important;
+        }
+
+        .format-research-paper .research-meta-header {
+            text-align: center;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #475569;
+            font-size: 0.88rem;
+            margin-bottom: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+
+        /* Markdown Content Engine Processing Overrides for Academic Research Papers */
+        .format-research-paper .prose-container {
+            color: #1e293b !important;
+            font-size: 1.05rem !important;
+            line-height: 1.8 !important;
+            text-align: justify; /* Proper academic document alignment layout standard */
+        }
+        .format-research-paper .prose-container p {
+            margin-bottom: 1.5rem;
+            text-indent: 0rem; /* Traditional academic indent parameters can be set here */
+        }
+        .format-research-paper .prose-container strong {
+            color: #000000 !important;
+            font-weight: 700;
+        }
+        .format-research-paper .prose-container a {
+            color: #1d4ed8 !important; /* Formal print-safe hyper-blue */
+            text-decoration: underline;
+        }
+        .format-research-paper .prose-container code {
+            background: #f1f5f9 !important;
+            color: #b91c1c !important; /* Academic-safe distinct code highlighting color tone */
+            border: 1px solid #e2e8f0;
+            padding: 2px 5px;
+            font-size: 0.9rem;
+            font-family: monospace;
+        }
+
+        /* --------------------------------------------------------------------------
+           STYLE ARCHETYPE B: Modern Flowing Blog Updates Format
+           -------------------------------------------------------------------------- */
+        .format-blog-normal {
+            background: var(--bg-card) !important;
+            border: 2px solid #7f7f7f !important;
+            border-radius: 0px !important;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.7);
+            padding: 2.5rem !important;
+        }
+
+        .format-blog-normal h1.doc-main-title {
+            color: var(--ps-yellow) !important;
+            font-family: inherit;
+            font-weight: bold;
+            font-size: 1.8rem;
+            border-bottom: 2px dashed rgba(255, 255, 255, 0.15);
+            padding-bottom: 12px;
+        }
+
+        .format-blog-normal .blog-meta-header {
+            color: var(--ps-cyan);
+            font-size: 0.8rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Markdown Content Engine Processing Overrides for Blogs */
+        .format-blog-normal .prose-container {
+            color: var(--text-readable) !important;
+            font-size: 0.95rem !important;
+            line-height: 1.6 !important;
+        }
+        .format-blog-normal .prose-container p {
+            margin-bottom: 1.25rem;
+        }
+        .format-blog-normal .prose-container strong {
+            color: #ffffff !important;
+        }
+        .format-blog-normal .prose-container a {
+            color: var(--accent-glow) !important;
+            text-decoration: underline;
+        }
+        .format-blog-normal .prose-container code {
+            background: rgba(0, 0, 0, 0.4) !important;
+            color: var(--terminal-green) !important;
+            padding: 2px 6px;
+            border-radius: 0px;
+            font-size: 0.88rem;
+        }
+
+        /* Content Protection Matrix Guardrail Rule */
+        .protect-content {
+            user-select: none !important;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+        }
+
+        /* --- Authentic Full-Width Fixed Windows 11 Taskbar --- */
+        footer.mt-auto {
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 48px !important;
+            background: rgba(32, 32, 32, 0.9) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 0px !important;
+            padding: 0 20px !important;
+            margin: 0 !important;
+            
+            display: grid !important;
+            grid-template-columns: 1fr auto 1fr !important;
+            align-items: center !important;
+            z-index: 99999;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .taskbar-left {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 10px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .taskbar-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+        .taskbar-icon {
+            font-size: 1.15rem;
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: transform 0.1s ease, color 0.1s ease;
+            display: flex;
+            align-items: center;
+        }
+        .taskbar-icon:hover {
+            color: var(--accent-glow);
+            transform: scale(1.1);
+        }
+        .taskbar-icon.win-brand {
+            color: #0078d4;
+            font-size: 1.25rem;
+        }
+        .taskbar-search-mock {
+            width: 140px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #cccccc;
+            font-size: 0.72rem;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            cursor: text;
+            user-select: none;
+        }
+
+        .taskbar-right {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 14px;
+            font-size: 0.8rem;
+            color: #e2e8f0;
+        }
+        .system-tray-icons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #cbd5e1;
+        }
+        .system-clock {
+            font-size: 0.75rem;
+            text-align: right;
+            line-height: 1.2;
+            border-left: 1px solid rgba(255, 255, 255, 0.15);
+            padding-left: 12px;
+            color: #ffffff;
+        }
+
+        /* Desktop Container Sizing Adaptability Fixes for Academic Reading Formats */
+        @media (max-width: 768px) {
+            .format-research-paper {
+                padding: 1.5rem !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container py-5 animate-boot">
+        
+        <div class="mb-4 pb-4 border-bottom border-secondary border-opacity-50">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                <h1 class="h3 fw-bold m-0">Fayola Roberts</h1>
+                <span class="badge status-pill px-2 py-1 text-uppercase fw-semibold">SYS_STATUS: ONLINE</span>
+            </div>
+            
+            <div class="d-flex flex-wrap gap-3 small fw-medium mt-3">
+                <div>
+                    <i class="bi bi-github text-white-forced me-1"></i> 
+                    <a href="https://github.com/DarkAngel2001" target="_blank" rel="noopener noreferrer" class="meta-link">AngelLite (GitHub)</a>
+                </div>
+                <div class="d-none d-sm-inline text-muted opacity-50">|</div>
+                <div>
+                    <i class="bi bi-linkedin text-white-forced me-1"></i> 
+                    <a href="https://www.linkedin.com/in/fayola-roberts-612760205/" target="_blank" rel="noopener noreferrer" class="meta-link">Fayola Roberts (LinkedIn)</a>
+                </div>
+                <div class="d-none d-sm-inline text-muted opacity-50">|</div>
+                <div>
+                    <i class="bi bi-envelope-fill text-white-forced me-1"></i> 
+                    <a href="mailto:fayola.c.roberts@gmail.com" class="meta-link font-monospace">fayola.c.roberts@gmail.com</a>
+                </div>
+            </div>
+        </div>
+
+        <header class="cmd-prompt-nav">
+            <div class="cmd-line-text">C:\Users\FayolaRoberts\Portfolio&gt; navigate --select-target</div>
+            <nav class="nav gap-2 small">
+                <a href="/research-portfolio/" class="nav-link-custom">[ Home ]</a>
+                <a href="/research-portfolio/about" class="nav-link-custom">[ About_Me ]</a>
+                <a href="/research-portfolio/insights" class="nav-link-custom">[ Insights_&amp;_Research ]</a>
+                <span class="terminal-cursor"></span>
+            </nav>
+        </header>
+
+        <main>
+           <div class="mb-4">
+                <a href="/research-portfolio/insights" class="meta-link small fw-bold font-monospace">
+                    &larr; /research-portfolio/insights
+
+                </a>
+            </div>
+
+                            <article class="format-research-paper protect-content mx-auto" style="max-width: 850px;" oncontextmenu="return false;">
+                    <h1 class="doc-main-title">Entertainment Analytics: Modeling Global Streaming Telemetry and Consumption Growth Trajectories</h1>
+                    <div class="research-meta-header">
+                        Published: 2021-06-27 &bull; Author: F. Roberts &bull; Classification: For fun
+                    </div>
+                    
+                    <div class="prose-container">
+                        <div ><h3 id="abstract">Abstract</h3>
+<p>This project implements a data analytics pipeline using Python to evaluate the historical growth, platform-specific distribution, and global consumption metrics of the musical group BTS. By analyzing longitudinal streaming telemetry spanning Spotify, YouTube, and regional digital service providers (DSPs), we model consumption trends from 2013 to the present. The paper outlines the data pipeline architecture, details platform-specific variances via standard deviation analysis, and highlights data integrity mechanics unique to streaming ecosystem metrics.</p>
+<hr />
+<h3 id="introduction-dataset-scope-amp-entity-definition">Introduction: Dataset Scope &amp; Entity Definition</h3>
+<p>BTS is a Korean pop group formed in Seoul in 2013, comprising seven distinct performance nodes: Kim Namjoon (RM), Kim Seokjin (Jin), Min Yoongi (Suga), Jung Hoseok (J-Hope), Park Jimin (Jimin), Kim Taehyung (V), and Jung Jungkook (Jungkook). All members serve as active vocalists and provide artistic input across every album release.</p>
+<p>The dataset maps performance contributions across seven individual nodes, accounting for solo arrangements and collaborative track distributions. BTS has demonstrated consistent year-over-year growth, repeatedly surpassing previous sales records. This analysis compiles streaming data from the start of their career (2013) through 2020 to determine sales information for all BTS albums, singles, and total streaming aggregations.</p>
+<p><strong>Dataset Temporal Scope:</strong> 2013–2020 (2021 excluded due to incomplete year data and ongoing streaming growth for recent releases like 'Butter', which was in its fourth week on Billboard Hot 100/200 during analysis).</p>
+<p><strong>Exclusion Criteria:</strong></p>
+<ul>
+<li>Remixes and re-releases excluded (initial release provides best growth trajectory baseline)</li>
+<li>Mini-albums excluded (not accepted at Korean Music Awards during analysis period)</li>
+<li>2021 data excluded (incomplete year, streaming numbers still volatile)</li>
+</ul>
+<hr />
+<h3 id="research-objectives">Research Objectives</h3>
+<p>This analysis investigates the following core questions:</p>
+<ol>
+<li>
+<p><strong>Contextual Growth Trajectory:</strong> What is the rate of BTS's market expansion from 2013 onward, and how does it correlate with release frequency?</p>
+</li>
+<li>
+<p><strong>Album Comparative Analysis:</strong> How do previous albums compare by genre, release year, and streaming performance stability?</p>
+</li>
+<li>
+<p><strong>Cross-Platform Growth:</strong> What are the streaming growth patterns across multiple platforms (Spotify, YouTube, regional DSPs)?</p>
+</li>
+<li>
+<p><strong>Performance Variance:</strong> Which albums and songs represent weaker or stronger performance outliers based on statistical metrics?</p>
+</li>
+</ol>
+<hr />
+<h3 id="data-pipeline-architecture-amp-methodology">Data Pipeline Architecture &amp; Methodology</h3>
+<h4 id="combined-streaming-performance-calculation-cspc">Combined Streaming Performance Calculation (CSPC)</h4>
+<p>The CSPC concept balances all sources equally while applying suitable weighting for each platform. Primary data sources include publicly accessible platforms (YouTube, Spotify) supplemented by Korean and global streaming services to reflect the expanding effects of numerous Asian countries where music is not always streamed on Western platforms.</p>
+<p><strong>Regional Market Share Weighting:</strong></p>
+<p><em>Audio Streams:</em></p>
+<ul>
+<li>South Korea: Genie streams × 3.05 (Gaon market adjustment)</li>
+<li>Japan: AWA streams × 100/5.5 (5.5% of Japanese market)</li>
+</ul>
+<p><em>Video Streams:</em></p>
+<ul>
+<li>China: QQ video streams × 50 (if song available) or × 5 (if not available)</li>
+<li>Elsewhere: YouTube views</li>
+</ul>
+<p><strong>Conversion Ratios:</strong></p>
+<ul>
+<li>Audio Stream: 1,500 plays = 1 album unit</li>
+<li>Video Stream: 11,750 views = 1 album unit</li>
+</ul>
+<p><strong>Equivalent Album Sales (EAS) Formula:</strong></p>
+<p>$$\text{EAS} = \frac{\left(\text{Spotify} \times \frac{310}{207} + \text{Genie} \times 3.05 \times 2 + \text{AWA} \times \frac{100}{5.5}\right)}{1500} + \frac{\left(\text{QQ views} \times 50\text{(or }5) + \text{YouTube}\right)}{11750}$$</p>
+<h4 id="data-ingestion-workflow">Data Ingestion Workflow</h4>
+<p>[Platform APIs / Scrapers] ---&gt; [Data Ingestion (Pandas DataFrame)] ---&gt; [Typecasting &amp; Anonymization]</p>
+<p>[Descriptive Dashboarding] &lt;--- [Statistical Aggregation (Mean/SD)] &lt;---------------+</p>
+<hr />
+<h3 id="data-cleaning-challenges-amp-python-implementation">Data Cleaning Challenges &amp; Python Implementation</h3>
+<p>Raw entertainment metrics often arrive with inconsistent formatting. Streaming numbers frequently import as string data containing comma separators, requiring automated regex cleansing and typecasting into 64-bit float arrays.</p>
+<p><strong>Python Analytics Pipeline Implementation:</strong></p>
+<code class="language-python">import pandas as pd
+import numpy as np
+import re
+
+# Sample implementation of the analytics aggregation pipeline
+def analyze_streaming_metrics(file_path):
+    &quot;&quot;&quot;
+    Parse BTS streaming dataset and compute descriptive statistics
+    across multiple platform vectors.
+    &quot;&quot;&quot;
+    df = pd.read_csv(file_path)
+    
+    # Regex cleansing: Remove comma separators from string-streaming fields
+    df['BTS_Spotify'] = df['BTS_Spotify'].astype(str).apply(
+        lambda x: float(re.sub(r'[,\s]', '', x)) if x != 'nan' else np.nan
+    )
+    df['BTS_Youtube'] = df['BTS_Youtube'].astype(str).apply(
+        lambda x: float(re.sub(r'[,\s]', '', x)) if x != 'nan' else np.nan
+    )
+    
+    # Calculate weighted streaming averages across major distribution pipelines
+    df['Total_Global_Streams'] = df['BTS_Spotify'] + df['BTS_Youtube'] + df['BTS_Comprehensive_Audio_Streaming']
+    
+    # Missing value imputation: Mean conditioning by album type
+    df['BTS_EAS'] = df['BTS_EAS'].fillna(df.groupby('BTS_Album')['BTS_EAS'].mean())
+    
+    return df
+
+def compute_streaming_aggregations(df):
+    &quot;&quot;&quot;
+    Aggregate mean and standard deviation metrics across dynamic album categories.
+    &quot;&quot;&quot;
+    summary = df.groupby('BTS_Album').agg({
+        'BTS_Spotify': ['mean', 'std', 'sum'],
+        'BTS_Youtube': ['mean', 'std', 'sum'],
+        'BTS_Comprehensive_Audio_Streaming': ['mean', 'std'],
+        'BTS_EAS': ['mean', 'sum']
+    }).round(2)
+    
+    return summary
+
+def find_peak_performance(df, region_column):
+    &quot;&quot;&quot;
+    Identify album with maximum sales in specified regional column.
+    &quot;&quot;&quot;
+    peak_album = df[df[region_column] == df[region_column].max()]
+    return peak_album
+
+# Execute pipeline
+df1 = analyze_streaming_metrics('BTS_Song_Data.csv')  # Sheet 1: Songs
+df2 = analyze_streaming_metrics('BTS_Album_Data.csv')  # Sheet 2: Albums
+
+# Compute regional sales impact
+album_sales_impact = df2[['Album_USA_Sales', 'Album_South_Korea_Sales', 
+                          'Album_Japan_Sales', 'Album_Asia_Sales']].sum()
+
+# Identify top 5 songs by platform
+top_5_spotify = df1.sort_values(by='BTS_Spotify', ascending=False).head(5)
+top_5_youtube = df1.sort_values(by='BTS_Youtube', ascending=False).head(5)
+top_5_audio = df1.sort_values(by='BTS_Comprehensive_Audio_Streaming', ascending=False).head(5)
+
+# Calculate descriptive statistics
+avg_spotify = df1['BTS_Spotify'].mean()
+avg_youtube = df1['BTS_Youtube'].mean()
+avg_external = df1['BTS_Comprehensive_Audio_Streaming'].mean()
+avg_eas = df1['BTS_EAS'].mean()
+
+sd_spotify = df1['BTS_Spotify'].std()
+sd_youtube = df1['BTS_Youtube'].std()
+sd_external = df1['BTS_Comprehensive_Audio_Streaming'].std()
+</code>
+<p><strong>Typecasting &amp; Imputation Strategy:</strong></p>
+<ul>
+<li>Missing values in historical tracking subsets from early 2013 layouts handled using mean imputation conditioned on corresponding album types</li>
+<li>Large string fields (streaming numbers with comma separators) typecasted to <code>float64</code> via regex cleansing</li>
+<li>Aggregating standard deviations across dynamic album categories using <code>groupby().agg()</code></li>
+</ul>
+<hr />
+<h3 id="dataset-description-amp-variable-schema">Dataset Description &amp; Variable Schema</h3>
+<p>The BTS dataset is a custom creation from independent research. Dataset variable types are <strong>Interval</strong> (continuous numerical metrics) and <strong>Categorical</strong> (discrete labels).</p>
+<h4 id="sheet-1-song-level-data-df1">Sheet 1: Song-Level Data (Df1)</h4>
+<p>| Variable Name | Description |
+| :--- | :--- |
+| <code>BTS_Song</code> | Song name |
+| <code>BTS_Spotify</code> | Song-relevant Spotify stream number |
+| <code>BTS_Comprehensive_Audio_Streaming</code> | Song stream number for services not listed (Genie, AWA, QQ) |
+| <code>BTS_Youtube</code> | Song-relevant YouTube view count |
+| <code>BTS_EAS</code> | Song-relevant Equivalent Album Sales |
+| <code>BTS_Album</code> | Song's parent album |</p>
+<h4 id="sheet-2-album-level-data-df2">Sheet 2: Album-Level Data (Df2)</h4>
+<p>| Variable Name | Description |
+| :--- | :--- |
+| <code>Name_Album</code> | Individual album name |
+| <code>Album_Year</code> | Year of album release |
+| <code>Album_USA_Sales</code> | USA sales (release date to 2020 end) |
+| <code>Album_Canada_Sales</code> | Canada sales (release date to 2020 end) |
+| <code>Album_Latin_America_Sales</code> | Latin America sales |
+| <code>Album_Mexico_Sales</code> | Mexico sales |
+| <code>Album_Asia_Sales</code> | Asia sales (excludes Japan, South Korea) |
+| <code>Album_Japan_Sales</code> | Japan sales |
+| <code>Album_South_Korea_Sales</code> | South Korea sales |
+| <code>Album_Australia_Sales</code> | Australia sales |
+| <code>Album_ROW_Sales</code> | Remainder of World sales |
+| <code>Album_Europe_Sales</code> | Europe sales |
+| <code>Album_UK_Sales</code> | United Kingdom sales |
+| <code>Album_Germany_Sales</code> | Germany sales |
+| <code>Album_France_Sales</code> | France sales |
+| <code>Album_Italy_Sales</code> | Italy sales |
+| <code>Album_Spain_Sales</code> | Spain sales |
+| <code>Album_Netherlands_Sales</code> | Netherlands sales |
+| <code>Album_Sweden_Sales</code> | Sweden sales |
+| <code>Album_Switzerland_Sales</code> | Switzerland sales |
+| <code>Album_Austria_Sales</code> | Austria sales |
+| <code>Album_Finland_Sales</code> | Finland sales |</p>
+<p><strong>Total Dataset Size:</strong> 22 columns, 2,938 rows (Sheet 1: Songs; Sheet 2: Albums)</p>
+<hr />
+<h3 id="empirical-results-amp-statistical-analysis">Empirical Results &amp; Statistical Analysis</h3>
+<h4 id="album-sales-trajectory-analysis">Album Sales Trajectory Analysis</h4>
+<p>Using pandas plotting to visualize album sales by year for key markets:</p>
+<code class="language-python"># Plot album sales by year for USA, Japan, South Korea
+df2.plot(x=&quot;Album_Year&quot;, y=[&quot;Album_USA_Sales&quot;, &quot;Album_Japan_Sales&quot;, 
+                             &quot;Album_South_Korea_Sales&quot;], kind=&quot;bar&quot;, 
+         rot=5, fontsize=7, title=&quot;Album Summary by Year&quot;)
+</code>
+<p><strong>Key Finding:</strong> The spike in album sales started in 2016 and dropped with their second 2020 release album.</p>
+<p><strong>Peak Performance Identification (2016 Breakout):</strong></p>
+<code class="language-python">Peak_Albums = df2[df2[&quot;Album_Year&quot;] == 2016]
+print(Peak_Albums)
+</code>
+<p><strong>Result:</strong> <em>Wings</em> (2016)</p>
+<ul>
+<li>USA Album Sales: 125,000</li>
+<li>Japan Album Sales: 102,500</li>
+<li>South Korea Album Sales: 695,000</li>
+</ul>
+<p><strong>Comparison:</strong> Previous album <em>The Most Beautiful Moment in Life Pt. 2</em> (late 2015):</p>
+<ul>
+<li>USA: 92,500 | Japan: 80,000 | South Korea: 347,500</li>
+</ul>
+<h4 id="regional-sales-impact-analysis">Regional Sales Impact Analysis</h4>
+<code class="language-python">Album_Sales_Imp = df2[[&quot;Album_USA_Sales&quot;,&quot;Album_South_Korea_Sales&quot;,
+                       &quot;Album_Japan_Sales&quot;, &quot;Album_Asia_Sales&quot;]].sum()
+Album_Sales_Imp.plot(kind=&quot;bar&quot;, rot=5, fontsize=7, 
+                     title=&quot;Sales of Relevant Regions&quot;)
+</code>
+<p><strong>Key Finding:</strong> Collective South Korean sales outweigh both Japan and USA individually, however remaining Asian countries dominated overall, accounting for <strong>16,607,500 album sales</strong> from 2013 to 2020.</p>
+<h4 id="best-album-by-regional-maximum">Best Album by Regional Maximum</h4>
+<code class="language-python">best_usa = df2[df2[&quot;Album_USA_Sales&quot;] == df2[&quot;Album_USA_Sales&quot;].max()]
+best_korea = df2[df2[&quot;Album_South_Korea_Sales&quot;] == df2[&quot;Album_South_Korea_Sales&quot;].max()]
+best_japan = df2[df2[&quot;Album_Japan_Sales&quot;] == df2[&quot;Album_Japan_Sales&quot;].max()]
+</code>
+<p><strong>Result:</strong> <em>Map of the Soul: 7</em> tops all categories:</p>
+<ul>
+<li>USA: 760,000 album sales</li>
+<li>Japan: 525,000 album sales</li>
+<li>South Korea: 2,070,000 album sales</li>
+</ul>
+<h4 id="historical-album-sales-milestones">Historical Album Sales Milestones</h4>
+<p>From dataset/resource analysis:</p>
+<ul>
+<li><strong>2 Cool 4 Skool</strong> &amp; <strong>O!RUL8,2?</strong> (early records): Produced in every format, sold ~1 million units combined</li>
+<li><strong>The Most Beautiful Moment in Life Pt. 1 &amp; 2</strong> (2015): Total sales ~7 million albums (one of Korea's most successful endeavors)</li>
+<li><strong>Wings</strong> (2016): Shattered records with 8.5 million total sales</li>
+<li><strong>Love Yourself: Her</strong> (2017): Top 10 in US, contributed 7.5 million sales</li>
+<li><strong>Love Yourself: Tear</strong> (2018): 6.9 million sales</li>
+<li><strong>Love Yourself: Answer</strong> (2018): 6.0 million sales (separate release)</li>
+<li><strong>Map of the Soul: Persona</strong> (2019): 9.1 million sales (overcame predecessors)</li>
+<li><strong>Map of the Soul: 7</strong> (2020): 8.1 million sales</li>
+<li><strong>Map of the Soul volumes</strong> (both): 8.9 million combined (two of best albums)</li>
+<li><strong>BE</strong> (2020): 7.55 million sales</li>
+</ul>
+<hr />
+<h3 id="song-level-analysis-amp-streaming-variance">Song-Level Analysis &amp; Streaming Variance</h3>
+<h4 id="song-distribution-per-album">Song Distribution Per Album</h4>
+<code class="language-python">album_count = df1[&quot;BTS_Album&quot;].value_counts()
+album_count.plot(kind=&quot;bar&quot;, title=&quot;Album Count&quot;)
+</code>
+<p><strong>Key Finding:</strong> Majority of songs are singles; album with most songs is <em>Wings</em>.</p>
+<h4 id="equivalent-album-sales-eas-extremes">Equivalent Album Sales (EAS) Extremes</h4>
+<code class="language-python">highest_eas = df1[df1[&quot;BTS_EAS&quot;] == df1[&quot;BTS_EAS&quot;].max()]
+lowest_eas = df1[df1[&quot;BTS_EAS&quot;] == df1[&quot;BTS_EAS&quot;].min()]
+Avg_EAS = df1[&quot;BTS_EAS&quot;].mean()
+</code>
+<p><strong>Results:</strong></p>
+<ul>
+<li><strong>Highest EAS:</strong> 'Dynamite' with 1,678,144 estimated album sales</li>
+<li><strong>Lowest EAS:</strong> 'The Rise Of Bangtan' &amp; 'No Title' with 0 estimated album sales</li>
+<li><strong>Average EAS:</strong> 149,225.15</li>
+</ul>
+<h4 id="top-5-songs-by-streaming-platform">Top 5 Songs by Streaming Platform</h4>
+<code class="language-python">top_5_spotify = df1.sort_values(by=&quot;BTS_Spotify&quot;, ascending=False).head(5)
+top_5_spotify.plot(x=&quot;BTS_Song&quot;, y=&quot;BTS_Spotify&quot;, kind=&quot;bar&quot;, 
+                   rot=5, fontsize=7, title=&quot;Top 5 Spotify Songs&quot;)
+
+top_5_youtube = df1.sort_values(by=&quot;BTS_Youtube&quot;, ascending=False).head(5)
+top_5_youtube.plot(x=&quot;BTS_Song&quot;, y=&quot;BTS_Youtube&quot;, kind=&quot;bar&quot;, 
+                   rot=5, fontsize=7, title=&quot;Top 5 YouTube Songs&quot;)
+
+top_5_audio = df1.sort_values(by=&quot;BTS_Comprehensive_Audio_Streaming&quot;, 
+                              ascending=False).head(5)
+top_5_audio.plot(x=&quot;BTS_Song&quot;, y=&quot;BTS_Comprehensive_Audio_Streaming&quot;, 
+                 kind=&quot;bar&quot;, rot=5, fontsize=7, title=&quot;Top 5 Audio Stream Songs&quot;)
+</code>
+<p><strong>Consistent Top 5 Performers:</strong> 'Dynamite', 'Boy With Luv', 'DNA', and 'Fake Love' appear across all platform top 5 lists.</p>
+<h4 id="descriptive-statistics-mean-amp-standard-deviation">Descriptive Statistics: Mean &amp; Standard Deviation</h4>
+<code class="language-python"># Compute mean metrics
+avg_spotify = df1['BTS_Spotify'].mean()
+avg_youtube = df1['BTS_Youtube'].mean()
+avg_external = df1['BTS_Comprehensive_Audio_Streaming'].mean()
+avg_eas = df1['BTS_EAS'].mean()
+
+# Compute standard deviation metrics
+sd_spotify = df1['BTS_Spotify'].std()
+sd_youtube = df1['BTS_Youtube'].std()
+sd_external = df1['BTS_Comprehensive_Audio_Streaming'].std()
+</code>
+<p><strong>Streaming Platform Vector Summary:</strong></p>
+<p>| Streaming Platform Vector | Computed Average Value | Standard Deviation (σ) | Evaluation of Variance |
+| :--- | :--- | :--- | :--- |
+| <strong>BTS Spotify Average</strong> | 87,125,645.83 | 118,275,075.74 | Moderate baseline consistency |
+| <strong>BTS External Streaming Service Average</strong> | 201,115,491.31 | 291,631,975.38 | High regional distribution spread |
+| <strong>BTS YouTube Streaming Average</strong> | 168,482,796.88 | 376,805,117.72 | Extreme programmatic volatility |
+| <strong>BTS Equivalent Album Sales Average</strong> | 149,225.15 | N/A | Discrete metric (no SD computed) |</p>
+<p><strong>Critical Finding:</strong> While Spotify platforms display linear, predictable growth curves, YouTube metrics display an exponentially larger standard deviation (σ = 376.8M), signaling highly volatile viral consumption events. External DSP engines show high regional distribution spread (σ = 291.6M), indicating market-specific variance.</p>
+<hr />
+<h3 id="advanced-context-data-integrity-amp-platform-telemetry">Advanced Context: Data Integrity &amp; Platform Telemetry</h3>
+<h4 id="the-data-sourcing-vector-data-science-perspective">The Data Sourcing Vector (Data Science Perspective)</h4>
+<p>Analyzing consumer behavior trends reveals unique intersections with web scraping architecture and API acquisition pipelines:</p>
+<p><strong>API Limitation Challenges:</strong></p>
+<ul>
+<li><strong>Spotify Developer Endpoints:</strong> Rate-limited to 500 requests/second with payload quotas requiring batched request strategies</li>
+<li><strong>YouTube Data API:</strong> Daily quota of 10,000,000 units with video-specific consumption costs (typically 1 unit per read operation)</li>
+<li><strong>Regional Tracking Deltas:</strong> South Korean platforms (Melon, Genie) and Japanese services (AWA, LINE Music) process tracking parameters differently than Western APIs</li>
+</ul>
+<p><strong>Data Normalization Requirements:</strong>
+Because regional distribution infrastructure processes tracking parameters differently, data normalization scripts must account for:</p>
+<ul>
+<li>Differing API rate limitations (request throttling)</li>
+<li>Platform-specific data validation criteria (timestamp formats, currency conversions)</li>
+<li>Schema mismatch vulnerabilities between DSP providers</li>
+</ul>
+<p>This requires building <strong>fault-tolerant ETL (Extract, Transform, Load) loops</strong> that protect incoming metrics against truncation or schema corruption.</p>
+<h4 id="the-telemetry-integrity-vector-cybersecurity-perspective">The Telemetry Integrity Vector (Cybersecurity Perspective)</h4>
+<p>Analyzing consumer behavior trends reveals unique intersections with data security and information infrastructure:</p>
+<p><strong>1. Sybil Attacks &amp; Stream Infiltration Detection</strong></p>
+<p>Modern entertainment datasets are uniquely prone to data poisoning via coordinated automated playlist loops or distributed botnets designed to artificially inflate stream counts. Major streaming providers utilize edge telemetry detection models to identify anomalous consumption behavior:</p>
+<ul>
+<li><strong>Concurrent Loop Detection:</strong> Single IP address maintaining hundreds of continuous loop streams without human interaction signatures (mouse movements, track skips, volume changes)</li>
+<li><strong>Temporal Pattern Analysis:</strong> Streams occurring at uniform intervals (e.g., exactly every 3 minutes) indicate automated scripting rather than organic listening</li>
+<li><strong>Geographic Anomaly Detection:</strong> Impossible travel patterns (same account streaming from Tokyo, Seoul, and New York within 10 minutes) flag credential sharing or bot activity</li>
+</ul>
+<p><strong>Automated Filtering Algorithms:</strong>
+Streaming platforms deploy ML-based anomaly detection to identify and remove artificial stream inflation, ensuring analyzed datasets reflect authentic consumer behavior. Key detection vectors include:</p>
+<ul>
+<li>Repetitive playback patterns (&lt; 30-second truncation avoidance)</li>
+<li>Device fingerprint consistency checks</li>
+<li>Session duration distribution analysis</li>
+</ul>
+<p><strong>2. Digital Rights Management (DRM) &amp; Data Governance</strong></p>
+<ul>
+<li><strong>Encrypted Telemetry Transmission:</strong> All streaming metrics transmitted via TLS 1.3 with payload encryption to prevent interception or manipulation</li>
+<li><strong>Cryptographic Hash Validation:</strong> Historical dataset snapshots maintain SHA-256 signatures for version integrity verification</li>
+<li><strong>Privacy-Preserving Aggregation:</strong> Individual user data anonymized before aggregation; country-level summaries prevent reverse-engineering to identify specific listeners</li>
+</ul>
+<p><strong>3. Fraud Detection Pipeline Architecture</strong></p>
+</div>
+                    </div>
+                </article>
+                    </main>
+
+        <footer class="mt-auto">
+            <div class="taskbar-left">
+                <span class="fw-semibold text-white">&copy; 2026 Fayola Roberts</span>
+                <span class="opacity-25">|</span>
+                <span>Secured OS Environment</span>
+            </div>
+
+            <div class="taskbar-center">
+                <div class="taskbar-icon win-brand" title="Start"><i class="bi bi-windows"></i></div>
+                <div class="taskbar-search-mock"><i class="bi bi-search me-2 opacity-50"></i>Search...</div>
+                <div class="taskbar-icon" title="Google Chrome"><i class="bi bi-browser-chrome"></i></div>
+                <div class="taskbar-icon" title="Spotify"><i class="bi bi-spotify"></i></div>
+            </div>
+
+            <div class="taskbar-right">
+                <div class="system-tray-icons">
+                    <i class="bi bi-volume-up-fill" title="Speaker: 100%"></i>
+                    <i class="bi bi-wifi" title="Network Connected: 5G"></i>
+                    <i class="bi bi-battery-charging" title="Battery Status: 100% (Plugged In)"></i>
+                </div>
+                <div class="system-clock">
+                    <<div>11:19 PM</div>
+                    <div style="font-size: 0.65rem; opacity: 0.7;">06/20/2026</div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

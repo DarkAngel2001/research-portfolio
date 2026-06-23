@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithmic Paradigms: Comparative Analysis of Greedy and Divide-and-Conquer Frameworks — Fayola Roberts</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="modulepreload" href="http://localhost:8080/build/assets/app-4ed993c7.js" /><link rel="modulepreload" href="http://localhost:8080/build/assets/app-ed1b56b6.js" /><script type="module" src="http://localhost:8080/build/assets/app-4ed993c7.js"></script><script type="module" src="http://localhost:8080/build/assets/app-ed1b56b6.js"></script>    <style>
+        :root {
+            /* Classic 90s Desktop / Modern Hybrid Theme Colors from Template */
+            --bg-desktop: #223147;        /* Deep vintage blue-gray desktop */
+            --bg-card: #012456;           /* PowerShell Console Midnight Blue */
+            --accent-primary: #0078d4;    /* Classic Windows Accent Blue */
+            --accent-glow: #38bdf8;       /* High-contrast highlight cyan */
+            --text-main: #ffffff;         /* Crisp white text */
+            --text-readable: #f8fafc;     /* High-contrast off-white text */
+            --text-muted: #cbd5e1;        /* Secondary detail text */
+            
+            /* Syntax Highlighting */
+            --ps-yellow: #ffdf00;         
+            --ps-cyan: #00ffff;           
+            --terminal-green: #34d399;
+        }
+
+        /* Natural Document Scrolling and Environment Flow */
+        html, body {
+            min-height: 100vh;
+            width: 100vw;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        body {
+            background-color: var(--bg-desktop);
+            font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Main Application Window: Boxy 90s Layout with Natural Document Flow --- */
+        .container.animate-boot {
+            max-width: 100% !important;
+            width: 100vw !important;
+            min-height: calc(100vh - 48px) !important;
+            background: #1e1e1e;
+            /* Boxy 3D Bezel Legacy Border Effect */
+            border-top: 3px solid #ffffff !important;
+            border-left: 3px solid #ffffff !important;
+            border-right: 3px solid #7f7f7f !important;
+            border-bottom: 3px solid #7f7f7f !important;
+            border-radius: 0px !important;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding: 40px 0 0 0 !important; /* Space under the custom chrome top frame */
+            margin-bottom: 48px !important; /* Clears fixed Windows 11 taskbar */
+        }
+
+        /* Vintage Active Title Bar Chrome Injection */
+        .container.animate-boot::before {
+            content: "🗔 DocumentReader.exe - Algorithmic Paradigms: Comparative Analysis of Greedy and Divide-and-Conquer Frameworks";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 32px;
+            background: linear-gradient(90deg, #000080, #1084d0);
+            color: #ffffff;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            padding-left: 12px;
+            letter-spacing: 0.5px;
+            z-index: 10;
+        }
+
+        /* Legacy Control Buttons UI Window Graphic */
+        .container.animate-boot::after {
+            content: "🗕 🗖 🗙";
+            position: absolute;
+            top: 4px;
+            right: 8px;
+            color: #ffffff;
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            cursor: pointer;
+            z-index: 11;
+        }
+
+        main {
+            flex: 1 0 auto;
+            padding: 30px;
+            padding-bottom: 80px; /* Clearing block for the fixed taskbar */
+        }
+
+        /* Identity Block Header Registry Fixes */
+        .border-bottom.border-secondary {
+            padding: 0 30px 20px 30px;
+            border-bottom-color: rgba(255, 255, 255, 0.15) !important;
+        }
+
+        h1, h2, h3, h4, h5, h6, .text-white-forced {
+            color: var(--text-main) !important;
+        }
+
+        .animate-boot {
+            animation: consoleBoot 0.25s ease-in-out forwards;
+        }
+        @keyframes consoleBoot {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* --- cmd.exe Command Line Navigation Block --- */
+        header.cmd-prompt-nav {
+            background: transparent !important;
+            border: none !important;
+            margin: 0 30px 30px 30px !important;
+            padding: 0 !important;
+        }
+        
+        .cmd-line-text {
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .nav-link-custom {
+            color: #a3a3a3;
+            transition: color 0.1s ease;
+            font-weight: bold;
+            padding: 2px 8px !important;
+            border-radius: 0px !important;
+            text-decoration: none;
+        }
+        .nav-link-custom:hover {
+            color: var(--accent-glow) !important;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .nav-link-custom.active {
+            color: #00ff00 !important; /* Active link selection terminal green override */
+            background: transparent !important;
+        }
+
+        /* High-Contrast Link Mechanics */
+        .meta-link {
+            color: var(--accent-glow);
+            text-decoration: none;
+        }
+        .meta-link:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        .status-pill {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid #34d399;
+            color: #34d399;
+            border-radius: 0px !important;
+        }
+
+        /* Blinking Terminal UI Cursor */
+        @keyframes blink { 50% { opacity: 0; } }
+        .terminal-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 15px;
+            background-color: #00ff00;
+            margin-left: 4px;
+            vertical-align: middle;
+            animation: blink 1s step-end infinite;
+        }
+
+        /* ==========================================================================
+           DOCUMENT SYSTEM VIEWPORT DISPATCHER (RESEARCH VS BLOG STYLES)
+           ========================================================================== */
+        
+        /* --------------------------------------------------------------------------
+           STYLE ARCHETYPE A: Formal Academic Research Paper Format
+           -------------------------------------------------------------------------- */
+        .format-research-paper {
+            background-color: #fcfbf9 !important; /* Premium archival off-white print stock page color */
+            color: #111111 !important;           /* Dark slate high-contrast print ink */
+            font-family: 'Georgia', 'Cambria', 'Times New Roman', Times, serif !important;
+            border: 1px solid #d1d5db !important;
+            border-top: 6px solid #475569 !important; /* Heavy-set academic card top bezel */
+            border-radius: 0px !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+            padding: 3rem 4rem !important;
+        }
+        
+        .format-research-paper h1.doc-main-title {
+            color: #0f172a !important;
+            font-family: 'Georgia', serif !important;
+            font-weight: 800 !important;
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 0.5rem !important;
+            border: none !important;
+            text-shadow: none !important;
+        }
+
+        .format-research-paper .research-meta-header {
+            text-align: center;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #475569;
+            font-size: 0.88rem;
+            margin-bottom: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+
+        /* Markdown Content Engine Processing Overrides for Academic Research Papers */
+        .format-research-paper .prose-container {
+            color: #1e293b !important;
+            font-size: 1.05rem !important;
+            line-height: 1.8 !important;
+            text-align: justify; /* Proper academic document alignment layout standard */
+        }
+        .format-research-paper .prose-container p {
+            margin-bottom: 1.5rem;
+            text-indent: 0rem; /* Traditional academic indent parameters can be set here */
+        }
+        .format-research-paper .prose-container strong {
+            color: #000000 !important;
+            font-weight: 700;
+        }
+        .format-research-paper .prose-container a {
+            color: #1d4ed8 !important; /* Formal print-safe hyper-blue */
+            text-decoration: underline;
+        }
+        .format-research-paper .prose-container code {
+            background: #f1f5f9 !important;
+            color: #b91c1c !important; /* Academic-safe distinct code highlighting color tone */
+            border: 1px solid #e2e8f0;
+            padding: 2px 5px;
+            font-size: 0.9rem;
+            font-family: monospace;
+        }
+
+        /* --------------------------------------------------------------------------
+           STYLE ARCHETYPE B: Modern Flowing Blog Updates Format
+           -------------------------------------------------------------------------- */
+        .format-blog-normal {
+            background: var(--bg-card) !important;
+            border: 2px solid #7f7f7f !important;
+            border-radius: 0px !important;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.7);
+            padding: 2.5rem !important;
+        }
+
+        .format-blog-normal h1.doc-main-title {
+            color: var(--ps-yellow) !important;
+            font-family: inherit;
+            font-weight: bold;
+            font-size: 1.8rem;
+            border-bottom: 2px dashed rgba(255, 255, 255, 0.15);
+            padding-bottom: 12px;
+        }
+
+        .format-blog-normal .blog-meta-header {
+            color: var(--ps-cyan);
+            font-size: 0.8rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Markdown Content Engine Processing Overrides for Blogs */
+        .format-blog-normal .prose-container {
+            color: var(--text-readable) !important;
+            font-size: 0.95rem !important;
+            line-height: 1.6 !important;
+        }
+        .format-blog-normal .prose-container p {
+            margin-bottom: 1.25rem;
+        }
+        .format-blog-normal .prose-container strong {
+            color: #ffffff !important;
+        }
+        .format-blog-normal .prose-container a {
+            color: var(--accent-glow) !important;
+            text-decoration: underline;
+        }
+        .format-blog-normal .prose-container code {
+            background: rgba(0, 0, 0, 0.4) !important;
+            color: var(--terminal-green) !important;
+            padding: 2px 6px;
+            border-radius: 0px;
+            font-size: 0.88rem;
+        }
+
+        /* Content Protection Matrix Guardrail Rule */
+        .protect-content {
+            user-select: none !important;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+        }
+
+        /* --- Authentic Full-Width Fixed Windows 11 Taskbar --- */
+        footer.mt-auto {
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 48px !important;
+            background: rgba(32, 32, 32, 0.9) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 0px !important;
+            padding: 0 20px !important;
+            margin: 0 !important;
+            
+            display: grid !important;
+            grid-template-columns: 1fr auto 1fr !important;
+            align-items: center !important;
+            z-index: 99999;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .taskbar-left {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 10px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .taskbar-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+        .taskbar-icon {
+            font-size: 1.15rem;
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: transform 0.1s ease, color 0.1s ease;
+            display: flex;
+            align-items: center;
+        }
+        .taskbar-icon:hover {
+            color: var(--accent-glow);
+            transform: scale(1.1);
+        }
+        .taskbar-icon.win-brand {
+            color: #0078d4;
+            font-size: 1.25rem;
+        }
+        .taskbar-search-mock {
+            width: 140px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #cccccc;
+            font-size: 0.72rem;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            cursor: text;
+            user-select: none;
+        }
+
+        .taskbar-right {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 14px;
+            font-size: 0.8rem;
+            color: #e2e8f0;
+        }
+        .system-tray-icons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #cbd5e1;
+        }
+        .system-clock {
+            font-size: 0.75rem;
+            text-align: right;
+            line-height: 1.2;
+            border-left: 1px solid rgba(255, 255, 255, 0.15);
+            padding-left: 12px;
+            color: #ffffff;
+        }
+
+        /* Desktop Container Sizing Adaptability Fixes for Academic Reading Formats */
+        @media (max-width: 768px) {
+            .format-research-paper {
+                padding: 1.5rem !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container py-5 animate-boot">
+        
+        <div class="mb-4 pb-4 border-bottom border-secondary border-opacity-50">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                <h1 class="h3 fw-bold m-0">Fayola Roberts</h1>
+                <span class="badge status-pill px-2 py-1 text-uppercase fw-semibold">SYS_STATUS: ONLINE</span>
+            </div>
+            
+            <div class="d-flex flex-wrap gap-3 small fw-medium mt-3">
+                <div>
+                    <i class="bi bi-github text-white-forced me-1"></i> 
+                    <a href="https://github.com/DarkAngel2001" target="_blank" rel="noopener noreferrer" class="meta-link">AngelLite (GitHub)</a>
+                </div>
+                <div class="d-none d-sm-inline text-muted opacity-50">|</div>
+                <div>
+                    <i class="bi bi-linkedin text-white-forced me-1"></i> 
+                    <a href="https://www.linkedin.com/in/fayola-roberts-612760205/" target="_blank" rel="noopener noreferrer" class="meta-link">Fayola Roberts (LinkedIn)</a>
+                </div>
+                <div class="d-none d-sm-inline text-muted opacity-50">|</div>
+                <div>
+                    <i class="bi bi-envelope-fill text-white-forced me-1"></i> 
+                    <a href="mailto:fayola.c.roberts@gmail.com" class="meta-link font-monospace">fayola.c.roberts@gmail.com</a>
+                </div>
+            </div>
+        </div>
+
+        <header class="cmd-prompt-nav">
+            <div class="cmd-line-text">C:\Users\FayolaRoberts\Portfolio&gt; navigate --select-target</div>
+            <nav class="nav gap-2 small">
+                <a href="/research-portfolio/" class="nav-link-custom">[ Home ]</a>
+                <a href="/research-portfolio/about" class="nav-link-custom">[ About_Me ]</a>
+                <a href="/research-portfolio/insights" class="nav-link-custom">[ Insights_&amp;_Research ]</a>
+                <span class="terminal-cursor"></span>
+            </nav>
+        </header>
+
+        <main>
+           <div class="mb-4">
+                <a href="/research-portfolio/insights" class="meta-link small fw-bold font-monospace">
+                    &larr; /research-portfolio/insights
+
+                </a>
+            </div>
+
+                            <article class="format-research-paper protect-content mx-auto" style="max-width: 850px;" oncontextmenu="return false;">
+                    <h1 class="doc-main-title">Algorithmic Paradigms: Comparative Analysis of Greedy and Divide-and-Conquer Frameworks</h1>
+                    <div class="research-meta-header">
+                        Published: 2021-04-04 &bull; Author: F. Roberts &bull; Classification: School Projects
+                    </div>
+                    
+                    <div class="prose-container">
+                        <div ><h3 id="abstract">Abstract</h3>
+<p>This paper presents a comparative analysis of two fundamental algorithmic paradigms: <strong>Greedy Strategy</strong> and <strong>Divide-and-Conquer</strong>. We evaluate their historical design intentions, component prerequisites, and operational limitations. Using <strong>Dijkstra's Shortest Path Algorithm</strong> for geospatial routing and an <strong>Enhanced Merge Sort</strong> framework as foundational use cases, we contrast their mathematical efficiency, memory profiles, and vulnerability to algorithmic exploitation vectors including ReDoS (Regular Expression Denial of Service) and Algorithmic Complexity Attacks.</p>
+<hr />
+<h2 id="1-the-greedy-algorithmic-paradigm">1. The Greedy Algorithmic Paradigm</h2>
+<h3 id="11-historical-context">1.1 Historical Context</h3>
+<p><strong>Greedy algorithms</strong> were conceptualized in <strong>1956</strong> and published in <strong>1959</strong> by <strong>Edsger Dijkstra</strong>. The algorithm was designed to create a <strong>minimal arboreal covering</strong> (minimum spanning tree) to trim down route spans in Amsterdam, the capital of the Netherlands. In the same decade, <strong>Prim's Algorithm</strong> (1957) and <strong>Kruskal's Algorithm</strong> (1956) developed optimization policies based on reduction of path costs on weighted routes.</p>
+<h3 id="12-core-design-philosophy">1.2 Core Design Philosophy</h3>
+<p>Greedy algorithms are intended to make the <strong>optimal choice at each step</strong> without knowing the future. Each step chooses the optimum local choice, attempting to find the worldwide best solution to resolve the whole problem.</p>
+<p><strong>Critical Limitation:</strong></p>
+<ul>
+<li>Greedy algorithms <strong>do not look ahead</strong> to decide the optimal solution globally</li>
+<li>They concern themselves <strong>only locally</strong> with the optimal solution</li>
+<li>The optimal overall solution can therefore be <strong>different from</strong> (and worse than) the solution chosen by the algorithm</li>
+<li>Extremely quick compared to Divide-and-Conquer and Dynamic Programming alternatives</li>
+</ul>
+<h3 id="13-algorithm-example-common-greedy-applications">1.3 Algorithm Example: Common Greedy Applications</h3>
+<p>Greedy algorithms are used in the majority of popular algorithms and consistently produce the global optimal solution <strong>when problem constraints satisfy greedy properties</strong>:</p>
+<p>| Algorithm | Application Domain |
+| :--- | :--- |
+| <strong>Travelling Salesman Problem</strong> | Route optimization (nearest neighbor heuristic) |
+| <strong>Prim's Minimum Spanning Tree</strong> | Network graph minimal connection cost |
+| <strong>Kruskal's Minimum Spanning Tree</strong> | Edge-weighted graph optimization |
+| <strong>Dijkstra's Shortest Path</strong> | GPS routing, network pathfinding |
+| <strong>Graph Map Coloring</strong> | Vertex assignment with constraint satisfaction |
+| <strong>Graph Vertex Cover</strong> | Minimal node set covering all edges |
+| <strong>Knapsack Problem</strong> | Resource allocation (fractional variant) |
+| <strong>Job Scheduling Problem</strong> | Task ordering by priority/deadline |</p>
+<hr />
+<h2 id="2-characteristics-of-the-greedy-approach">2. Characteristics of the Greedy Approach</h2>
+<h3 id="21-resource-management-principles">2.1 Resource Management Principles</h3>
+<ul>
+<li><strong>Ordered Resource List:</strong> The resource list with cost or value allocation is ordered, quantifying system constraints</li>
+<li><strong>Maximum Resource Allocation:</strong> During a constraint, take the maximum amount of resources available</li>
+<li><strong>Serial Activity Scheduling:</strong> For instance, resource costs measured in hours for activity scheduling problems where activities must be conducted in serial order</li>
+</ul>
+<h3 id="22-core-structural-components">2.2 Core Structural Components</h3>
+<p>A greedy algorithm requires five essential components:</p>
+<p>| Component | Function |
+| :--- | :--- |
+| <strong>Candidate Data Set</strong> | Requires a solution from available options |
+| <strong>Selection Function</strong> | Identifies the most promising candidate (greedy choice) |
+| <strong>Feasibility Function</strong> | Supports selection by identifying whether a candidate can contribute to the solution |
+| <strong>Objective Function</strong> | Assigns a value to the partial solution (measures optimization progress) |
+| <strong>Solution Function</strong> | Indicates when the optimal solution has been discovered |</p>
+<h3 id="23-mathematical-prerequisites-for-global-optimality">2.3 Mathematical Prerequisites for Global Optimality</h3>
+<p>To guarantee that a greedy approach yields a <strong>globally optimal solution</strong>, the underlying problem space must possess two core mathematical properties:</p>
+<p><strong>1. Greedy Choice Property:</strong>
+A global optimum can be arrived at by making <strong>locally optimal (greedy) choices iteratively</strong>.</p>
+<p><strong>2. Optimal Substructure:</strong>
+An optimal solution to the entire problem contains within it the <strong>optimal solutions to all its sub-problems</strong>.</p>
+<h3 id="24-visual-representation-greedy-selection-lock-in">2.4 Visual Representation: Greedy Selection Lock-in</h3>
+<p>[Current Node: A]
+/ |
+(Cost: 8) (Cost: 2) (Cost: 14)
+/ |
+Node B Node C Node D</p>
+<p>Greedy selection locks Node C immediately (lowest cost = 2)
+without evaluating long-term consequences of this choice</p>
+<hr />
+<h2 id="3-use-case-dijkstras-shortest-path-algorithm-in-geospatial-telematics">3. Use Case: Dijkstra's Shortest Path Algorithm in Geospatial Telematics</h2>
+<h3 id="31-gps-navigation-integration">3.1 GPS Navigation Integration</h3>
+<p>In the original paper, Dijkstra's algorithm uses the <strong>Global Positioning System (GPS)</strong> to include position parameters. The current position can be found at any time and used to calculate the distance between one node and another. This distance identifies the shortest path.</p>
+<p><strong>Real-Time GPS Navigation System Workflow:</strong></p>
+<ol>
+<li>GPS receiver determines user's location on digital map (e.g., Beirut city map)</li>
+<li>User enters destination coordinate</li>
+<li>Dijkstra's algorithm calculates shortest path</li>
+<li>App guides user along the route with directional guidance</li>
+<li>User can take different path; system dynamically republishes corresponding shortest path</li>
+</ol>
+<h3 id="32-data-structure-dependencies-amp-min-heap-optimization">3.2 Data Structure Dependencies &amp; Min-Heap Optimization</h3>
+<p><strong>Critical Insight for Data Science:</strong>
+Implementing Dijkstra's algorithm has <strong>major computational performance differences</strong> based on data structure choice:</p>
+<p>| Data Structure | Time Complexity | Space Complexity | Use Case |
+| :--- | :--- | :--- | :--- |
+| <strong>Raw Adjacency Matrix</strong> | $O(V^2)$ | $O(V^2)$ | Small networks (&lt;100 nodes) |
+| <strong>Min-Heap Priority Queue</strong> | $O((E + V) \log V)$ | $O(V)$ | Large-scale GPS Routing |
+| <strong>Fibonacci Heap</strong> | $O(E + V \log V)$ | $O(V)$ | Theoretical optimal (complex implementation) |</p>
+<p><strong>Why Min-Heap Optimization Matters:</strong></p>
+<ul>
+<li><strong>Raw adjacency matrix yields $O(V^2)$</strong>: For city maps with 10,000 vertices = 100,000,000 operations</li>
+<li><strong>Min-Heap reduces to $O((E + V) \log V)$</strong>: For same graph = ~140,000 operations (714× faster)</li>
+<li><strong>Computational awareness</strong>: Shows deep understanding of algorithmic pipeline optimization</li>
+</ul>
+<h3 id="33-standardized-pseudocode-dijkstra-with-min-heap">3.3 Standardized Pseudocode: Dijkstra with Min-Heap</h3>
+<code class="language-python">import heapq
+
+def dijkstra_min_heap(graph, start_vertex):
+    &quot;&quot;&quot;
+    Dijkstra's Shortest Path Algorithm using Min-Heap Priority Queue
+    Time Complexity: O((E + V) log V)
+    Space Complexity: O(V)
+    
+    Args:
+        graph: Adjacency dictionary {vertex: {neighbor: weight}}
+        start_vertex: Source node for path calculation
+    
+    Returns:
+        distances: {vertex: shortest_distance_from_start}
+    &quot;&quot;&quot;
+    
+    # Initialize distances: infinity for all vertices, 0 for start
+    distances = {vertex: float('infinity') for vertex in graph}
+    distances[start_vertex] = 0
+    
+    # Instantiate Min-Heap Priority Queue: (distance, vertex)
+    priority_queue = [(0, start_vertex)]
+    
+    while priority_queue:
+        # Pop vertex with smallest distance (Min-Heap property)
+        current_distance, current_vertex = heapq.heappop(priority_queue)
+        
+        # Skip if we've found a better path already
+        if current_distance &gt; distances[current_vertex]:
+            continue
+        
+        # Explore all neighbors
+        for neighbor, weight in graph[current_vertex].items():
+            distance = current_distance + weight
+            
+            # Only update if new path is shorter
+            if distance &lt; distances[neighbor]:
+                distances[neighbor] = distance
+                heapq.heappush(priority_queue, (distance, neighbor))
+                
+    return distances
+
+# Example Usage:
+# graph = {
+#     'A': {'B': 2, 'C': 5},
+#     'B': {'A': 2, 'C': 1, 'D': 3},
+#     'C': {'A': 5, 'B': 1, 'D': 2},
+#     'D': {'B': 3, 'C': 2}
+# }
+# shortest_paths = dijkstra_min_heap(graph, 'A')
+</code>
+<h3 id="34-network-scalability-limitation">3.4 Network Scalability Limitation</h3>
+<p>The designed concept focuses on Dijkstra's algorithm, one of the most famous shortest path algorithms. It is effective enough for <strong>small networks</strong> such as city maps, but for <strong>real-time applications</strong>, it cannot run efficiently for <strong>country or continental maps</strong> without Min-Heap optimization or alternative algorithms (e.g., A*, Bidirectional Dijkstra).</p>
+<hr />
+<h2 id="4-disadvantages-of-greedy-algorithms">4. Disadvantages of Greedy Algorithms</h2>
+<h3 id="41-fundamental-limitation-lack-of-global-vision">4.1 Fundamental Limitation: Lack of Global Vision</h3>
+<p>It is <strong>not suitable</strong> for problems where, for every subproblem, a solution such as sorting is needed. In the worst case, the Greedy method can even lead to an <strong>unsatisfactory solution</strong>.</p>
+<p><strong>Core Disadvantage:</strong>
+Greedy algorithms <strong>don't know what is ahead</strong> of the present greedy state. They make irreversible local decisions without evaluating long-term consequences.</p>
+<h3 id="42-worst-case-failure-scenarios">4.2 Worst-Case Failure Scenarios</h3>
+<p>| Problem Type | Why Greedy Fails |
+| :--- | :--- |
+| <strong>0/1 Knapsack Problem</strong> | Greedy by value/kg ratio may fillcapacity with low-value items |
+| <strong>Travelling Salesman (exact)</strong> | Nearest neighbor heuristic produces suboptimal total distance |
+| <strong>Job Scheduling with Dependencies</strong> | Greedy priority may block critical path dependencies |
+| <strong>Graph Coloring (general)</strong> | Greedy vertex assignment may use more colors than minimum |</p>
+<hr />
+<h2 id="5-the-divide-and-conquer-paradigm">5. The Divide-and-Conquer Paradigm</h2>
+<h3 id="51-historical-context">5.1 Historical Context</h3>
+<p>Early examples of Divide-and-Conquer involve <strong>decreasing and conquering</strong> strategies where the original problem is divided into subproblems and resolved iteratively.</p>
+<p><strong>Key Historical Milestones:</strong></p>
+<p>| Year | Contributor | Algorithm | Significance |
+| :--- | :--- | :--- | :--- |
+| <strong>1805</strong> | Carl Gauss | Fast Fourier Transform ( precursor) | Early dividing/conquering with subproblems |
+| <strong>1945</strong> | John von Neumann | <strong>Merge Sort</strong> | First two-sub-problem D&amp;C algorithm for computers |
+| <strong>1946</strong> | John Mauchly | Algorithm description | Clear computer algorithm documentation |
+| <strong>1962</strong> | Anatoly Karatsuba | Karatsuba Multiplication | Fastest traditional multiplication algorithm |
+| <strong>1970</strong> | Volker Strassen | Strassen's Algorithm | Faster matrix multiplication |</p>
+<p><strong>Donald Knuth's Post Office Example:</strong>
+A method for routing letters in separate bags for various geo-regions, each bag sorted into batches for smaller sub-regions, etc.—a non-computerized original D&amp;C algorithm.</p>
+<h3 id="52-core-design-philosophy">5.2 Core Design Philosophy</h3>
+<p><strong>Divide-and-Conquer</strong> is where you divide a big problem into many smaller problems that are far easier to solve. It attempts to divide a problem into as many small pieces as possible, as small pieces are easier to solve. This is usually done with <strong>recursion</strong>.</p>
+<p><strong>Competitive Advantage:</strong></p>
+<ul>
+<li>Backbone for <strong>competition</strong> and <strong>multi-threading</strong></li>
+<li>Fastest, perhaps easiest way to improve algorithm speed</li>
+<li>Unbelievably helpful in daily programming</li>
+</ul>
+<h3 id="53-algorithm-example-common-divide-and-conquer-applications">5.3 Algorithm Example: Common Divide-and-Conquer Applications</h3>
+<p>| Algorithm | Time Complexity | Application Domain |
+| :--- | :--- | :--- |
+| <strong>Binary Search</strong> | $O(\log n)$ | Sorted array search (half-interval search) |
+| <strong>Quicksort</strong> | $O(n \log n)$ avg, $O(n^2)$ worst | Partition-exchange sorting (most effective general sort) |
+| <strong>Merge Sort</strong> | $O(n \log n)$ | Stable sorting, database operations |
+| <strong>Closest Pair of Points</strong> | $O(n \log n)$ | Computational geometry (minimize point distance) |
+| <strong>Strassen's Algorithm</strong> | $O(n^{2.81})$ | Matrix multiplication (faster than traditional $O(n^3)$) |
+| <strong>Cooley-Tukey FFT</strong> | $O(n \log n)$ | Signal processing, frequency analysis |
+| <strong>Karatsuba Multiplication</strong> | $O(n^{1.585})$ | Large integer multiplication |</p>
+<h3 id="54-characteristics-of-divide-and-conquer">5.4 Characteristics of Divide-and-Conquer</h3>
+<p>This technique divides into three structural parts:</p>
+<p><strong>1. DIVIDE:</strong>
+Problem is broken into smaller subproblems. A part of the original problem becomes subproblems. Usually leads to a <strong>recursive approach</strong> to split the problem until no further division is found. At this stage, sub-problems are <strong>atomic</strong> but still form part of the problem itself.</p>
+<p><strong>2. CONQUER:</strong>
+A lot of smaller problems are solved. Problems are generally considered solved by themselves at this level (base case reached).</p>
+<p><strong>3. COMBINE:</strong>
+Phase <strong>recursively combines</strong> the smaller problems until they formulate a solution to the original problem. This algorithmic approach works recursively and takes steps to conquer and merge so closely that they appear as one.</p>
+<h3 id="55-visual-representation-divide-and-conquer-workflow">5.5 Visual Representation: Divide-and-Conquer Workflow</h3>
+<p>[ Monolithic Dataset]
+/
+[ Sub-Problem 1] [ Sub-Problem 2] &lt;--- 1. DIVIDE
+| |
+[ Sorted Sub 1] [ Sorted Sub 2] &lt;--- 2. CONQUER
+\ /
+[ Unified Sorted Array] &lt;--- 3. COMBINE</p>
+<hr />
+<h2 id="6-standardized-pseudocode-merge-sort">6. Standardized Pseudocode: Merge Sort</h2>
+<h3 id="61-basic-merge-sort-algorithm">6.1 Basic Merge Sort Algorithm</h3>
+<code class="language-python">def merge_sort(arr, left, right):
+    &quot;&quot;&quot;
+    Merge Sort: Divide-and-Conquer Sorting Algorithm
+    Time Complexity: O(n log n) - consistent across all cases
+    Space Complexity: O(n) - temporary array allocations
+    
+    Args:
+        arr: Array to sort
+        left: Left index boundary
+        right: Right index boundary
+    &quot;&quot;&quot;
+    
+    if right &gt; left:
+        # 1. DIVIDE: Find middle point to split array into two halves
+        middle = left + (right - left) // 2
+        
+        # 2. CONQUER: Recursively sort first half
+        merge_sort(arr, left, middle)
+        
+        # 3. CONQUER: Recursively sort second half
+        merge_sort(arr, middle + 1, right)
+        
+        # 4. COMBINE: Merge the two sorted halves
+        merge(arr, left, middle, right)
+
+def merge(arr, left, middle, right):
+    &quot;&quot;&quot;
+    Merge two sorted subarrays into single sorted array
+    &quot;&quot;&quot;
+    # Create temporary arrays
+    n1 = middle - left + 1
+    n2 = right - middle
+    
+    left_sub = arr[left:middle + 1]
+    right_sub = arr[middle + 1:right + 1]
+    
+    # Merge temporary arrays back into arr[left..right]
+    i = 0  # Initial index of first subarray
+    j = 0  # Initial index of second subarray
+    k = left  # Initial index of merged subarray
+    
+    while i &lt; n1 and j &lt; n2:
+        if left_sub[i] &lt;= right_sub[j]:
+            arr[k] = left_sub[i]
+            i += 1
+        else:
+            arr[k] = right_sub[j]
+            j += 1
+        k += 1
+    
+    # Copy remaining elements of left_sub (if any)
+    while i &lt; n1:
+        arr[k] = left_sub[i]
+        i += 1
+        k += 1
+    
+    # Copy remaining elements of right_sub (if any)
+    while j &lt; n2:
+        arr[k] = right_sub[j]
+        j += 1
+        k += 1
+</code>
+<hr />
+<h2 id="7-use-case-enhanced-merge-sort">7. Use Case: Enhanced Merge Sort</h2>
+<h3 id="71-algorithm-enhancement-objective">7.1 Algorithm Enhancement Objective</h3>
+<p>The intention behind the research was to change the conventional Merge Sort algorithm and present a new process with <strong>reduced run-time</strong>. The newly proposed algorithm has a time complexity of <strong>$O(n \log_2 n)$</strong>, faster than the conventional Merge Sort algorithm.</p>
+<p><strong>Experimental Validation:</strong>
+The algorithm proposed was tested, carried out, compared, and experimental results were promising.</p>
+<h3 id="72-classic-sorting-algorithm-classification">7.2 Classic Sorting Algorithm Classification</h3>
+<p>Classic sorting algorithms can be divided into two classes depending on problem difficulty. Algorithmic complexity is shown in <strong>Big-O time complexity notations</strong> where:</p>
+<ul>
+<li><strong>O</strong> = algorithm's complexity</li>
+<li><strong>n</strong> = list size</li>
+</ul>
+<h3 id="73-enhanced-merge-sort-general-steps">7.3 Enhanced Merge Sort: General Steps</h3>
+<code class="language-python">def enhanced_merge_sort(x):
+    &quot;&quot;&quot;
+    Enhanced Merge Sort: Pair-wise sorting before division
+    Time Complexity: O(n log₂ n) - faster for large arrays
+    Space Complexity: O(n)
+    
+    Args:
+        x: Unsorted array
+    
+    Returns:
+        Sorted array
+    &quot;&quot;&quot;
+    
+    # Step 1: Input the unsorted array x
+    # Step 2: Perform pair-wise sorting of each element
+    for i in range(0, len(x) - 1, 2):
+        if x[i] &gt; x[i + 1]:
+            x[i], x[i + 1] = x[i + 1], x[i]  # Swap if out of order
+    
+    # Step 3: Divide array into two sub-lists considering odd-even positions
+    odd_list = [x[i] for i in range(0, len(x), 2)]   # Even positions
+    even_list = [x[i] for i in range(1, len(x), 2)]  # Odd positions
+    
+    # Step 4: Continue dividing until sub-lists contain two elements each
+    if len(odd_list) &gt; 2:
+        odd_list = enhanced_merge_sort(odd_list)
+    if len(even_list) &gt; 2:
+        even_list = enhanced_merge_sort(even_list)
+    
+    # Step 5: Merge and combine the sub-arrays
+    sorted_array = merge(odd_list, even_list)
+    
+    # Step 6: Output the sorted array
+    return sorted_array
+
+def merge(left_list, right_list):
+    &quot;&quot;&quot;Merge two sorted lists into one sorted list&quot;&quot;&quot;
+    result = []
+    i = j = 0
+    
+    while i &lt; len(left_list) and j &lt; len(right_list):
+        if left_list[i] &lt;= right_list[j]:
+            result.append(left_list[i])
+            i += 1
+        else:
+            result.append(right_list[j])
+            j += 1
+    
+    result.extend(left_list[i:])
+    result.extend(right_list[j:])
+    return result
+</code>
+<h3 id="74-performance-comparison-traditional-vs-enhanced">7.4 Performance Comparison: Traditional vs. Enhanced</h3>
+<p>| Metric | Traditional Merge Sort | Enhanced Merge Sort |
+| :--- | :--- | :--- |
+| <strong>Time Complexity</strong> | $O(n \log n)$ | $O(n \log_2 n)$ |
+| <strong>Pre-sorting Step</strong> | None | Pair-wise sorting before division |
+| <strong>Large Array Performance</strong> | Standard | Executes more rapidly |
+| <strong>Reverse Order Performance</strong> | Slower than Quick Sort | Faster than Quick Sort |
+| <strong>Small List Performance</strong> | Sufficient | Takes less time |
+| <strong>Space Complexity</strong> | $O(n)$ | $O(n)$ |</p>
+<p><strong>Fundamental Difference:</strong>
+If the array is very big and the new algorithm sorts the array by <strong>simultaneously dividing into odd position sub-lists</strong>, the former method executes more rapidly. It executes <strong>pair-wise sorting before division</strong>, partially sorting the array. This takes less time to sort both small and large lists.</p>
+<h3 id="75-real-world-applications">7.5 Real-World Applications</h3>
+<p>Merge Sort has wide application in:</p>
+<ul>
+<li><strong>Database systems:</strong> Modified technological version leaves programmer with less burden accessing single items quickly</li>
+<li><strong>External sorting:</strong> Large datasets exceeding memory capacity</li>
+<li><strong>Stable sorting requirements:</strong> Maintaining relative order of equal elements</li>
+</ul>
+<hr />
+<h2 id="8-disadvantages-of-divide-and-conquer">8. Disadvantages of Divide-and-Conquer</h2>
+<h3 id="81-memory-management-challenges">8.1 Memory Management Challenges</h3>
+<p>Since most algorithms are designed by <strong>recurrence</strong>, high memory management is needed:</p>
+<p>| Issue | Description | Consequence |
+| :--- | :--- | :--- |
+| <strong>Explicit Stack Overuse</strong> | Recursive calls consume stack space | Space exhaustion |
+| <strong>Stack Overflow</strong> | Recursion larger than CPU stack present | System crash |
+| <strong>Temporary Array Allocations</strong> | $O(n)$ space for merge operations | Memory pressure on large datasets |</p>
+<p><strong>Mitigation Strategies:</strong></p>
+<ul>
+<li>Enforce strict <strong>recursion depth limits</strong></li>
+<li>Implement <strong>input sanitation protocols</strong></li>
+<li>Ensure incoming telemetry arrays fit comfortably within structural hardware limits</li>
+<li>Use <strong>iterative alternatives</strong> (e.g., iterative Merge Sort) for deep recursion cases</li>
+</ul>
+<hr />
+<h2 id="9-quantitative-paradigm-matrix-amp-architectural-comparison">9. Quantitative Paradigm Matrix &amp; Architectural Comparison</h2>
+<p>Evaluating these design approaches demonstrates major differences in memory usage, execution predictability, and resource requirements:</p>
+<p>| Computational Metric | Greedy Strategy Paradigm | Divide-and-Conquer Paradigm |
+| :--- | :--- | :--- |
+| <strong>Design Approach</strong> | Iterative, forward-facing optimization | Recursive sub-problem fragmentation |
+| <strong>Time Complexity</strong> | Highly variable ($O((E + V) \log V)$ with Min-Heaps) | Consistently stable ($O(n \log n)$ across all cases) |
+| <strong>Space Complexity</strong> | Highly efficient ($O(V)$ auxiliary memory footprint) | Higher overhead ($O(n)$ temporary array allocations) |
+| <strong>Global Solution Guarantee</strong> | <strong>Only if</strong> optimal substructure criteria match | <strong>Guaranteed</strong> global solution for sorting/searching |
+| <strong>Recursion Required</strong> | No (iterative) | Yes (recursive call stack) |
+| <strong>Best Use Case</strong> | Pathfinding, resource allocation, scheduling | Sorting, searching, matrix operations, FFT |
+| <strong>Worst-Case Vulnerability</strong> | Suboptimal local decisions | Stack overflow, memory exhaustion |</p>
+<hr />
+<h2 id="10-cybersecurity-amp-data-engineering-considerations">10. Cybersecurity &amp; Data Engineering Considerations</h2>
+<h3 id="101-algorithmic-complexity-exploitation-dos-vulnerabilities">10.1 Algorithmic Complexity Exploitation (DoS Vulnerabilities)</h3>
+<p>From a <strong>security engineering perspective</strong>, understanding algorithmic behavior is essential for protecting system endpoints against <strong>Algorithmic Complexity Denial of Service (DoS) attacks</strong>.</p>
+<p><strong>Attack Mechanism:</strong>
+If an asset pipeline uses <strong>unoptimized algorithms</strong> where worst-case input configurations blow up exponentially (such as forcing $O(n^2)$ degradations), malicious actors can <strong>deliberately inject worst-case datasets</strong>.</p>
+<p><strong>Consequences:</strong></p>
+<ul>
+<li>Forces system components into <strong>infinite loops</strong> or <strong>extreme processing consumption states</strong></li>
+<li>Crashes backend processing gateways</li>
+<li>Exhausts CPU cycle capabilities</li>
+<li><strong>Freezes operational endpoints</strong></li>
+</ul>
+<p><strong>ReDoS (Regular Expression Denial of Service):</strong>
+A specific variant where adversarial input patterns trigger worst-case regex engine behavior ($O(2^n)$ catastrophic backtracking), commonly seen in:</p>
+<ul>
+<li>Web application input validation</li>
+<li>API request parsing</li>
+<li>Log analysis pipelines</li>
+</ul>
+<h3 id="102-data-science-optimization-min-heap-vs-adjacency-matrix">10.2 Data Science Optimization: Min-Heap vs. Adjacency Matrix</h3>
+<p><strong>Critical Data Structure Awareness:</strong>
+In GPS navigation pathfinding (Dijkstra's algorithm), data structure choice creates <strong>714× performance difference</strong>:</p>
+<p>$$\text{Optimization Factor} = \frac{O(V^2)}{O((E + V) \log V)} = \frac{100,000,000}{140,000} \approx 714$$</p>
+<p><strong>Security Implication:</strong>
+Unoptimized algorithms ($O(V^2)$ adjacency matrix) create <strong>larger attack windows</strong> because:</p>
+<ul>
+<li>Adversarial inputs consume more CPU cycles per request</li>
+<li>System remains vulnerable longer during processing</li>
+<li>Higher resource exhaustion threshold for attackers</li>
+</ul>
+<h3 id="103-memory-exhaustion-profiles">10.3 Memory Exhaustion Profiles</h3>
+<p>Because Divide-and-Conquer relies heavily on the <strong>recursive call stack</strong>, deep datasets can introduce execution vulnerabilities:</p>
+<p><strong>Stack Overflow Attack Vector:</strong>
+Adversarial Input: Array with 100,000 elements in reverse order
+Algorithm: Quicksort (worst-case $O(n^2)$ with bad pivot)
+Result: Recursive depth = 100,000 → Stack overflow → System crash</p>
+<p><strong>Mitigation:</strong></p>
+<ul>
+<li><strong>Input Sanitization:</strong> Validate array size before processing</li>
+<li><strong>Depth Limiting:</strong> Enforce maximum recursion depth (e.g., 10,000 calls)</li>
+<li><strong>Pivot Randomization:</strong> Use randomized Quicksort to prevent worst-case triggering</li>
+<li><strong>Hybrid Algorithms:</strong> Use Introsort (Quicksort + Heapsort fallback)</li>
+</ul>
+<h3 id="104-secure-algorithm-selection-guidelines">10.4 Secure Algorithm Selection Guidelines</h3>
+<p>| Scenario | Recommended Algorithm | Security Justification |
+| :--- | :--- | :--- |
+| <strong>GPS Pathfinding</strong> | Dijkstra with Min-Heap | $O((E + V) \log V)$ prevents DoS via input size |
+| <strong>General Sorting</strong> | Introsort (Quicksort + Heapsort) | Worst-case $O(n \log n)$ prevents ReDoS |
+| <strong>Database Queries</strong> | Merge Sort (stable, external) | Consistent $O(n \log n)$, no stack overflow risk |
+| <strong>Real-Time Systems</strong> | Heapsort (in-place, no recursion) | $O(n \log n)$ with $O(1)$ space, no stack attacks |</p>
+<hr />
+<h2 id="11-conclusion">11. Conclusion</h2>
+<p>Greedy and Divide-and-Conquer paradigms represent <strong>different but complementary solutions</strong> to structural optimization challenges.</p>
+<p><strong>Key Trade-offs:</strong></p>
+<p>| Paradigm | Strengths | Weaknesses |
+| :--- | :--- | :--- |
+| <strong>Greedy</strong> | Runtime efficiency, minimum memory footprints ($O(V)$), immediate localized gains | No global solution guarantee, suboptimal decisions possible |
+| <strong>Divide-and-Conquer</strong> | Predictable stability ($O(n \log n)$), guaranteed global solutions, multi-threading support | Higher memory overhead ($O(n)$), stack overflow vulnerability |</p>
+<p><strong>Strategic Alignment:</strong>
+Aligning these algorithmic mechanics with <strong>robust memory controls</strong> and <strong>secure input parsing</strong> ensures that data pipelines remain:</p>
+<ul>
+<li><strong>Efficient:</strong> Optimized time complexity (Min-Heap for Dijkstra, Enhanced Merge Sort)</li>
+<li><strong>Scalable:</strong> Handles large datasets without exponential degradation</li>
+<li><strong>Resilient:</strong> Protected against algorithmic exploitation vectors (ReDoS, DoS attacks)</li>
+</ul>
+<p><strong>Final Insight:</strong>
+While greedy choices prioritize <strong>runtime efficiency</strong> and <strong>minimum memory footprints</strong>, Divide-and-Conquer provides <strong>predictable stability</strong> across highly variable datasets. Understanding both paradigms enables engineers to select the optimal algorithmic strategy for specific problem constraints while maintaining security posture against adversarial input exploitation.</p>
+<hr />
+<h2 id="12-references">12. References</h2>
+<ul>
+<li>
+<p><strong>Cormen, T. H., Leiserson, C. E., Rivest, R. L., &amp; Stein, C.</strong> (2001). <em>Introduction to Algorithms</em> (2nd ed.). MIT Press.</p>
+</li>
+<li>
+<p><strong>Dijkstra, E. W.</strong> (1959). &quot;A note on two problems in connexion with graphs.&quot; <em>Numerische Mathematik</em>, 1(1), 269–271.</p>
+</li>
+<li>
+<p><strong>Paira, S., et al.</strong> (2016). &quot;Enhanced Merge Sort—A New Approach to the Merging Process.&quot; <em>Procedia Computer Science</em>, 89, 982–987. https://doi.org/10.1016/j.procs.2016.07.292</p>
+</li>
+<li>
+<p><strong>Simmons, B. I., et al.</strong> (2019). &quot;Beware Greedy Algorithms.&quot; <em>Journal of Animal Ecology</em>, edited by Anna Eklöf, no. 5, Wiley, Mar., pp. 804–807. https://doi.org/10.1111/1365-2656.12963</p>
+</li>
+<li>
+<p><strong>Singal, P., &amp; Chhillar, R. S.</strong> (2014). &quot;Dijkstra Shortest Path Algorithm Using Global Position System.&quot; <em>International Journal of Computer Applications</em>, no. 6, Foundation of Computer Science, Sept., pp. 12–18. https://doi.org/10.5120/17690-8654</p>
+</li>
+<li>
+<p><strong>GeeksforGeeks.</strong> (2012). &quot;Divide and Conquer Algorithm | Introduction.&quot; https://www.geeksforgeeks.org/divide-and-conquer-algorithm-introduction/</p>
+</li>
+<li>
+<p><strong>Brilliant Math &amp; Science Wiki.</strong> (2021). &quot;Greedy Algorithms.&quot; https://brilliant.org/wiki/greedy-algorithm/</p>
+</li>
+<li>
+<p><strong>Radford University.</strong> (2021). &quot;Greedy Algorithms.&quot; https://www.radford.edu/~nokie/classes/360/greedy.html (Accessed April 4, 2021)</p>
+</li>
+<li>
+<p><strong>Meyers, R. A.</strong> (2002). <em>Encyclopedia of Physical Science and Technology</em> (Third Edition). Academic Press, pp. 507–523.</p>
+</li>
+</ul>
+<hr />
+</div>
+                    </div>
+                </article>
+                    </main>
+
+        <footer class="mt-auto">
+            <div class="taskbar-left">
+                <span class="fw-semibold text-white">&copy; 2026 Fayola Roberts</span>
+                <span class="opacity-25">|</span>
+                <span>Secured OS Environment</span>
+            </div>
+
+            <div class="taskbar-center">
+                <div class="taskbar-icon win-brand" title="Start"><i class="bi bi-windows"></i></div>
+                <div class="taskbar-search-mock"><i class="bi bi-search me-2 opacity-50"></i>Search...</div>
+                <div class="taskbar-icon" title="Google Chrome"><i class="bi bi-browser-chrome"></i></div>
+                <div class="taskbar-icon" title="Spotify"><i class="bi bi-spotify"></i></div>
+            </div>
+
+            <div class="taskbar-right">
+                <div class="system-tray-icons">
+                    <i class="bi bi-volume-up-fill" title="Speaker: 100%"></i>
+                    <i class="bi bi-wifi" title="Network Connected: 5G"></i>
+                    <i class="bi bi-battery-charging" title="Battery Status: 100% (Plugged In)"></i>
+                </div>
+                <div class="system-clock">
+                    <<div>11:19 PM</div>
+                    <div style="font-size: 0.65rem; opacity: 0.7;">06/20/2026</div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
